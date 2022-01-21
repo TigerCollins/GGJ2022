@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor;
+using UnityEngine.InputSystem;
 
 
 public class DimensionSwitcher : MonoBehaviour
 {
     internal static DimensionSwitcher instance;
 
+    [SerializeField] bool debugMode;
     [SerializeField] GlobalHelper.Dimensions currentDimension;
     GlobalHelper.Dimensions lastDimension;
     [SerializeField] DimensionEnvironmentHandler environmentHandler;
@@ -33,7 +34,7 @@ public class DimensionSwitcher : MonoBehaviour
     void UpdateTickDimensionCheck()
     {
         
-        if (currentDimension != lastDimension)
+        if (currentDimension != lastDimension && debugMode)
         {
             lastDimension = currentDimension;
             onDimensionChange.Invoke();
@@ -43,6 +44,24 @@ public class DimensionSwitcher : MonoBehaviour
     public GlobalHelper.Dimensions CurrentDimension()
     {
         return currentDimension;
+    }
+
+    public void ChangeDimensionViaInput(InputAction.CallbackContext input)
+    {
+        if(input.performed)
+        {
+            if (currentDimension != GlobalHelper.Dimensions.dimensionA)
+            {
+                currentDimension = GlobalHelper.Dimensions.dimensionA;
+            }
+
+            else
+            {
+                currentDimension = GlobalHelper.Dimensions.dimensionB;
+            }
+            onDimensionChange.Invoke();
+        }
+       
     }
 
 }
