@@ -4,16 +4,20 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
+
+[RequireComponent(typeof(PlayerAnimation))]
 public class PlayerController : MonoBehaviour
 {
 	//public GameController gameController;
 
 	bool receivingMovementInput;
 
+	
+
 	[Header("Player Settings")]
 	public static PlayerController instance;
-
-	[SerializeField] CharacterController rb;
+	[SerializeField] PlayerAnimation playerAnimator;
+	[SerializeField] CharacterController characterController;
 
 	[SerializeField] MovementDetails movement;
 	[SerializeField] CharacterEvents characterEvents;
@@ -37,11 +41,21 @@ public class PlayerController : MonoBehaviour
 	Vector3 originalPos;
 	[SerializeField] bool isGrounded;
 
+	public enum MovementState
+    {
+		idle,
+		combatIdle,
+		Sprint,
+		Jumping,
+		Freefall
+    }
+
 	// Initialization
 	private void Awake()
 	{
 		instance = this;
 		originalPos = playerTransform.position;
+		playerAnimator.Init();
 	}
 
 	void Start()
@@ -51,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
 	public IEnumerator PositionTracking()
 	{
-		if (isSafe && rb.isGrounded)
+		if (isSafe && IsGrounded)
 		{
 			lastSafePosition = transform.position;
 		}
@@ -65,7 +79,7 @@ public class PlayerController : MonoBehaviour
 	{
 		//Movement();
 		ApplyMovement();
-		IsGrounded = rb.isGrounded;
+		IsGrounded = characterController.isGrounded;
 
 	}
 
@@ -75,14 +89,23 @@ public class PlayerController : MonoBehaviour
         {
 			if(value != isGrounded)
             {
-				value = rb.isGrounded;
+				value = characterController.isGrounded;
+				playerAnimator.IsGrounded = value;
 				characterEvents.onGrounded.Invoke();
+				isGrounded = value;
+				
 
-				if(value == true)
+				if (value == true)
                 {
 					movement.isMidair = false;
+					//playerAnimator.AttemptIdleAnimationState();
 				}
 			}
+        }
+
+		get
+        {
+			 return characterController.isGrounded;
         }
     }
 
@@ -113,6 +136,7 @@ public class PlayerController : MonoBehaviour
 #endif
 
 
+	
 
 	void ApplyMovement()
 	{
@@ -121,9 +145,21 @@ public class PlayerController : MonoBehaviour
 		if (Mathf.Abs(input) < 0.3f)
 		{
 			input = 0f;
+			playerAnimator.AttemptIdleAnimationState();
+			//Animate Run
+
 		}
 
-		Vector2 desiredVelocity = new Vector2(input, rb.velocity.y);
+		else
+        {
+			if(IsGrounded)
+            {
+				playerAnimator.onMoveInputStateChange.Invoke(MovementState.Sprint);
+			}
+			
+		}
+
+		Vector2 desiredVelocity = new Vector2(input, characterController.velocity.y);
 		desiredVelocity *= movement.maxSpeed;
 
 		//Midair
@@ -131,7 +167,7 @@ public class PlayerController : MonoBehaviour
 		{
 			if(movement.canControlMidAir)
             {
-				desiredVelocity = Vector2.Lerp(rb.velocity, desiredVelocity, Time.deltaTime * movement.airControlDamping);
+				desiredVelocity = Vector2.Lerp(characterController.velocity, desiredVelocity, Time.deltaTime * movement.airControlDamping);
 				movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
 			}
 
@@ -144,16 +180,16 @@ public class PlayerController : MonoBehaviour
 		}
 
 		//On Ground
-		else if (rb.isGrounded)
+		else if (IsGrounded)
 		{
-			desiredVelocity = new Vector2(Mathf.LerpUnclamped(rb.velocity.x, desiredVelocity.x, movement.controlDamping * Time.deltaTime), rb.velocity.y);
+			desiredVelocity = new Vector2(Mathf.LerpUnclamped(characterController.velocity.x, desiredVelocity.x, movement.controlDamping * Time.deltaTime), characterController.velocity.y);
 			movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
 			movement.MoveVector = transform.TransformDirection(movement.MoveVector);
 		}
 		moveDirection += movement.gravity * Time.deltaTime;
 		moveDirection = new Vector3(movement.MoveVector.x, moveDirection.y, movement.MoveVector.z);
 
-		rb.Move(moveDirection * Time.deltaTime);
+		characterController.Move(moveDirection * Time.deltaTime);
 	}
 
 	
@@ -163,11 +199,12 @@ public class PlayerController : MonoBehaviour
 		if(callbackContext.performed)
         {
 			
-			if (rb.isGrounded)
+			if (IsGrounded)
             {
 				movement.isMidair = true;
 				moveDirection.y = Mathf.Sqrt(movement.jumpHeight * -3.0f * movement.gravity.y);
 				characterEvents.onJumped.Invoke();
+				playerAnimator.onJump.Invoke();
 			}
 			
 		}
@@ -219,6 +256,19 @@ public class PlayerController : MonoBehaviour
 		}
 
 	}
+
+	public bool CheckInputState()
+    {
+		return receivingMovementInput;
+    }
+
+	public bool IsFacingRight
+    {
+        get
+        {
+			return isFacingRight;
+        }
+    }
 }
 
 [System.Serializable]
