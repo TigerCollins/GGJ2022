@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] MovementDetails movement;
 	[SerializeField] CharacterEvents characterEvents;
 	 Vector3 moveDirection = Vector3.zero;
+	UnityEvent onUpdateCalled = new UnityEvent();
 
 	
 
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] Vector2 moveAxis;
 	Vector3 originalPos;
 	[SerializeField] bool isGrounded;
+	[SerializeField] bool isHittingWall;
 
 	public enum MovementState
     {
@@ -65,6 +67,14 @@ public class PlayerController : MonoBehaviour
 		StartCoroutine(PositionTracking());
 	}
 
+	public CharacterController PlayerCharacterController
+    {
+		get
+        {
+			return characterController;
+        }
+    }
+
 	public IEnumerator PositionTracking()
 	{
 		if (isSafe && IsGrounded)
@@ -86,13 +96,13 @@ public class PlayerController : MonoBehaviour
 		}
 		
 		IsGrounded = characterController.isGrounded;
-
+		onUpdateCalled.Invoke();
 	}
 
-    private void Update()
+    public void Update()
     {
 		ForcePlayerHeightToDrop();
-
+		HittingWallLogic();
 	}
 
     public bool IsGrounded
@@ -164,9 +174,14 @@ public class PlayerController : MonoBehaviour
 
 		else
         {
-			if(IsGrounded)
+			if(IsGrounded && !IsHittingWall)
             {
 				playerAnimator.onMoveInputStateChange.Invoke(MovementState.Sprint);
+			}
+
+			else if(IsHittingWall)
+            {
+				playerAnimator.onMoveInputStateChange.Invoke(MovementState.idle);
 			}
 			
 		}
@@ -297,6 +312,12 @@ public class PlayerController : MonoBehaviour
 			moveDirection.y = 0;
         }
 	}
+
+	public void HittingWallLogic()
+    {
+		isHittingWall = HittingObjectInfrontWithoutRigidBody();
+    }
+
 	public bool HitObjectAbove()
     {
 		bool isHitting = false;
@@ -315,26 +336,31 @@ public class PlayerController : MonoBehaviour
 		return isHitting;
 	}
 
-	void OnControllerColliderHit(ControllerColliderHit hit)
-	{
-
-
-		/*if (hit.collider.TryGetComponent(out Projectile projectile))
+	public bool HittingObjectInfrontWithoutRigidBody()
+    {
+		bool isHitting = false;
+		RaycastHit hit;
+		Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y + 1, _raycast.raycastPoint.position.z);
+		Debug.DrawRay(origin, Vector2.right * (isFacingRight ? 1 : -1) * _raycast.wallCheckDistance, _raycast.wallCheckRaycastColour);
+		if (Physics.Raycast(origin, Vector2.right * (isFacingRight ? 1 : -1), out hit, _raycast.wallCheckDistance, _raycast.raycastMask))
 		{
-			if (!projectile.isInAnimation)
+			//Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
+			if (hit.rigidbody == null)
 			{
-				RigidBodyPhysics(hit);
+				isHitting = true;
+			}
+
+			else if (hit.transform.TryGetComponent(out InteractableDimensionObject interactable))
+			{
+				isHitting = true;
 			}
 		}
+		return isHitting;
+	}
 
-		else
-		{*/
+	void OnControllerColliderHit(ControllerColliderHit hit)
+	{
 			RigidBodyPhysics(hit);
-		//}
-
-
-
-
 	}
 
 	public void RigidBodyPhysics(ControllerColliderHit hit)
@@ -361,6 +387,38 @@ public class PlayerController : MonoBehaviour
 		body.velocity = pushDir * physicsPushPower;
 
 	}
+
+	public UnityEvent UpdateEvent
+    {
+		get
+        {
+			return onUpdateCalled;
+        }
+    }
+
+	public Vector2 MoveAxis
+    {
+		get
+        {
+			return moveAxis;
+        }
+    }
+
+	public bool IsHittingWall
+    {
+        get
+        {
+			return isHittingWall;
+        }
+    }
+
+	public bool CanMove
+    {
+		get
+        {
+			return canMove;
+        }
+    }
 }
 
 [System.Serializable]
@@ -377,6 +435,11 @@ public class RaycastDetails
 
 	public float aboveCheckDistance = .5f;
 	public Color aboveCheckRaycastColour;
+
+	[Space(10)]
+
+	public float wallCheckDistance = .5f;
+	public Color wallCheckRaycastColour;
 }
 
 [System.Serializable]
