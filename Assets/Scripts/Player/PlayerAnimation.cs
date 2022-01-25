@@ -64,9 +64,18 @@ public class PlayerAnimation : MonoBehaviour
         if(state != movementState &&  PlayerController.instance.IsGrounded)
         {
             movementState = state;
-            animator.SetInteger("AnimState", (int)state);
-        }
-       
+            if (PlayerController.instance.CanMove)
+            {
+                animator.SetInteger("AnimState", (int)state);
+            }
+
+            else
+            {
+
+            }
+         
+          
+        }       
     }
 
     public void AttemptIdleAnimationState()
