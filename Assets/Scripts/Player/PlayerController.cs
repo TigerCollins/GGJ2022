@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] float physicsPushPower;
 
 	[SerializeField] MovementDetails movement;
-	[SerializeField] CharacterEvents characterEvents;
+	[SerializeField] internal CharacterEvents characterEvents;
 	 Vector3 moveDirection = Vector3.zero;
 	UnityEvent onUpdateCalled = new UnityEvent();
 
@@ -159,9 +159,15 @@ public class PlayerController : MonoBehaviour
 #endif
 
 
-	
+	public void BasicAttack(InputAction.CallbackContext context)
+	{
+		if (context.performed)
+		{
+			characterEvents.onAttack.Invoke();
+		}
+	}
 
-	void ApplyMovement()
+		void ApplyMovement()
 	{
 
 		float input = moveAxis.x;
@@ -512,6 +518,7 @@ public class CharacterEvents
 	[Header("Jump")]
 	public UnityEvent onGrounded;
 	public UnityEvent onJumped;
+	public UnityEvent onAttack;
 
 	[Header("Life")]
 	public UnityEvent onDeath;

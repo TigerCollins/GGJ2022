@@ -8,6 +8,7 @@ public class HairAnchor : MonoBehaviour
     Vector2 rootAnchorOffset;
     public Vector2 partOffset = Vector2.zero;
     public float lerpSpeed = 20f;
+    [SerializeField] float fallVelocityBuffer = -.5f;
 
     private Transform[] hairParts;
     private Transform hairAnchor;
@@ -46,7 +47,7 @@ public class HairAnchor : MonoBehaviour
             currentOffset = jumpOffset;
         }
         // fall
-        else if (playerController.PlayerCharacterController.velocity.y < -.03f)
+        else if (playerController.PlayerCharacterController.velocity.y < fallVelocityBuffer)
         {
             currentOffset = fallOffset;
         }
@@ -54,6 +55,11 @@ public class HairAnchor : MonoBehaviour
         else if (playerController.MoveAxis.x != 0)
         {
             currentOffset = runOffset;
+        }
+
+        else
+        {
+            currentOffset = idleOffset;
         }
 
         // flip x offset direction if we're facing left

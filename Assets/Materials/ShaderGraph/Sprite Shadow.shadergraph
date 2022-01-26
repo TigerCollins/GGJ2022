@@ -5,6 +5,12 @@
     "m_Properties": [
         {
             "m_Id": "97f832e3db3744f1aa1394cae928aff4"
+        },
+        {
+            "m_Id": "488f1e00792a462c880a51c5f36e98f0"
+        },
+        {
+            "m_Id": "e1cce599226a491e9a53bf1eb801ef31"
         }
     ],
     "m_Keywords": [],
@@ -511,6 +517,31 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Texture2DShaderProperty",
+    "m_ObjectId": "488f1e00792a462c880a51c5f36e98f0",
+    "m_Guid": {
+        "m_GuidSerialized": "eadb85f2-cbb2-4834-81f4-ddb4b420fb74"
+    },
+    "m_Name": "EmissionSprite",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "EmissionSprite",
+    "m_DefaultReferenceName": "EmissionSprite",
+    "m_OverrideReferenceName": "Emission_Sprite",
+    "m_GeneratePropertyBlock": true,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_Guid": ""
+    },
+    "m_Modifiable": true,
+    "m_DefaultType": 0
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.VertexColorNode",
     "m_ObjectId": "4bee88b463f642529a2f7489d04c2f86",
     "m_Group": {
@@ -888,10 +919,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 29.00006103515625,
-            "y": -175.0000457763672,
+            "x": 44.99995422363281,
+            "y": -134.99996948242188,
             "width": 208.0,
-            "height": 302.0
+            "height": 301.9999694824219
         }
     },
     "m_Slots": [
@@ -1096,6 +1127,8 @@
         "m_GuidSerialized": "019e15da-1817-42b8-92ec-9229399fbe2a"
     },
     "m_Name": "Sprite",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Texture2D_97f832e3db3744f1aa1394cae928aff4",
     "m_OverrideReferenceName": "_MainTex",
     "m_GeneratePropertyBlock": true,
@@ -1104,7 +1137,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"6fd0b649401ca5b419a5ebf5df170c0f\",\"type\":3}}",
         "m_Guid": ""
     },
     "m_Modifiable": true,
@@ -1651,6 +1684,32 @@
         "m_SerializableColors": []
     },
     "m_SerializedDescriptor": "SurfaceDescription.Emission"
+}
+
+{
+    "m_SGVersion": 3,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.ColorShaderProperty",
+    "m_ObjectId": "e1cce599226a491e9a53bf1eb801ef31",
+    "m_Guid": {
+        "m_GuidSerialized": "7f946abf-a5eb-462c-bfbf-ffb41b2e0d4a"
+    },
+    "m_Name": "EmissionColour",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "EmissionColour",
+    "m_DefaultReferenceName": "EmissionColour",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "r": 0.1695888191461563,
+        "g": 0.7213625311851502,
+        "b": 0.9716981053352356,
+        "a": 0.7019608020782471
+    },
+    "m_ColorMode": 0
 }
 
 {

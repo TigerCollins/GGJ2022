@@ -44,6 +44,7 @@ public class PlayerAnimation : MonoBehaviour
     public void Init()
     {
         onJump.AddListener(delegate { animator.SetTrigger("Jump");});
+        PlayerController.instance.characterEvents.onAttack.AddListener(delegate { Attack(); });
        // onGrounded.AddListener(delegate { AttemptIdleAnimationState(); });
         onMoveInputStateChange.AddListener(MovementStateChange);
     }
@@ -57,6 +58,11 @@ public class PlayerAnimation : MonoBehaviour
         {
             animator.SetTrigger("Jump");
         }
+    }
+
+    void Attack()
+    {
+        animator.SetTrigger("Attack");
     }
 
     public void MovementStateChange(PlayerController.MovementState state)
