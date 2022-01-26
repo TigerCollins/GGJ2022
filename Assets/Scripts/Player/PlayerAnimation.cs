@@ -8,6 +8,10 @@ public class PlayerAnimation : MonoBehaviour
 {
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer spriteRenderer;
+
+    [SerializeField] Animator animator_card;
+    [SerializeField] SpriteRenderer spriteRenderer_card;
+
     public UnityEvent onJump;
     public UnityEvent onGrounded;
     public UnityEvent onNoLongerGrounded;
@@ -26,6 +30,7 @@ public class PlayerAnimation : MonoBehaviour
             {
                 groundedState = value;
                 animator.SetBool("Grounded", value);
+                animator_card.SetBool("Grounded", value);
                 if (value)
                 {
                     onGrounded.Invoke();
@@ -44,6 +49,7 @@ public class PlayerAnimation : MonoBehaviour
     public void Init()
     {
         onJump.AddListener(delegate { animator.SetTrigger("Jump");});
+        onJump.AddListener(delegate { animator_card.SetTrigger("Jump"); });
         PlayerController.instance.characterEvents.onAttack.AddListener(delegate { Attack(); });
         PlayerController.instance.characterEvents.onAbilityUsed.AddListener(delegate { AbilityUsed(); });
        // onGrounded.AddListener(delegate { AttemptIdleAnimationState(); });
@@ -58,12 +64,14 @@ public class PlayerAnimation : MonoBehaviour
         if(!PlayerController.instance.IsGrounded)
         {
             animator.SetTrigger("Jump");
+            animator_card.SetTrigger("Jump");
         }
     }
 
     void Attack()
     {
         animator.SetTrigger("Attack");
+        animator_card.SetTrigger("Attack");
     }
 
     void AbilityUsed()
@@ -79,6 +87,7 @@ public class PlayerAnimation : MonoBehaviour
             if (PlayerController.instance.CanMove)
             {
                 animator.SetInteger("AnimState", (int)state);
+                animator_card.SetInteger("AnimState", (int)state);
             }
 
             else
@@ -104,6 +113,7 @@ public class PlayerAnimation : MonoBehaviour
         {
             playerFacingRight = PlayerController.instance.IsFacingRight;
             spriteRenderer.flipX = playerFacingRight;
+            spriteRenderer_card.flipX = playerFacingRight;
         }
     }
 }

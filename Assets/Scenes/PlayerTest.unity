@@ -611,7 +611,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 0.348, g: 0.33298823, b: 0.29204705, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -1242,98 +1242,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 438706132, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_CastShadows
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 438706132, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619352, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.067
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619352, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.703
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619353, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619353, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619353, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 7e110a41413939142b16369ead473877, type: 2}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: lerpSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: fallOffset.x
-      value: -0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: fallOffset.y
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: idleOffset.x
-      value: -0.09
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: idleOffset.y
-      value: -0.18
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: jumpOffset.y
-      value: -0.22
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: partOffset.x
-      value: -0.09
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: partOffset.y
-      value: -0.18
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: fallVelocityBuffer
-      value: -0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 2909470774800876578, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Height
-      value: 0.85
-      objectReference: {fileID: 0}
-    - target: {fileID: 2909470774800876578, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Radius
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2909470774800876578, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Center.y
-      value: 0.56
-      objectReference: {fileID: 0}
-    - target: {fileID: 3015820705017892937, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_RayTracingMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3015820705017892937, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_RayTraceProcedural
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3015820705017892937, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_StaticShadowCaster
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3015820705017892937, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 7e110a41413939142b16369ead473877, type: 2}
     - target: {fileID: 3111495686390456893, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1381,18 +1289,6 @@ PrefabInstance:
     - target: {fileID: 3114611267891543743, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4145980867137352174, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_CastShadows
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4145980867137352174, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5315511273860487878, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: physicsPushPower
-      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
