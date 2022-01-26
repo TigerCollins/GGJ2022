@@ -8,6 +8,7 @@ public class PlayerAnimation : MonoBehaviour
 {
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] PlayerController playerController;
 
     [SerializeField] Animator animator_card;
     [SerializeField] SpriteRenderer spriteRenderer_card;
@@ -50,8 +51,8 @@ public class PlayerAnimation : MonoBehaviour
     {
         onJump.AddListener(delegate { animator.SetTrigger("Jump");});
         onJump.AddListener(delegate { animator_card.SetTrigger("Jump"); });
-        PlayerController.instance.characterEvents.onAttack.AddListener(delegate { Attack(); });
-        PlayerController.instance.characterEvents.onAbilityUsed.AddListener(delegate { AbilityUsed(); });
+        playerController.characterEvents.onAttack.AddListener(delegate { Attack(); });
+        playerController.characterEvents.onAbilityUsed.AddListener(delegate { AbilityUsed(); });
        // onGrounded.AddListener(delegate { AttemptIdleAnimationState(); });
         onMoveInputStateChange.AddListener(MovementStateChange);
     }
@@ -61,7 +62,7 @@ public class PlayerAnimation : MonoBehaviour
         //Grounded
        // animator.SetBool("Grounded", groundedState);
         DirectionChange();
-        if(!PlayerController.instance.IsGrounded)
+        if(!playerController.IsGrounded)
         {
             animator.SetTrigger("Jump");
             animator_card.SetTrigger("Jump");
@@ -81,10 +82,10 @@ public class PlayerAnimation : MonoBehaviour
 
     public void MovementStateChange(PlayerController.MovementState state)
     {
-        if(state != movementState &&  PlayerController.instance.IsGrounded)
+        if(state != movementState && playerController.IsGrounded)
         {
             movementState = state;
-            if (PlayerController.instance.CanMove)
+            if (playerController.CanMove)
             {
                 animator.SetInteger("AnimState", (int)state);
                 animator_card.SetInteger("AnimState", (int)state);
@@ -101,7 +102,7 @@ public class PlayerAnimation : MonoBehaviour
 
     public void AttemptIdleAnimationState()
     {
-        if(PlayerController.instance.IsGrounded)
+        if(playerController.IsGrounded)
         {
             onMoveInputStateChange.Invoke(PlayerController.MovementState.idle);
         }
@@ -109,9 +110,9 @@ public class PlayerAnimation : MonoBehaviour
 
     void DirectionChange()
     {
-        if(PlayerController.instance.IsFacingRight != playerFacingRight)
+        if(playerController.IsFacingRight != playerFacingRight)
         {
-            playerFacingRight = PlayerController.instance.IsFacingRight;
+            playerFacingRight = playerController.IsFacingRight;
             spriteRenderer.flipX = playerFacingRight;
             spriteRenderer_card.flipX = playerFacingRight;
         }

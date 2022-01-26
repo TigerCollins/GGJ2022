@@ -15,8 +15,15 @@ public class HairAnchor : MonoBehaviour
 
     [SerializeField] PlayerAnimation playerAnimation;
     [SerializeField] PlayerController playerController;
+    [Header("Hair 'Juice'")]
+    [SerializeField] bool canWiggle;
+    [SerializeField] bool wiggleWhenIdle;
+    [SerializeField] WiggleVariables idleWiggleVariables;
+    [SerializeField] WiggleVariables movingWiggleVariables;
+ 
 
     [Header("Hair Offsets (Assume facing right)")]
+    [SerializeField] bool isIdleOffset;
     [SerializeField] private Vector2 idleOffset = new Vector2(-0.01f, -0.1f);
     [SerializeField] private Vector2 runOffset = new Vector2(-0.1f, -0.01f);
     [SerializeField] private Vector2 jumpOffset = new Vector2(-0.01f, -0.1f);
@@ -40,26 +47,31 @@ public class HairAnchor : MonoBehaviour
         if ( playerController.MoveAxis.x == 0 && playerController.PlayerCharacterController.velocity.y == 0 || playerController.IsHittingWall && playerController.IsGrounded)
         {
             currentOffset = idleOffset;
+            isIdleOffset = true;
         }
         // jump
         else if (playerController.MoveAxis.y > 0)
         {
             currentOffset = jumpOffset;
+            isIdleOffset = false;
         }
         // fall
         else if (playerController.PlayerCharacterController.velocity.y < fallVelocityBuffer)
         {
             currentOffset = fallOffset;
+            isIdleOffset = false;
         }
         // run
         else if (playerController.MoveAxis.x != 0)
         {
             currentOffset = runOffset;
+            isIdleOffset = false;
         }
 
         else
         {
             currentOffset = idleOffset;
+            isIdleOffset = true;
         }
 
         // flip x offset direction if we're facing left
@@ -81,7 +93,9 @@ public class HairAnchor : MonoBehaviour
             // make sure we're not including the hair anchor, only the hair parts
             if (!hairPart.Equals(hairAnchor))
             {
-                Vector2 targetPosition = (Vector2) pieceToFollow.position + partOffset;
+                
+
+                Vector2 targetPosition = (Vector2) pieceToFollow.position + (partOffset + WiggleOffset);
                 Vector2 newPositionLerped = Vector2.Lerp(hairPart.position, targetPosition, Time.deltaTime * lerpSpeed);
                
                 hairPart.position = newPositionLerped;
@@ -90,4 +104,34 @@ public class HairAnchor : MonoBehaviour
         }
     }
 
+
+    Vector2 WiggleOffset
+    {
+        get
+        {
+            Vector2 wiggleOffset = Vector2.zero;
+            if(canWiggle)
+            {
+                if (wiggleWhenIdle && isIdleOffset)
+                {
+                    wiggleOffset = new Vector2(idleWiggleVariables.wiggleBounds.x * Mathf.Sin(Time.time * idleWiggleVariables.wiggleSpeed) * idleWiggleVariables.wiggleAmount, idleWiggleVariables.wiggleBounds.y * Mathf.Sin(Time.time * idleWiggleVariables.wiggleSpeed) * idleWiggleVariables.wiggleAmount);
+                }
+
+                else if (!isIdleOffset)
+                {
+                    wiggleOffset = new Vector2(movingWiggleVariables.wiggleBounds.x * Mathf.Sin(Time.time * movingWiggleVariables.wiggleSpeed) * movingWiggleVariables.wiggleAmount, movingWiggleVariables.wiggleBounds.y * Mathf.Sin(Time.time * movingWiggleVariables.wiggleSpeed) * movingWiggleVariables.wiggleAmount);
+                }
+            }
+            
+            return wiggleOffset;
+        }
+    }
+}
+
+[System.Serializable]
+public class WiggleVariables
+{
+    public Vector2 wiggleBounds;
+    public float wiggleSpeed;
+    public float wiggleAmount;
 }
