@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
 	[SerializeField] MovementDetails movement;
 	[SerializeField] internal CharacterEvents characterEvents;
+	[SerializeField] List<DirectionBasedObjectFlip> directionBasedObjectFlips;
 	 Vector3 moveDirection = Vector3.zero;
 	UnityEvent onUpdateCalled = new UnityEvent();
 
@@ -60,6 +61,7 @@ public class PlayerController : MonoBehaviour
 		instance = this;
 		originalPos = playerTransform.position;
 		playerAnimator.Init();
+		InitAllDirectionBasedObjects();
 	}
 
 	void Start()
@@ -260,13 +262,13 @@ public class PlayerController : MonoBehaviour
 		//Facing Direction
 		if (moveAxis.x < 0)
 		{
-			isFacingRight = false;
+			IsFacingRight = false;
 			receivingMovementInput = true;
 		}
 
 		else if(moveAxis.x >0)
         {
-			isFacingRight = true;
+			IsFacingRight = true;
 			receivingMovementInput = true;
 
 		}
@@ -305,6 +307,13 @@ public class PlayerController : MonoBehaviour
 
 	public bool IsFacingRight
     {
+		set
+        {
+			isFacingRight = value;
+			FlipDirectionBasedObjects();
+
+		}
+		
         get
         {
 			return isFacingRight;
@@ -426,6 +435,22 @@ public class PlayerController : MonoBehaviour
 			return canMove;
         }
     }
+
+	void InitAllDirectionBasedObjects()
+    {
+        foreach (DirectionBasedObjectFlip item in directionBasedObjectFlips)
+        {
+			item.Init();
+        }
+    }
+
+	void FlipDirectionBasedObjects()
+    {
+		foreach (DirectionBasedObjectFlip item in directionBasedObjectFlips)
+		{
+			item.FlipObject(IsFacingRight);
+		}
+	}
 }
 
 [System.Serializable]
