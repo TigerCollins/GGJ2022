@@ -78,6 +78,7 @@ public class PlayerAnimation : MonoBehaviour
     void AbilityUsed()
     {
         animator.SetTrigger("Ability");
+        animator_card.SetTrigger("Ability");
     }
 
     public void MovementStateChange(PlayerController.MovementState state)
