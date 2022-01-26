@@ -297,14 +297,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fede746688060264dbfa99607bc42438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partOffset: {x: 0, y: -8}
+  partOffset: {x: 0, y: 0}
   lerpSpeed: 20
   playerAnimation: {fileID: 2536726500216195613}
   playerController: {fileID: 5315511273860487878}
   idleOffset: {x: -0.01, y: -0.1}
-  runOffset: {x: -0.1, y: -0.01}
-  jumpOffset: {x: -0.01, y: -0.1}
-  fallOffset: {x: -0.01, y: 0.1}
+  runOffset: {x: -0.15, y: -0.01}
+  jumpOffset: {x: -0.01, y: -0.19}
+  fallOffset: {x: -0.01, y: 0.19}
 --- !u!212 &1049619353
 SpriteRenderer:
   m_ObjectHideFlags: 0
