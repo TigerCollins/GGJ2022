@@ -96,13 +96,14 @@ public class PlayerController : MonoBehaviour
 		}
 		
 		IsGrounded = characterController.isGrounded;
-		onUpdateCalled.Invoke();
+		
 	}
 
     public void Update()
     {
 		ForcePlayerHeightToDrop();
 		HittingWallLogic();
+		onUpdateCalled.Invoke();
 	}
 
     public bool IsGrounded

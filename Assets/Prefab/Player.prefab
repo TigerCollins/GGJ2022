@@ -301,10 +301,10 @@ MonoBehaviour:
   lerpSpeed: 20
   playerAnimation: {fileID: 2536726500216195613}
   playerController: {fileID: 5315511273860487878}
-  idleOffset: {x: -0.01, y: -0.1}
-  runOffset: {x: -0.1, y: -0.01}
-  jumpOffset: {x: -0.01, y: -0.1}
-  fallOffset: {x: -0.01, y: 0.1}
+  idleOffset: {x: -0.01, y: -0.2}
+  runOffset: {x: -0.2, y: -0.01}
+  jumpOffset: {x: -0.01, y: -0.2}
+  fallOffset: {x: -0.01, y: 0.2}
 --- !u!212 &1049619353
 SpriteRenderer:
   m_ObjectHideFlags: 0

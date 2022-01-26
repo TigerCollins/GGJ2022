@@ -36,7 +36,7 @@ public class HairAnchor : MonoBehaviour
         transform.localPosition = new Vector2(-rootAnchorOffset.x,rootAnchorOffset.y);
 
         // idle
-        if ( playerController.MoveAxis.x == 0 && playerController.MoveAxis.y == 0 || playerController.IsHittingWall)
+        if ( playerController.MoveAxis.x == 0 && playerController.PlayerCharacterController.velocity.y == 0 || playerController.IsHittingWall && playerController.IsGrounded)
         {
             currentOffset = idleOffset;
         }
@@ -46,7 +46,7 @@ public class HairAnchor : MonoBehaviour
             currentOffset = jumpOffset;
         }
         // fall
-        else if (playerController.MoveAxis.y < 0)
+        else if (playerController.PlayerCharacterController.velocity.y < -.03f)
         {
             currentOffset = fallOffset;
         }
