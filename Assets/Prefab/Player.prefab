@@ -213,6 +213,8 @@ GameObject:
   - component: {fileID: 1924742592}
   - component: {fileID: 1439607154}
   - component: {fileID: 1439607155}
+  - component: {fileID: 5743444973657746380}
+  - component: {fileID: 2800212253779726071}
   m_Layer: 0
   m_Name: Card Light
   m_TagString: Untagged
@@ -228,7 +230,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1924742590}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.234, y: 0.179, z: -0.12}
+  m_LocalPosition: {x: -0.594, y: 0.556, z: -0.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3114611267891543743}
@@ -246,8 +248,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0, b: 0.017929077, a: 1}
-  m_Intensity: 0.11
-  m_Range: 1.41
+  m_Intensity: 0
+  m_Range: 6.17
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -311,6 +313,34 @@ MonoBehaviour:
   inverse: 1
   dynamicObject: 0
 --- !u!114 &1439607155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924742590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 1
+--- !u!114 &5743444973657746380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924742590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9286681f946327a478a7b79f1c7c7420, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverse: 1
+  dynamicObject: 0
+--- !u!114 &2800212253779726071
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -422,6 +452,7 @@ GameObject:
   - component: {fileID: 3061037224798816055}
   - component: {fileID: 2909470774800876578}
   - component: {fileID: 750061762}
+  - component: {fileID: 8235586008436921445}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -494,7 +525,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   directionBasedObjectFlips:
-  - {fileID: 1439607154}
+  - {fileID: 5743444973657746380}
   isFacingRight: 0
   _raycast:
     useRaycast: 1
@@ -637,6 +668,27 @@ CharacterController:
   m_MinMoveDistance: 0.0001
   m_Center: {x: 0, y: 0.56, z: 0}
 --- !u!114 &750061762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3111495686390456893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7adbaf6d4e7c7f4eb7c1a413905eb33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraObject: {fileID: 0}
+  cameraTarget: {fileID: 3114611267891543743}
+  playerController: {fileID: 5315511273860487878}
+  useCameraBounds: 0
+  cameraXBounds: {x: 0, y: 0}
+  cameraDelay: 0.2
+  cameraOffset: {x: 0, y: 2.5, z: -9}
+  moveDirectionChangesXOffset: 1
+  moveDirectionXOffset: 0.5
+--- !u!114 &8235586008436921445
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

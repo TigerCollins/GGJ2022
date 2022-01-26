@@ -1231,32 +1231,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 27.945, y: -505.281, z: -731.424}
---- !u!1 &750061757 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3111495686390456893, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-  m_PrefabInstance: {fileID: 1607073789}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &750061762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 750061757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7adbaf6d4e7c7f4eb7c1a413905eb33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraObject: {fileID: 963194225}
-  cameraTarget: {fileID: 592984391}
-  playerController: {fileID: 1607073790}
-  useCameraBounds: 0
-  cameraXBounds: {x: 0, y: 0}
-  cameraDelay: 0.2
-  cameraOffset: {x: 0, y: 2.5, z: -9}
-  moveDirectionChangesXOffset: 1
-  moveDirectionXOffset: 0.5
 --- !u!1 &829191889
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,39 +1654,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1439607153 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1924742590, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-  m_PrefabInstance: {fileID: 1607073789}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1439607154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439607153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9286681f946327a478a7b79f1c7c7420, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inverse: 1
-  dynamicObject: 0
---- !u!114 &1439607155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439607153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 1
 --- !u!1 &1537502117
 GameObject:
   m_ObjectHideFlags: 0
@@ -1928,134 +1869,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: canWiggle
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: wiggleSpeed
-      value: 1.55
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: idleOffset.x
-      value: -0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: isIdleOffset
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: partOffset.x
-      value: 0.09
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: wiggleAmount
-      value: 1.34
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: wiggleBounds.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: wiggleBounds.y
-      value: 0.48
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: wiggleWhenIdle
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: idleWiggleVariables.wiggleSpeed
-      value: 5.31
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: idleWiggleVariables.wiggleAmount
-      value: 0.23
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: movingWiggleVariables.wiggleSpeed
-      value: 5.31
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: idleWiggleVariables.wiggleBounds.x
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: idleWiggleVariables.wiggleBounds.y
-      value: 0.09
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: movingWiggleVariables.wiggleAmount
-      value: 0.23
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: movingWiggleVariables.wiggleBounds.x
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 1049619354, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: movingWiggleVariables.wiggleBounds.y
-      value: 0.14
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742590, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Name
-      value: Card Light
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742591, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.234
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Range
-      value: 1.41
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Color.b
-      value: 0.017929077
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Intensity
-      value: 0.11
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Lightmapping
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Shadows.m_Bias
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Shadows.m_Type
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Shadows.m_Strength
-      value: 0.828
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Shadows.m_NormalBias
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: m_Shadows.m_Resolution
-      value: 128
-      objectReference: {fileID: 0}
-    - target: {fileID: 2536726500216195613, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: playerController
-      value: 
-      objectReference: {fileID: 1607073790}
     - target: {fileID: 3111495686390456893, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2104,14 +1917,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5315511273860487878, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: directionBasedObjectFlips.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5315511273860487878, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
-      propertyPath: directionBasedObjectFlips.Array.data[0]
+    - target: {fileID: 8235586008436921445, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
+      propertyPath: cameraObject
       value: 
-      objectReference: {fileID: 1439607154}
+      objectReference: {fileID: 963194225}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
 --- !u!114 &1607073790 stripped
@@ -2119,7 +1928,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5315511273860487878, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
   m_PrefabInstance: {fileID: 1607073789}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 750061757}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89e8f197b01cd7c44b243f71bca4261f, type: 3}
