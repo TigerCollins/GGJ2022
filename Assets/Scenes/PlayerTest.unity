@@ -2000,17 +2000,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Card Light
       objectReference: {fileID: 0}
+    - target: {fileID: 1924742591, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.234
+      objectReference: {fileID: 0}
     - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: m_Range
       value: 1.41
       objectReference: {fileID: 0}
     - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: m_Color.b
-      value: 0.23222043
+      value: 0.017929077
       objectReference: {fileID: 0}
     - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: m_Color.g
-      value: 0.023584902
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: m_Color.r
@@ -2018,7 +2026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: m_Intensity
-      value: 0.19
+      value: 0.11
       objectReference: {fileID: 0}
     - target: {fileID: 1924742592, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: m_Lightmapping
