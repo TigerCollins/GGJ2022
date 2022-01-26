@@ -167,7 +167,7 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-		void ApplyMovement()
+	void ApplyMovement()
 	{
 
 		float input = moveAxis.x;
@@ -519,6 +519,7 @@ public class CharacterEvents
 	public UnityEvent onGrounded;
 	public UnityEvent onJumped;
 	public UnityEvent onAttack;
+	public UnityEvent onAbilityUsed;
 
 	[Header("Life")]
 	public UnityEvent onDeath;

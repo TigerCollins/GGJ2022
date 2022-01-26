@@ -45,6 +45,7 @@ public class PlayerAnimation : MonoBehaviour
     {
         onJump.AddListener(delegate { animator.SetTrigger("Jump");});
         PlayerController.instance.characterEvents.onAttack.AddListener(delegate { Attack(); });
+        PlayerController.instance.characterEvents.onAbilityUsed.AddListener(delegate { AbilityUsed(); });
        // onGrounded.AddListener(delegate { AttemptIdleAnimationState(); });
         onMoveInputStateChange.AddListener(MovementStateChange);
     }
@@ -63,6 +64,11 @@ public class PlayerAnimation : MonoBehaviour
     void Attack()
     {
         animator.SetTrigger("Attack");
+    }
+
+    void AbilityUsed()
+    {
+        animator.SetTrigger("Ability");
     }
 
     public void MovementStateChange(PlayerController.MovementState state)

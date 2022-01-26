@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 using MoreMountains.Feedbacks;
 
@@ -73,62 +74,67 @@ public class CardObject : MonoBehaviour
         return bothLocked;
     }
 
-    public void ActivateAbility()
+    public void ActivateAbility(InputAction.CallbackContext context)
     {
-        if(DimensionSwitcher.instance.CurrentDimension() == GlobalHelper.Dimensions.dimensionA )
+        if(context.performed)
         {
-            if(sideACardDetails.IsUnlocked)
+            PlayerController.instance.characterEvents.onAbilityUsed.Invoke();
+            if (DimensionSwitcher.instance.CurrentDimension() == GlobalHelper.Dimensions.dimensionA)
             {
-                switch (sideACardDetails.CardAbility)
+                if (sideACardDetails.IsUnlocked)
                 {
-                    case CardAbilities.Ability.DimensionSwap:
-                        DimensionSwitcher.instance.onDimensionChange.Invoke();
-                        break;
-                    case CardAbilities.Ability.WorldFlip:
-                        break;
-                    case CardAbilities.Ability.Ability2:
-                        break;
-                    case CardAbilities.Ability.Ability3:
-                        break;
-                    case CardAbilities.Ability.Ability4:
-                        break;
-                    case CardAbilities.Ability.Ability5:
-                        break;
-                    case CardAbilities.Ability.Ability6:
-                        break;
-                    default:
-                        break;
+                    switch (sideACardDetails.CardAbility)
+                    {
+                        case CardAbilities.Ability.DimensionSwap:
+                            DimensionSwitcher.instance.onDimensionChange.Invoke();
+                            break;
+                        case CardAbilities.Ability.WorldFlip:
+                            break;
+                        case CardAbilities.Ability.Ability2:
+                            break;
+                        case CardAbilities.Ability.Ability3:
+                            break;
+                        case CardAbilities.Ability.Ability4:
+                            break;
+                        case CardAbilities.Ability.Ability5:
+                            break;
+                        case CardAbilities.Ability.Ability6:
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-            
-        }
 
-        else
-        {
-            if (sideBCardDetails.IsUnlocked)
+            }
+
+            else
             {
-                switch (sideBCardDetails.CardAbility)
+                if (sideBCardDetails.IsUnlocked)
                 {
-                    case CardAbilities.Ability.DimensionSwap:
-                        DimensionSwitcher.instance.onDimensionChange.Invoke();
-                        break;
-                    case CardAbilities.Ability.WorldFlip:
-                        break;
-                    case CardAbilities.Ability.Ability2:
-                        break;
-                    case CardAbilities.Ability.Ability3:
-                        break;
-                    case CardAbilities.Ability.Ability4:
-                        break;
-                    case CardAbilities.Ability.Ability5:
-                        break;
-                    case CardAbilities.Ability.Ability6:
-                        break;
-                    default:
-                        break;
+                    switch (sideBCardDetails.CardAbility)
+                    {
+                        case CardAbilities.Ability.DimensionSwap:
+                            DimensionSwitcher.instance.onDimensionChange.Invoke();
+                            break;
+                        case CardAbilities.Ability.WorldFlip:
+                            break;
+                        case CardAbilities.Ability.Ability2:
+                            break;
+                        case CardAbilities.Ability.Ability3:
+                            break;
+                        case CardAbilities.Ability.Ability4:
+                            break;
+                        case CardAbilities.Ability.Ability5:
+                            break;
+                        case CardAbilities.Ability.Ability6:
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
+       
     }
 }
 
