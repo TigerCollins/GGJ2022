@@ -1111,6 +1111,17 @@ Transform:
   m_Father: {fileID: 60439922}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &525324960 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 525324960, guid: 0a5f316b3805f5844b18683d461066d8, type: 3}
+  m_PrefabInstance: {fileID: 2090536511197223318}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b79f1d02dc4ad441972bcc3795b01c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -2418,6 +2429,10 @@ PrefabInstance:
       propertyPath: statsProfile
       value: 
       objectReference: {fileID: 11400000, guid: 46a031573ed752d4796082eefe067ccc, type: 2}
+    - target: {fileID: 3993900933442133004, guid: 0a5f316b3805f5844b18683d461066d8, type: 3}
+      propertyPath: stats
+      value: 
+      objectReference: {fileID: 525324960}
     - target: {fileID: 3993900933442133006, guid: 0a5f316b3805f5844b18683d461066d8, type: 3}
       propertyPath: m_Name
       value: NPC
