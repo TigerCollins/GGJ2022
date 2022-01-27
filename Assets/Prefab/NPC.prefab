@@ -467,10 +467,10 @@ GameObject:
   - component: {fileID: 3997574794052059276}
   - component: {fileID: 3993900933442133004}
   - component: {fileID: 3993900933442133007}
+  - component: {fileID: 525324960}
   - component: {fileID: 3862179287901793914}
   - component: {fileID: 3907314994672072964}
   - component: {fileID: 3757105085532797457}
-  - component: {fileID: 525324960}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Player
@@ -511,6 +511,7 @@ MonoBehaviour:
   canMove: 1
   npcAnimation: {fileID: 3993900933442133007}
   characterController: {fileID: 3757105085532797457}
+  stats: {fileID: 525324960}
   physicsPushPower: 6
   movement:
     gravity: {x: 0, y: -9.8, z: 0}
@@ -595,6 +596,40 @@ MonoBehaviour:
   groundedState: 0
   playerFacingRight: 0
   movementState: 0
+--- !u!114 &525324960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3993900933442133006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b79f1d02dc4ad441972bcc3795b01c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statsProfile: {fileID: 11400000, guid: 46a031573ed752d4796082eefe067ccc, type: 2}
+  maxHealth: 0
+  health: 4
+  defence: 0
+  maxLivesRemaining: 0
+  livesRemaining: 0
+  attack: 0
+  onHealthGained:
+    m_PersistentCalls:
+      m_Calls: []
+  onHealthLost:
+    m_PersistentCalls:
+      m_Calls: []
+  onLifeLost:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  isAlive: 0
+  destroyOnDeath: 1
+  destroyTimer: 0
 --- !u!212 &3862179287901793914
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -684,35 +719,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.0001
   m_Center: {x: 0, y: 0.56, z: 0}
---- !u!114 &525324960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3993900933442133006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b79f1d02dc4ad441972bcc3795b01c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isAlive: 0
-  health: 4
-  defence: 0
-  livesRemaining: 0
-  attack: 0
-  onHealthGained:
-    m_PersistentCalls:
-      m_Calls: []
-  onHealthLost:
-    m_PersistentCalls:
-      m_Calls: []
-  onLifeLost:
-    m_PersistentCalls:
-      m_Calls: []
-  onDeath:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &4649244005475389746
 GameObject:
   m_ObjectHideFlags: 0

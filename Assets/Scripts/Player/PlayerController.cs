@@ -102,14 +102,11 @@ public class PlayerController : MonoBehaviour
 	void FixedUpdate()
 	{
 		//Movement();
-		if(canMove)
-        {
 
-			ApplyMovement();
-		}
-		
+		ApplyMovement();
+
 		IsGrounded = characterController.isGrounded;
-		
+
 	}
 
     public void Update()
@@ -177,11 +174,14 @@ public class PlayerController : MonoBehaviour
 	{
 		if (context.performed)
 		{
+			
 			StatsController stats = RaycastStats();
 			if(stats != null)
             {
+		
 				statsController.DealDamageToOther(stats);
             }
+			HaltMovement();
 			characterEvents.onAttack.Invoke();
 		}
 	}
@@ -198,7 +198,7 @@ public class PlayerController : MonoBehaviour
 
 		}
 
-		else
+		else if( canMove)
         {
 			if(IsGrounded && !IsHittingWall)
             {
@@ -228,7 +228,7 @@ public class PlayerController : MonoBehaviour
 		}
 
 		//On Ground
-		else if (IsGrounded)
+		else if (IsGrounded && canMove)
 		{
 			desiredVelocity = new Vector2(Mathf.LerpUnclamped(characterController.velocity.x, desiredVelocity.x, movement.controlDamping * Time.deltaTime), characterController.velocity.y);
 			movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
@@ -246,7 +246,16 @@ public class PlayerController : MonoBehaviour
 			moveDirection += movement.gravity * Time.deltaTime ;
 		}
 		
-		moveDirection = new Vector3(movement.MoveVector.x, moveDirection.y, movement.MoveVector.z);
+		if(canMove)
+        {
+			moveDirection = new Vector3(movement.MoveVector.x, moveDirection.y, movement.MoveVector.z);
+		}
+
+		else
+        {
+			moveDirection = new Vector3(0, moveDirection.y, movement.MoveVector.z);
+		}
+		
 
 		characterController.Move(moveDirection * Time.deltaTime);
 	}
@@ -511,6 +520,38 @@ public class PlayerController : MonoBehaviour
 			return movement.isFalling;
 		}
     }
+
+	public void HaltMovement(InputAction.CallbackContext context)
+    {
+		if(context.performed)
+        {
+			HaltMovement();
+        }
+    }
+
+	public void HaltMovement()
+    {
+		print("rgrregregg");
+		if (movement.stopMovementWhenAttacking == true)
+        {
+			print("rgrg");
+			if (movement.StopMovementCoroutine != null)
+			{
+				//StopCoroutine(movement.StopMovementCoroutine);
+				//movement.StopMovementCoroutine = null;
+			}
+			movement.StopMovementCoroutine = StartCoroutine(StopMovement());
+		}
+		
+	}
+
+	IEnumerator StopMovement()
+    {
+		canMove = false;
+		yield return new WaitForSeconds(movement.movementStopTime);
+		canMove = true;
+
+	}
 }
 
 [System.Serializable]
@@ -557,6 +598,25 @@ public class MovementDetails
 	public bool isMidair;
 	public bool canControlMidAir = true;
 	[Range(1.25f, 15f)] public float airControlDamping = 2.5f;
+
+	[Space(10)]
+	public bool stopMovementWhenAttacking;
+	public float movementStopTime;
+	Coroutine stopCoroutine;
+		
+
+	public Coroutine StopMovementCoroutine
+    {
+		set
+        {
+			stopCoroutine = value;
+        }
+
+		get
+        {
+			return stopCoroutine;
+        }
+    }
 
 	public Vector3 MoveVector
 	{
