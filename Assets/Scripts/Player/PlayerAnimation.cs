@@ -8,6 +8,11 @@ public class PlayerAnimation : MonoBehaviour
 {
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] PlayerController playerController;
+
+    [SerializeField] Animator animatorCard;
+    [SerializeField] SpriteRenderer spriteRendererCard;
+
     public UnityEvent onJump;
     public UnityEvent onGrounded;
     public UnityEvent onNoLongerGrounded;
@@ -26,9 +31,12 @@ public class PlayerAnimation : MonoBehaviour
             {
                 groundedState = value;
                 animator.SetBool("Grounded", value);
+                animatorCard.SetBool("Grounded", value);
                 if (value)
                 {
                     onGrounded.Invoke();
+                    animator.SetBool("Falling", false);
+                    animatorCard.SetBool("Falling", false);
                 }
                
 
@@ -43,7 +51,10 @@ public class PlayerAnimation : MonoBehaviour
 
     public void Init()
     {
-        onJump.AddListener(delegate { animator.SetTrigger("Jump");});
+        onJump.AddListener(delegate { Jump(); });
+        playerController.characterEvents.onAttack.AddListener(delegate { Attack(); });
+        playerController.characterEvents.onAbilityUsed.AddListener(delegate { AbilityUsed(); });
+        playerController.characterEvents.onFalling.AddListener(delegate { IsFalling(); });
        // onGrounded.AddListener(delegate { AttemptIdleAnimationState(); });
         onMoveInputStateChange.AddListener(MovementStateChange);
     }
@@ -53,25 +64,69 @@ public class PlayerAnimation : MonoBehaviour
         //Grounded
        // animator.SetBool("Grounded", groundedState);
         DirectionChange();
-        if(!PlayerController.instance.IsGrounded)
+        if(!playerController.IsGrounded && !playerController.IsFalling)
+        {
+            Jump();
+        }
+
+        else if(!playerController.IsGrounded && playerController.IsFalling)
+        {
+            IsFalling();
+        }
+    }
+
+
+    void Jump()
+    {
+        if(!playerController.IsFalling)
         {
             animator.SetTrigger("Jump");
+            animatorCard.SetTrigger("Jump");
         }
+        
+    }
+    void Attack()
+    {
+        animator.SetTrigger("Attack");
+        animatorCard.SetTrigger("Attack");
+    }
+
+    void AbilityUsed()
+    {
+        animator.SetTrigger("Ability");
+        animatorCard.SetTrigger("Ability");
+    }
+
+    void IsFalling()
+    {
+
+            animator.SetBool("Falling", true);
+            animatorCard.SetBool("Falling", true);
     }
 
     public void MovementStateChange(PlayerController.MovementState state)
     {
-        if(state != movementState &&  PlayerController.instance.IsGrounded)
+        if(state != movementState && playerController.IsGrounded)
         {
             movementState = state;
-            animator.SetInteger("AnimState", (int)state);
-        }
-       
+            if (playerController.CanMove)
+            {
+                animator.SetInteger("AnimState", (int)state);
+                animatorCard.SetInteger("AnimState", (int)state);
+            }
+
+            else
+            {
+
+            }
+         
+          
+        }       
     }
 
     public void AttemptIdleAnimationState()
     {
-        if(PlayerController.instance.IsGrounded)
+        if(playerController.IsGrounded)
         {
             onMoveInputStateChange.Invoke(PlayerController.MovementState.idle);
         }
@@ -79,10 +134,11 @@ public class PlayerAnimation : MonoBehaviour
 
     void DirectionChange()
     {
-        if(PlayerController.instance.IsFacingRight != playerFacingRight)
+        if(playerController.IsFacingRight != playerFacingRight)
         {
-            playerFacingRight = PlayerController.instance.IsFacingRight;
+            playerFacingRight = playerController.IsFacingRight;
             spriteRenderer.flipX = playerFacingRight;
+            spriteRendererCard.flipX = playerFacingRight;
         }
     }
 }
