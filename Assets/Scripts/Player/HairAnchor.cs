@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HairAnchor : MonoBehaviour
 {
+    [SerializeField] NPCScript npcScript;
+
+    [Space(10)]
 
     Vector2 rootAnchorOffset;
    
@@ -36,9 +39,18 @@ public class HairAnchor : MonoBehaviour
     [SerializeField] private Vector2 jumpOffset = new Vector2(-0.01f, -0.1f);
     [SerializeField] private Vector2 fallOffset = new Vector2(-0.01f, 0.1f);
 
-    private void Awake() 
+    private void Start() 
     {
-        playerController.UpdateEvent.AddListener(delegate { UpdateHairOffset(); });
+        if (npcScript != null)
+        {
+            npcScript.UpdateEvent.AddListener(delegate { UpdateHairOffset(); });
+        }
+
+        else
+        {
+            PlayerController.instance.UpdateEvent.AddListener(delegate { UpdateHairOffset(); });
+        }
+
         rootAnchorOffset = transform.localPosition;
 
         hairAnchor = GetComponent<Transform>();
@@ -50,26 +62,52 @@ public class HairAnchor : MonoBehaviour
         Vector2 currentOffset = Vector2.zero;
         transform.localPosition = new Vector2(-rootAnchorOffset.x,rootAnchorOffset.y);
 
+
+        float xMovement = 0;
+        float yMovement = 0;
+        bool isGrounded = false;
+        bool isHittingWall = false;
+        bool isFalling = false;
+        bool isFacingRight = false;
+        if (npcScript != null)
+        {
+            xMovement = npcScript.MovementValue;
+            isGrounded = npcScript.IsGrounded;
+            isHittingWall = npcScript.IsHittingWall;
+            isFalling = npcScript.IsFalling;
+            isFacingRight = !npcScript.IsFacingRight;
+        }
+
+        else
+        {
+            xMovement = playerController.MoveAxis.x;
+            yMovement = playerController.PlayerCharacterController.velocity.y ;
+            isGrounded = playerController.IsGrounded;
+            isHittingWall = playerController.IsHittingWall;
+            isFalling = playerController.IsFalling;
+            isFacingRight = !playerController.IsFacingRight;
+        }
+
         // idle
-        if ( playerController.MoveAxis.x == 0 && playerController.PlayerCharacterController.velocity.y == 0 || playerController.IsHittingWall && playerController.IsGrounded)
+        if (xMovement == 0 && !isFalling || isHittingWall && isGrounded)
         {
             currentOffset = idleOffset;
             isIdleOffset = true;
         }
         // jump
-        else if (playerController.MoveAxis.y > 0)
+        else if (yMovement > 0)
         {
             currentOffset = jumpOffset;
             isIdleOffset = false;
         }
         // fall
-        else if (playerController.IsFalling)
+        else if (isFalling)
         {
             currentOffset = fallOffset;
             isIdleOffset = false;
         }
         // run
-        else if (playerController.MoveAxis.x != 0)
+        else if (xMovement != 0)
         {
             currentOffset = runOffset;
             isIdleOffset = false;
@@ -82,7 +120,7 @@ public class HairAnchor : MonoBehaviour
         }
 
         // flip x offset direction if we're facing left
-        if (!playerController.IsFacingRight)
+        if (isFacingRight)
         {
             transform.localPosition = new Vector2(rootAnchorOffset.x + rootOffset.x, rootAnchorOffset.y + rootOffset.y);
             currentOffset.x = currentOffset.x * -1;
