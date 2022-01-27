@@ -260,6 +260,7 @@ public class PlayerController : MonoBehaviour
 
 	public void MovementVector(InputAction.CallbackContext callbackContext)
 	{
+
 		moveAxis = callbackContext.ReadValue<Vector2>();
 		
 
@@ -457,20 +458,20 @@ public class PlayerController : MonoBehaviour
 	}
 
 	public void IsFallingCheck()
-	{
+    {
 
-		bool isFalling = characterController.velocity.y < movement.fallVelocityBuffer && !IsGrounded;
-		if (movement.isFalling != isFalling)
-		{
-			movement.isFalling = isFalling;
-			if (isFalling)
-			{
+			bool isFalling = characterController.velocity.y < movement.fallVelocityBuffer && !IsGrounded;
+			if(movement.isFalling != isFalling)
+            {
+				movement.isFalling = isFalling;
+			if(isFalling)
+            {
 				characterEvents.onFalling.Invoke();
 
 			}
-
-		}
-	}
+				
+			}
+    }
 
 	public bool IsFalling
     {
