@@ -1,0 +1,449 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Events;
+
+
+[RequireComponent(typeof(NPCAnimation))]
+public class NPCScript : MonoBehaviour
+{
+	//public GameController gameController;
+
+	bool receivingMovementInput;
+	[SerializeField] bool canMove = true;
+
+
+
+	[Header("NPC Settings")]
+	[SerializeField] NPCAnimation npcAnimation;
+	[SerializeField] CharacterController characterController;
+	[SerializeField] float physicsPushPower;
+
+
+	[SerializeField] MovementInfo movement;
+	[SerializeField] internal CharacterEvents characterEvents;
+	[SerializeField] List<DirectionBasedObjectFlip> directionBasedObjectFlips;
+	Vector3 moveDirection = Vector3.zero;
+	UnityEvent onUpdateCalled = new UnityEvent();
+
+
+
+	[SerializeField] bool isFacingRight;
+
+	[Header("Raycast")]
+	[SerializeField] RaycastInfo _raycast;
+
+	[Header("Debug")]
+	[SerializeField] Transform playerTransform;
+	Vector3 originalPos;
+	[SerializeField] bool isGrounded;
+	[SerializeField] bool isHittingWall;
+
+	public enum MovementState
+	{
+		idle,
+		combatIdle,
+		Sprint,
+		Jumping,
+		Freefall
+	}
+
+	// Initialization
+	private void Awake()
+	{
+		originalPos = playerTransform.position;
+		npcAnimation.Init();
+		InitAllDirectionBasedObjects();
+	}
+
+	public CharacterController PlayerCharacterController
+	{
+		get
+		{
+			return characterController;
+		}
+	}
+
+	// Main tick
+	void FixedUpdate()
+	{
+		//Movement();
+		if (canMove)
+		{
+
+			MovementVector();
+		}
+
+		IsGrounded = characterController.isGrounded;
+
+	}
+
+	public void Update()
+	{
+		ForcePlayerHeightToDrop();
+		HittingWallLogic();
+		IsFallingCheck();
+		onUpdateCalled.Invoke();
+	}
+
+	public bool IsGrounded
+	{
+		set
+		{
+			if (value != isGrounded)
+			{
+				value = characterController.isGrounded;
+				npcAnimation.IsGrounded = value;
+				characterEvents.onGrounded.Invoke();
+				isGrounded = value;
+			}
+		}
+
+		get
+		{
+			return characterController.isGrounded;
+		}
+	}
+
+#if UNITY_EDITOR
+	public void EditorResetPosition(InputAction.CallbackContext context)
+	{
+		if (context.performed)
+		{
+			playerTransform.position = originalPos;
+		}
+	}
+
+	public void EditorSlowMo(InputAction.CallbackContext context)
+	{
+		if (context.performed)
+		{
+			Time.timeScale = 0.2f;
+		}
+	}
+
+	public void EditorNormalTime(InputAction.CallbackContext context)
+	{
+		if (context.performed)
+		{
+			Time.timeScale = 1f;
+		}
+	}
+#endif
+
+
+	public void BasicAttack(InputAction.CallbackContext context)
+	{
+		if (context.performed)
+		{
+			characterEvents.onAttack.Invoke();
+		}
+	}
+
+
+	public void MovementVector()
+	{
+
+		float input = movement.horizontalMoveDirection;
+
+
+		//Facing Direction
+		if (input < 0)
+		{
+			IsFacingRight = false;
+			receivingMovementInput = true;
+		}
+
+		else if (input > 0)
+		{
+			IsFacingRight = true;
+			receivingMovementInput = true;
+
+		}
+
+		else
+		{
+			receivingMovementInput = false;
+
+		
+		}
+
+
+		
+		//Position
+		if (Mathf.Abs(input) > 0.3f)
+		{
+					
+
+
+			if (IsGrounded && !IsHittingWall)
+			{
+				npcAnimation.onMoveInputStateChange.Invoke(MovementState.Sprint);
+			}
+
+			else if (IsHittingWall)
+			{
+				npcAnimation.onMoveInputStateChange.Invoke(MovementState.idle);
+			}
+
+		}
+		else
+        {
+			npcAnimation.AttemptIdleAnimationState();
+        }
+
+		moveDirection += movement.gravity * Time.deltaTime;
+	
+
+	moveDirection = new Vector3(input, moveDirection.y, 0);
+
+	characterController.Move(moveDirection* Time.deltaTime);
+
+
+	}
+
+	public void Raycast(InputAction.CallbackContext context)
+	{
+
+		if (context.performed && _raycast.useRaycast)
+		{
+			bool isHitting = false;
+			RaycastHit hit;
+			Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y + 1, _raycast.raycastPoint.position.z);
+			Debug.DrawRay(origin, Vector2.right * (isFacingRight ? 1 : -1) * _raycast.raycastDistance, _raycast.aboveCheckRaycastColour);
+			if (Physics.Raycast(origin, Vector2.right * (isFacingRight ? 1 : -1), out hit, _raycast.raycastDistance, _raycast.raycastMask))
+			{
+				//Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
+				if (hit.collider.TryGetComponent(out InteractableDimensionObject interactable))
+				{
+					interactable.DebugRaycastHit();
+				}
+			}
+		}
+	}
+
+	public bool CheckInputState()
+	{
+		return receivingMovementInput;
+	}
+
+	public bool IsFacingRight
+	{
+		set
+		{
+			isFacingRight = value;
+			FlipDirectionBasedObjects();
+
+		}
+
+		get
+		{
+			return isFacingRight;
+		}
+	}
+
+
+	void ForcePlayerHeightToDrop()
+	{
+		if (HitObjectAbove() == true)
+		{
+			moveDirection.y = 0;
+		}
+	}
+
+	public void HittingWallLogic()
+	{
+		isHittingWall = HittingObjectInfrontWithoutRigidBody();
+	}
+
+	public bool HitObjectAbove()
+	{
+		bool isHitting = false;
+		RaycastHit hit;
+		Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y + 1, _raycast.raycastPoint.position.z);
+		Debug.DrawRay(origin, transform.TransformDirection(Vector2.up) * _raycast.aboveCheckDistance, _raycast.aboveCheckRaycastColour);
+		if (Physics.Raycast(origin, transform.TransformDirection(Vector2.up), out hit, _raycast.aboveCheckDistance, _raycast.raycastMask))
+		{
+			//Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
+			if (hit.transform != null)
+			{
+				isHitting = true;
+			}
+
+		}
+		return isHitting;
+	}
+
+	public bool HittingObjectInfrontWithoutRigidBody()
+	{
+		bool isHitting = false;
+		RaycastHit hit;
+		Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y + 1, _raycast.raycastPoint.position.z);
+		Debug.DrawRay(origin, Vector2.right * (isFacingRight ? 1 : -1) * _raycast.wallCheckDistance, _raycast.wallCheckRaycastColour);
+		if (Physics.Raycast(origin, Vector2.right * (isFacingRight ? 1 : -1), out hit, _raycast.wallCheckDistance, _raycast.raycastMask))
+		{
+			//Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
+			if (hit.rigidbody == null)
+			{
+				isHitting = true;
+			}
+
+			else if (hit.transform.TryGetComponent(out InteractableDimensionObject interactable))
+			{
+				isHitting = true;
+			}
+		}
+		return isHitting;
+	}
+
+	void OnControllerColliderHit(ControllerColliderHit hit)
+	{
+		RigidBodyPhysics(hit);
+	}
+
+	public void RigidBodyPhysics(ControllerColliderHit hit)
+	{
+		Rigidbody body = hit.collider.attachedRigidbody;
+
+
+		// no rigidbody
+		if (body == null || body.isKinematic)
+			return;
+
+		// We dont want to push objects below us
+		if (hit.moveDirection.y < -0.3f)
+			return;
+
+		// Calculate push direction from move direction,
+		// we only push objects to the sides never up and down
+		Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+
+		// If you know how fast your character is trying to move,
+		// then you can also multiply the push velocity by that.
+
+		// Apply the push
+		body.velocity = pushDir * physicsPushPower;
+
+	}
+
+	public UnityEvent UpdateEvent
+	{
+		get
+		{
+			return onUpdateCalled;
+		}
+	}
+
+	public bool IsHittingWall
+	{
+		get
+		{
+			return isHittingWall;
+		}
+	}
+
+	public bool CanMove
+	{
+		get
+		{
+			return canMove;
+		}
+	}
+
+	void InitAllDirectionBasedObjects()
+	{
+		foreach (DirectionBasedObjectFlip item in directionBasedObjectFlips)
+		{
+			item.Init();
+		}
+	}
+
+	void FlipDirectionBasedObjects()
+	{
+		foreach (DirectionBasedObjectFlip item in directionBasedObjectFlips)
+		{
+			item.FlipObject(IsFacingRight);
+		}
+	}
+
+	public void IsFallingCheck()
+	{
+
+		bool isFalling = characterController.velocity.y < movement.fallVelocityBuffer && !IsGrounded;
+		if (movement.isFalling != isFalling)
+		{
+			movement.isFalling = isFalling;
+			if (isFalling)
+			{
+				characterEvents.onFalling.Invoke();
+
+			}
+
+		}
+	}
+
+	public bool IsFalling
+	{
+		get
+		{
+			return movement.isFalling;
+		}
+	}
+
+	public float MovementValue
+    {
+		get
+        {
+			return movement.horizontalMoveDirection;
+        }
+    }
+}
+
+[System.Serializable]
+public class RaycastInfo
+{
+	public bool useRaycast;
+	public LayerMask raycastMask;
+	[Tooltip("This decides where the raycast comes from Leave this variable blank for it to default to this gameobject.")]
+	public Transform raycastPoint;
+	public float raycastDistance;
+	public Color raycastColour;
+
+	[Space(10)]
+
+	public float aboveCheckDistance = .5f;
+	public Color aboveCheckRaycastColour;
+
+	[Space(10)]
+
+	public float wallCheckDistance = .5f;
+	public Color wallCheckRaycastColour;
+}
+
+[System.Serializable]
+public class MovementInfo
+{
+	public Vector3 gravity = new Vector3(0, 20.0f, 0);
+
+	[Space(10)]
+
+	public Vector3 velocity;
+	[HideInInspector] public Vector3 lastPositon;
+	public float horizontalMoveDirection;
+
+	[Space(10)]
+
+	public float fallVelocityBuffer = .03f;
+	[HideInInspector] public bool isFalling;
+	[Range(1.25f, 15f)] public float controlDamping = 7f;
+
+
+
+
+
+}
+
+
+
+

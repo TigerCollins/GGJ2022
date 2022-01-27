@@ -4,13 +4,27 @@ using UnityEngine;
 
 public class DirectionBasedObjectFlip : MonoBehaviour
 {
+    [SerializeField] NPCScript npcScript;
+
+    [Space(10)]
+
     [SerializeField] bool inverse;
     [SerializeField] bool dynamicObject;
     Vector2 offsetPosition;
     public void Init()
     {
         offsetPosition = transform.localPosition;
-            PlayerController.instance.UpdateEvent.AddListener(delegate { UpdatePosition(); });        
+
+        if(npcScript != null)
+        {
+            npcScript.UpdateEvent.AddListener(delegate { UpdatePosition(); });
+        }
+
+        else
+        {
+            PlayerController.instance.UpdateEvent.AddListener(delegate { UpdatePosition(); });
+        }
+         
     }
 
     void UpdatePosition()
