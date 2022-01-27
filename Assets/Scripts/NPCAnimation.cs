@@ -131,6 +131,21 @@ public class NPCAnimation : MonoBehaviour
         }
     }
 
+    public void Death()
+    {
+        if (npcController.IsGrounded)
+        {
+            animator.SetTrigger("Death");
+        }
+    }
+
+    public void TookDamage()
+    {
+
+            animator.SetTrigger("Hurt");
+        
+    }
+
     void DirectionChange()
     {
         if (npcController.IsFacingRight != playerFacingRight)

@@ -159,6 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fede746688060264dbfa99607bc42438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcScript: {fileID: 0}
   partOffset: {x: 0.09, y: -0.18}
   lerpSpeed: 10
   fallVelocityBuffer: -0.75
@@ -341,6 +342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9286681f946327a478a7b79f1c7c7420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcScript: {fileID: 0}
   inverse: 1
   dynamicObject: 0
 --- !u!114 &1439607155
@@ -454,6 +456,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2807150554123357353
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5319434624368891087}
+  m_Layer: 0
+  m_Name: HairFollowPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5319434624368891087
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2807150554123357353}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.087, y: 0.675, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3114611267891543743}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3111495686390456893
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,6 +501,7 @@ GameObject:
   - component: {fileID: 3061037224798816055}
   - component: {fileID: 2909470774800876578}
   - component: {fileID: 8235586008436921445}
+  - component: {fileID: 1607073792}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -491,6 +524,7 @@ Transform:
   - {fileID: 1049619352}
   - {fileID: 1924742591}
   - {fileID: 956990872}
+  - {fileID: 5319434624368891087}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -507,6 +541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canMove: 1
+  statsController: {fileID: 1607073792}
   playerAnimator: {fileID: 2536726500216195613}
   characterController: {fileID: 2909470774800876578}
   physicsPushPower: 6
@@ -555,7 +590,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 1
     raycastPoint: {fileID: 3114611267891543743}
-    raycastDistance: 7.91
+    raycastDistance: 1.2
     raycastColour: {r: 0.2028302, g: 0.6222379, b: 1, a: 1}
     aboveCheckDistance: 0.7
     aboveCheckRaycastColour: {r: 1, g: 0.77560496, b: 0, a: 0.31764707}
@@ -710,6 +745,35 @@ MonoBehaviour:
   cameraOffset: {x: 0, y: 2.5, z: -9}
   moveDirectionChangesXOffset: 1
   moveDirectionXOffset: 0.75
+--- !u!114 &1607073792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3111495686390456893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b79f1d02dc4ad441972bcc3795b01c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAlive: 0
+  health: 4
+  defence: 0
+  livesRemaining: 0
+  attack: 0
+  onHealthGained:
+    m_PersistentCalls:
+      m_Calls: []
+  onHealthLost:
+    m_PersistentCalls:
+      m_Calls: []
+  onLifeLost:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6685032484304088833
 GameObject:
   m_ObjectHideFlags: 0

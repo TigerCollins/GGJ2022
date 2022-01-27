@@ -18,6 +18,7 @@ public class NPCScript : MonoBehaviour
 	[Header("NPC Settings")]
 	[SerializeField] NPCAnimation npcAnimation;
 	[SerializeField] CharacterController characterController;
+	[SerializeField] StatsController stats;
 	[SerializeField] float physicsPushPower;
 
 
@@ -55,7 +56,14 @@ public class NPCScript : MonoBehaviour
 		originalPos = playerTransform.position;
 		npcAnimation.Init();
 		InitAllDirectionBasedObjects();
+		InitStatEvents();
 	}
+
+	void InitStatEvents()
+    {
+		stats.onDeath.AddListener(delegate { npcAnimation.Death(); });
+		stats.onHealthLost.AddListener(delegate { npcAnimation.TookDamage(); });
+    }
 
 	public CharacterController PlayerCharacterController
 	{

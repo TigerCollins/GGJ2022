@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
 	[Header("Player Settings")]
 	public static PlayerController instance;
+	[SerializeField] StatsController statsController;
 	[SerializeField] PlayerAnimation playerAnimator;
 	[SerializeField] CharacterController characterController;
 	[SerializeField] float physicsPushPower;
@@ -63,7 +64,15 @@ public class PlayerController : MonoBehaviour
 		originalPos = playerTransform.position;
 		playerAnimator.Init();
 		InitAllDirectionBasedObjects();
+		InitStatEvents();
 	}
+
+	void InitStatEvents()
+	{
+		statsController.onDeath.AddListener(delegate { playerAnimator.Death(); });
+		statsController.onHealthLost.AddListener(delegate { playerAnimator.TookDamage(); });
+	}
+
 
 	void Start()
 	{
@@ -168,6 +177,11 @@ public class PlayerController : MonoBehaviour
 	{
 		if (context.performed)
 		{
+			StatsController stats = RaycastStats();
+			if(stats != null)
+            {
+				statsController.DealDamageToOther(stats);
+            }
 			characterEvents.onAttack.Invoke();
 		}
 	}
@@ -290,20 +304,32 @@ public class PlayerController : MonoBehaviour
 
 		if (context.performed && _raycast.useRaycast)
 		{
-			bool isHitting = false;
+			
+		}
+	}
+
+	StatsController RaycastStats()
+    {
+		StatsController newController = null;
+		if(_raycast.useRaycast)
+        {
 			RaycastHit hit;
 			Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y + 1, _raycast.raycastPoint.position.z);
 			Debug.DrawRay(origin, Vector2.right * (isFacingRight ? 1 : -1) * _raycast.raycastDistance, _raycast.aboveCheckRaycastColour);
 			if (Physics.Raycast(origin, Vector2.right * (isFacingRight ? 1 : -1), out hit, _raycast.raycastDistance, _raycast.raycastMask))
 			{
 				//Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
-				if (hit.collider.TryGetComponent(out InteractableDimensionObject interactable))
+				 if (hit.transform.TryGetComponent(out StatsController stats))
 				{
-					interactable.DebugRaycastHit();
+					newController = stats;
 				}
 			}
 		}
-	}
+
+		return newController;
+    }
+
+
 
 	public bool CheckInputState()
     {
@@ -375,6 +401,11 @@ public class PlayerController : MonoBehaviour
 			{
 				isHitting = true;
 			}
+
+			else if(hit.transform.TryGetComponent(out NPCScript NPCScript))
+            {
+				isHitting = true;
+            }
 		}
 		return isHitting;
 	}
