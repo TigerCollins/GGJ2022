@@ -5,24 +5,40 @@ using UnityEngine.Events;
 
 public class StatsController : MonoBehaviour
 {
-    [SerializeField] bool isAlive;
+
     [SerializeField] StatsDetails statsProfile;
 
     [Header("Health")]
     [SerializeField] int maxHealth;
     [SerializeField] int health;
+
+    [Space (10)]
+
     [SerializeField] int defence;
+
+    [Space(10)]
+
     [SerializeField] int maxLivesRemaining;
     [SerializeField] int livesRemaining;
 
     [Header("Combat")]
     [SerializeField] int attack;
 
+    [Header("On Death")]
+    [SerializeField] bool isAlive = true;
+
+    [Space(10)]
+
+    [SerializeField] bool destroyOnDeath = true;
+    [SerializeField] float destroyTimer = 1.5f;
+
     [Header("Events")]
     public UnityEvent onHealthGained;
     public UnityEvent onHealthLost;
     public UnityEvent onLifeLost;
     public UnityEvent onDeath;
+
+    
 
 
     private void Start()
@@ -109,18 +125,34 @@ public class StatsController : MonoBehaviour
     {
         set
         {
+
+            if (livesRemaining <= 0 && isAlive == true)
+            {
+
+                DeathCountdown();
+                onDeath.Invoke();
+                isAlive = false;
+
+            }
+
+
             livesRemaining = Mathf.Clamp(value, 0, maxLivesRemaining);
 
-            if (livesRemaining <= 0)
-            {
-                isAlive = false;
-                onDeath.Invoke();
-            }
+          
         }
 
         get
         {
             return livesRemaining;
         }
+    }
+
+    void DeathCountdown()
+    {
+        if(destroyOnDeath)
+        {
+            Destroy(gameObject, destroyTimer);
+        }
+      
     }
 }
