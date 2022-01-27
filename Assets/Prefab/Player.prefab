@@ -83,6 +83,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &956990871
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 956990872}
+  m_Layer: 0
+  m_Name: HairFollowPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &956990872
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956990871}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.087, y: 0.675, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3114611267891543743}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1049619351
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,6 +164,8 @@ MonoBehaviour:
   fallVelocityBuffer: -0.75
   playerAnimation: {fileID: 2536726500216195613}
   playerController: {fileID: 5315511273860487878}
+  rootOffset: {x: 0, y: 0}
+  followPoint: {fileID: 956990872}
   canWiggle: 1
   wiggleWhenIdle: 1
   idleWiggleVariables:
@@ -213,7 +245,6 @@ GameObject:
   - component: {fileID: 1924742592}
   - component: {fileID: 1439607154}
   - component: {fileID: 1439607155}
-  - component: {fileID: 5743444973657746380}
   - component: {fileID: 2800212253779726071}
   m_Layer: 0
   m_Name: Card Light
@@ -230,7 +261,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1924742590}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.594, y: 0.61, z: -0.28}
+  m_LocalPosition: {x: -0.528, y: 0.61, z: -0.731}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3114611267891543743}
@@ -326,20 +357,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 1
---- !u!114 &5743444973657746380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1924742590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9286681f946327a478a7b79f1c7c7420, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inverse: 1
-  dynamicObject: 0
 --- !u!114 &2800212253779726071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,7 +468,6 @@ GameObject:
   - component: {fileID: 3015820705017892937}
   - component: {fileID: 3061037224798816055}
   - component: {fileID: 2909470774800876578}
-  - component: {fileID: 750061762}
   - component: {fileID: 8235586008436921445}
   m_Layer: 0
   m_Name: Player
@@ -474,6 +490,7 @@ Transform:
   - {fileID: 8732617891454816647}
   - {fileID: 1049619352}
   - {fileID: 1924742591}
+  - {fileID: 956990872}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -496,6 +513,8 @@ MonoBehaviour:
   movement:
     gravity: {x: 0, y: -3, z: 0}
     jumpGravityMultiplier: 10
+    fallVelocityBuffer: -0.03
+    isFalling: 0
     controlDamping: 8.5
     maxSpeed: 6
     jumpHeight: 30
@@ -507,6 +526,9 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
     onJumped:
+      m_PersistentCalls:
+        m_Calls: []
+    onFalling:
       m_PersistentCalls:
         m_Calls: []
     onAttack:
@@ -525,7 +547,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   directionBasedObjectFlips:
-  - {fileID: 5743444973657746380}
+  - {fileID: 1439607154}
   isFacingRight: 0
   _raycast:
     useRaycast: 1
@@ -535,7 +557,7 @@ MonoBehaviour:
     raycastPoint: {fileID: 3114611267891543743}
     raycastDistance: 7.91
     raycastColour: {r: 0.2028302, g: 0.6222379, b: 1, a: 1}
-    aboveCheckDistance: 0.9
+    aboveCheckDistance: 0.7
     aboveCheckRaycastColour: {r: 1, g: 0.77560496, b: 0, a: 0.31764707}
     wallCheckDistance: 0.6
     wallCheckRaycastColour: {r: 1, g: 0, b: 0.7139201, a: 0.69411767}
@@ -561,8 +583,8 @@ MonoBehaviour:
   animator: {fileID: 3061037224798816055}
   spriteRenderer: {fileID: 3015820705017892937}
   playerController: {fileID: 5315511273860487878}
-  animator_card: {fileID: 4513749112596310634}
-  spriteRenderer_card: {fileID: 7815908606309496279}
+  animatorCard: {fileID: 4513749112596310634}
+  spriteRendererCard: {fileID: 7815908606309496279}
   onJump:
     m_PersistentCalls:
       m_Calls: []
@@ -667,27 +689,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.0001
   m_Center: {x: 0, y: 0.56, z: 0}
---- !u!114 &750061762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3111495686390456893}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7adbaf6d4e7c7f4eb7c1a413905eb33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraObject: {fileID: 0}
-  cameraTarget: {fileID: 3114611267891543743}
-  playerController: {fileID: 5315511273860487878}
-  useCameraBounds: 0
-  cameraXBounds: {x: 0, y: 0}
-  cameraDelay: 0.2
-  cameraOffset: {x: 0, y: 2.5, z: -9}
-  moveDirectionChangesXOffset: 1
-  moveDirectionXOffset: 0.5
 --- !u!114 &8235586008436921445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -703,12 +704,12 @@ MonoBehaviour:
   cameraObject: {fileID: 0}
   cameraTarget: {fileID: 3114611267891543743}
   playerController: {fileID: 5315511273860487878}
-  useCameraBounds: 0
-  cameraXBounds: {x: 0, y: 0}
+  useCameraBounds: 1
+  cameraXBounds: {x: -10, y: 15}
   cameraDelay: 0.2
   cameraOffset: {x: 0, y: 2.5, z: -9}
   moveDirectionChangesXOffset: 1
-  moveDirectionXOffset: 0.5
+  moveDirectionXOffset: 0.75
 --- !u!1 &6685032484304088833
 GameObject:
   m_ObjectHideFlags: 0
