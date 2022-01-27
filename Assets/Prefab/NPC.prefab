@@ -191,6 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9286681f946327a478a7b79f1c7c7420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcScript: {fileID: 3993900933442133004}
   inverse: 1
   dynamicObject: 0
 --- !u!114 &2036593958419912512
@@ -267,6 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fede746688060264dbfa99607bc42438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcScript: {fileID: 3993900933442133004}
   partOffset: {x: 0.09, y: -0.18}
   lerpSpeed: 10
   fallVelocityBuffer: -0.75
@@ -468,6 +470,7 @@ GameObject:
   - component: {fileID: 3862179287901793914}
   - component: {fileID: 3907314994672072964}
   - component: {fileID: 3757105085532797457}
+  - component: {fileID: 525324960}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Player
@@ -510,17 +513,13 @@ MonoBehaviour:
   characterController: {fileID: 3757105085532797457}
   physicsPushPower: 6
   movement:
-    gravity: {x: 0, y: -4, z: 0}
+    gravity: {x: 0, y: -9.8, z: 0}
     velocity: {x: 0, y: 0, z: 0}
     lastPositon: {x: 0, y: 0, z: 0}
-    horizontalMoveDirection: 0
+    horizontalMoveDirection: 4
     fallVelocityBuffer: 0.03
     isFalling: 0
     controlDamping: 7
-    maxSpeed: 6
-    isMidair: 0
-    canControlMidAir: 1
-    airControlDamping: 2.5
   characterEvents:
     onGrounded:
       m_PersistentCalls:
@@ -685,6 +684,35 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.0001
   m_Center: {x: 0, y: 0.56, z: 0}
+--- !u!114 &525324960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3993900933442133006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b79f1d02dc4ad441972bcc3795b01c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAlive: 0
+  health: 4
+  defence: 0
+  livesRemaining: 0
+  attack: 0
+  onHealthGained:
+    m_PersistentCalls:
+      m_Calls: []
+  onHealthLost:
+    m_PersistentCalls:
+      m_Calls: []
+  onLifeLost:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4649244005475389746
 GameObject:
   m_ObjectHideFlags: 0

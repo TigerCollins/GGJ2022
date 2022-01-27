@@ -85,6 +85,21 @@ public class PlayerAnimation : MonoBehaviour
         }
         
     }
+
+    public void Death()
+    {
+        if (playerController.IsGrounded)
+        {
+            animator.SetTrigger("Death");
+        }
+    }
+
+    public void TookDamage()
+    {
+
+        animator.SetTrigger("Hurt");
+
+    }
     void Attack()
     {
         animator.SetTrigger("Attack");
