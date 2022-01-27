@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] CharacterController characterController;
 	[SerializeField] float physicsPushPower;
 
+
 	[SerializeField] MovementDetails movement;
 	[SerializeField] internal CharacterEvents characterEvents;
 	[SerializeField] List<DirectionBasedObjectFlip> directionBasedObjectFlips;
@@ -94,6 +95,7 @@ public class PlayerController : MonoBehaviour
 		//Movement();
 		if(canMove)
         {
+
 			ApplyMovement();
 		}
 		
@@ -105,6 +107,7 @@ public class PlayerController : MonoBehaviour
     {
 		ForcePlayerHeightToDrop();
 		HittingWallLogic();
+		IsFallingCheck();
 		onUpdateCalled.Invoke();
 	}
 
@@ -248,6 +251,7 @@ public class PlayerController : MonoBehaviour
 				movement.JumpTarget = Mathf.Sqrt(movement.jumpHeight * -3.0f * movement.gravity.y);
 				moveDirection.y = movement.JumpTarget;
 				characterEvents.onJumped.Invoke();
+				
 				playerAnimator.onJump.Invoke();
 			}
 			
@@ -451,6 +455,30 @@ public class PlayerController : MonoBehaviour
 			item.FlipObject(IsFacingRight);
 		}
 	}
+
+	public void IsFallingCheck()
+	{
+
+		bool isFalling = characterController.velocity.y < movement.fallVelocityBuffer && !IsGrounded;
+		if (movement.isFalling != isFalling)
+		{
+			movement.isFalling = isFalling;
+			if (isFalling)
+			{
+				characterEvents.onFalling.Invoke();
+
+			}
+
+		}
+	}
+
+	public bool IsFalling
+    {
+		get
+        {
+			return movement.isFalling;
+		}
+    }
 }
 
 [System.Serializable]
@@ -482,6 +510,8 @@ public class MovementDetails
 
 	[Space(10)]
 
+	public float fallVelocityBuffer = .03f;
+	[HideInInspector] public bool isFalling;
 	[Range(1.25f,15f)] public float controlDamping = 7f;
 	public float maxSpeed = 6;
 	public float jumpHeight = 8;
@@ -543,6 +573,7 @@ public class CharacterEvents
 	[Header("Jump")]
 	public UnityEvent onGrounded;
 	public UnityEvent onJumped;
+	public UnityEvent onFalling;
 	public UnityEvent onAttack;
 	public UnityEvent onAbilityUsed;
 

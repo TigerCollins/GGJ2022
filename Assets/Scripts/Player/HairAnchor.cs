@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class HairAnchor : MonoBehaviour
 {
-    
+
     Vector2 rootAnchorOffset;
+   
     public Vector2 partOffset = Vector2.zero;
     public float lerpSpeed = 20f;
     [SerializeField] float fallVelocityBuffer = -.5f;
@@ -15,6 +16,12 @@ public class HairAnchor : MonoBehaviour
 
     [SerializeField] PlayerAnimation playerAnimation;
     [SerializeField] PlayerController playerController;
+
+    [Space(10)]
+
+    public Vector2 rootOffset = Vector2.zero;
+    public Transform followPoint;
+
     [Header("Hair 'Juice'")]
     [SerializeField] bool canWiggle;
     [SerializeField] bool wiggleWhenIdle;
@@ -56,7 +63,7 @@ public class HairAnchor : MonoBehaviour
             isIdleOffset = false;
         }
         // fall
-        else if (playerController.PlayerCharacterController.velocity.y < fallVelocityBuffer)
+        else if (playerController.IsFalling)
         {
             currentOffset = fallOffset;
             isIdleOffset = false;
@@ -77,8 +84,13 @@ public class HairAnchor : MonoBehaviour
         // flip x offset direction if we're facing left
         if (!playerController.IsFacingRight)
         {
-            transform.localPosition = new Vector2(rootAnchorOffset.x, rootAnchorOffset.y);
+            transform.localPosition = new Vector2(rootAnchorOffset.x + rootOffset.x, rootAnchorOffset.y + rootOffset.y);
             currentOffset.x = currentOffset.x * -1;
+        }
+
+        else
+        {
+            transform.localPosition = new Vector2(-rootAnchorOffset.x + rootOffset.x, rootAnchorOffset.y + rootOffset.y);
         }
 
         partOffset = currentOffset;
@@ -86,7 +98,13 @@ public class HairAnchor : MonoBehaviour
 
     private void Update() 
     {
-        Transform pieceToFollow = hairAnchor;
+        //The point the hair moves to (for animations)
+        if(followPoint!=null)
+        {
+            rootOffset = followPoint.transform.localPosition - new Vector3( rootAnchorOffset.x, rootAnchorOffset.y,0);
+        }
+
+            Transform pieceToFollow = hairAnchor;
 
         foreach(Transform hairPart in hairParts)
         {
