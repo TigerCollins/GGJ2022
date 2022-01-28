@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using MoreMountains.Feedbacks;
 
 public class SideScrollCamera : MonoBehaviour
 {
@@ -23,6 +25,16 @@ public class SideScrollCamera : MonoBehaviour
     [Space(10)]
     [SerializeField] bool moveDirectionChangesXOffset;
     [SerializeField] float moveDirectionXOffset;
+
+    [Header("Juice")]
+    [SerializeField] MMFeedbacks screenShakeFeedback;
+
+    [Space(10)]
+
+    [SerializeField] float shakeTime;
+    [SerializeField] Vector2 shakeFrequency;
+    [SerializeField] Vector3 minAmplitude;
+    [SerializeField] Vector3 maxAmplitude;
 
 
     private void Start()
@@ -61,5 +73,41 @@ public class SideScrollCamera : MonoBehaviour
 
 
 
+    }
+
+    public void ShakeCamera(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            ShakeCamera();
+        }
+    }
+
+    void ShakeCamera()
+    {
+        if(screenShakeFeedback.TryGetComponent(out MMFeedbackWiggle wiggle))
+        {
+            wiggle.WigglePositionDuration = shakeTime;
+            wiggle.TargetWiggle.PositionWiggleProperties.AmplitudeMin = minAmplitude;
+            wiggle.TargetWiggle.PositionWiggleProperties.AmplitudeMax = maxAmplitude;
+            wiggle.TargetWiggle.PositionWiggleProperties.FrequencyMin = shakeFrequency.x;
+            wiggle.TargetWiggle.PositionWiggleProperties.FrequencyMax = shakeFrequency.y;
+            screenShakeFeedback.Initialization();
+            screenShakeFeedback.PlayFeedbacks();
+        }
+    }
+
+    void ShakeCameraOneTime(float time,Vector3 minPos, Vector3 maxPos)
+    {
+        if (screenShakeFeedback.TryGetComponent(out MMFeedbackWiggle wiggle))
+        {
+            wiggle.WigglePositionDuration = time;
+            wiggle.TargetWiggle.PositionWiggleProperties.AmplitudeMin = minPos;
+            wiggle.TargetWiggle.PositionWiggleProperties.AmplitudeMax = maxPos;
+            wiggle.TargetWiggle.PositionWiggleProperties.FrequencyMin = shakeFrequency.x;
+            wiggle.TargetWiggle.PositionWiggleProperties.FrequencyMax = shakeFrequency.y;
+            screenShakeFeedback.Initialization();
+            screenShakeFeedback.PlayFeedbacks();
+        }
     }
 }
