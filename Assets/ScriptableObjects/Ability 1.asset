@@ -17,5 +17,5 @@ MonoBehaviour:
   cardName: NA
   abilityLockedFlavour: 
   abilityUnlockedFlavour: LOREM IPSUM LOREM IPSUM LOREM IPSUM
-  unlocked: 0
-  cooldown: 0
+  unlocked: 1
+  cooldown: 1

@@ -15,4 +15,10 @@ public class GlobalHelper : MonoBehaviour
         dimensionA,
         dimensionB
     }
+
+    public enum CardSide
+    {
+        aSide,
+        bSide
+    }
 }

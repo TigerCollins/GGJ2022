@@ -8,7 +8,6 @@ using UnityEngine.Events;
 [RequireComponent(typeof(PlayerAnimation))]
 public class PlayerController : MonoBehaviour
 {
-	//public GameController gameController;
 
 	bool receivingMovementInput;
 	[SerializeField] bool canMove = true;
@@ -19,14 +18,14 @@ public class PlayerController : MonoBehaviour
 	public static PlayerController instance;
 	[SerializeField] StatsController statsController;
 	[SerializeField] PlayerAnimation playerAnimator;
-	[SerializeField] CharacterController characterController;
+	public  CharacterController characterController;
 	[SerializeField] float physicsPushPower;
 
 
 	[SerializeField] MovementDetails movement;
 	[SerializeField] internal CharacterEvents characterEvents;
 	[SerializeField] List<DirectionBasedObjectFlip> directionBasedObjectFlips;
-	 Vector3 moveDirection = Vector3.zero;
+    Vector3 moveDirection = Vector3.zero;
 	UnityEvent onUpdateCalled = new UnityEvent();
 
 	
@@ -104,16 +103,12 @@ public class PlayerController : MonoBehaviour
 		//Movement();
 
 		ApplyMovement();
-
-		
-
+        
 	}
 
     public void Update()
     {
 		IsGrounded = characterController.isGrounded;
-
-		ForcePlayerHeightToDrop();
 		HittingWallLogic();
 		IsFallingCheck();
 		onUpdateCalled.Invoke();
@@ -238,14 +233,9 @@ public class PlayerController : MonoBehaviour
 		}
 
 		//JUMP (when midair)
-		if(movement.isMidair)
+		if(!IsGrounded)
         {
 			moveDirection += movement.gravity * Time.deltaTime * movement.jumpGravityMultiplier;
-		}
-		//JUMP (when grounded)
-		else
-		{
-			moveDirection += movement.gravity * Time.deltaTime ;
 		}
 		
 		if(canMove)
@@ -330,7 +320,7 @@ public class PlayerController : MonoBehaviour
 			if (Physics.Raycast(origin, Vector2.right * (isFacingRight ? 1 : -1), out hit, _raycast.raycastDistance, _raycast.raycastMask))
 			{
 				//Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
-				 if (hit.transform.TryGetComponent(out StatsController stats))
+				if (hit.transform.TryGetComponent(out StatsController stats))
 				{
 					newController = stats;
 				}
@@ -362,37 +352,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-	void ForcePlayerHeightToDrop()
-    {
-		if(HitObjectAbove() == true)
-        {
-			moveDirection.y = 0;
-        }
-	}
-
 	public void HittingWallLogic()
     {
 		isHittingWall = HittingObjectInfrontWithoutRigidBody();
     }
-
-	public bool HitObjectAbove()
-    {
-		bool isHitting = false;
-		RaycastHit hit;
-		Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y + 1, _raycast.raycastPoint.position.z);
-		Debug.DrawRay(origin, transform.TransformDirection(Vector2.up) * _raycast.aboveCheckDistance, _raycast.aboveCheckRaycastColour);
-		if (Physics.Raycast(origin,transform.TransformDirection(Vector2.up),out hit, _raycast.aboveCheckDistance,_raycast.raycastMask))  
-		{
-			//Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
-			if (hit.transform != null)
-			{
-				isHitting = true;
-			}
-
-		}
-		return isHitting;
-	}
 
 	public bool HittingObjectInfrontWithoutRigidBody()
     {
@@ -428,7 +391,11 @@ public class PlayerController : MonoBehaviour
 
 	public void RigidBodyPhysics(ControllerColliderHit hit)
 	{
-		Rigidbody body = hit.collider.attachedRigidbody;
+
+        if (hit.moveDirection.y > 0f)
+            moveDirection.y = -1;
+
+        Rigidbody body = hit.collider.attachedRigidbody;
 
 
 		// no rigidbody
@@ -449,7 +416,7 @@ public class PlayerController : MonoBehaviour
 		// Apply the push
 		body.velocity = pushDir * physicsPushPower;
 
-	}
+    }
 
 	public UnityEvent UpdateEvent
     {
@@ -533,10 +500,8 @@ public class PlayerController : MonoBehaviour
 
 	public void HaltMovement()
     {
-		print("rgrregregg");
 		if (movement.stopMovementWhenAttacking == true)
         {
-			print("rgrg");
 			if (movement.StopMovementCoroutine != null)
 			{
 				//StopCoroutine(movement.StopMovementCoroutine);
@@ -554,6 +519,52 @@ public class PlayerController : MonoBehaviour
 		canMove = true;
 
 	}
+
+    public Vector3 SetMoveDirection
+    {
+        get => moveDirection;
+        set
+        {
+            moveDirection = value;
+        }
+    }
+
+    public Vector3 GetMoveDirection
+    {
+        get
+        {
+            return moveDirection;
+        }
+    }
+
+    public void SetMoveHigh()
+    {
+        StartCoroutine(Dash());
+        
+    }
+
+    IEnumerator Dash()
+    {
+        float startTime = Time.time;
+
+        while(Time.time < startTime + 0.25f)
+        {
+            if (isFacingRight)
+            {
+                characterController.Move(Vector3.right * 15f * Time.deltaTime);
+            }
+            else
+            {
+                characterController.Move(-Vector3.right * 15f * Time.deltaTime);
+            }
+            
+            yield return null;
+        }
+
+
+    }
+
+
 }
 
 [System.Serializable]

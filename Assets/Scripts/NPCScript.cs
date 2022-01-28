@@ -28,8 +28,6 @@ public class NPCScript : MonoBehaviour
 	Vector3 moveDirection = Vector3.zero;
 	UnityEvent onUpdateCalled = new UnityEvent();
 
-
-
 	[SerializeField] bool isFacingRight;
 
 	[Header("Raycast")]
@@ -140,7 +138,6 @@ public class NPCScript : MonoBehaviour
 	}
 #endif
 
-
 	public void BasicAttack(InputAction.CallbackContext context)
 	{
 		if (context.performed)
@@ -177,13 +174,9 @@ public class NPCScript : MonoBehaviour
 		
 		}
 
-
-		
 		//Position
 		if (Mathf.Abs(input) > 0.3f)
 		{
-					
-
 
 			if (IsGrounded && !IsHittingWall)
 			{
@@ -445,11 +438,7 @@ public class MovementInfo
 	public float fallVelocityBuffer = .03f;
 	[HideInInspector] public bool isFalling;
 	[Range(1.25f, 15f)] public float controlDamping = 7f;
-
-
-
-
-
+    
 }
 
 
