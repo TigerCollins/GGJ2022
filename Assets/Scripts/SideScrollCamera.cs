@@ -32,9 +32,9 @@ public class SideScrollCamera : MonoBehaviour
     [Space(10)]
 
     [SerializeField] float shakeTime;
-    [SerializeField] Vector2 shakeFrequency;
-    [SerializeField] Vector3 minAmplitude;
-    [SerializeField] Vector3 maxAmplitude;
+    [SerializeField] float shakeStrength;
+    [SerializeField] float shakeFrequency;
+    [SerializeField] Vector3 amplitude;
 
 
     private void Start()
@@ -85,27 +85,30 @@ public class SideScrollCamera : MonoBehaviour
 
     void ShakeCamera()
     {
-        if(screenShakeFeedback.TryGetComponent(out MMFeedbackWiggle wiggle))
+        if(screenShakeFeedback.TryGetComponent(out MMFeedbackCameraShake wiggle))
         {
-            wiggle.WigglePositionDuration = shakeTime;
-            wiggle.TargetWiggle.PositionWiggleProperties.AmplitudeMin = minAmplitude;
-            wiggle.TargetWiggle.PositionWiggleProperties.AmplitudeMax = maxAmplitude;
-            wiggle.TargetWiggle.PositionWiggleProperties.FrequencyMin = shakeFrequency.x;
-            wiggle.TargetWiggle.PositionWiggleProperties.FrequencyMax = shakeFrequency.y;
+            wiggle.CameraShakeProperties.Duration = shakeTime;
+            wiggle.CameraShakeProperties.Amplitude = shakeStrength;
+            wiggle.CameraShakeProperties.Frequency = shakeFrequency;
+            wiggle.CameraShakeProperties.AmplitudeX = amplitude.x;
+            wiggle.CameraShakeProperties.AmplitudeY = amplitude.y;
+            wiggle.CameraShakeProperties.AmplitudeZ = amplitude.z;
+
             screenShakeFeedback.Initialization();
             screenShakeFeedback.PlayFeedbacks();
         }
     }
 
-    void ShakeCameraOneTime(float time,Vector3 minPos, Vector3 maxPos)
+    void ShakeCameraOneTime(float time,float strength, Vector3 newAmplitude)
     {
-        if (screenShakeFeedback.TryGetComponent(out MMFeedbackWiggle wiggle))
+        if (screenShakeFeedback.TryGetComponent(out MMFeedbackCameraShake wiggle))
         {
-            wiggle.WigglePositionDuration = time;
-            wiggle.TargetWiggle.PositionWiggleProperties.AmplitudeMin = minPos;
-            wiggle.TargetWiggle.PositionWiggleProperties.AmplitudeMax = maxPos;
-            wiggle.TargetWiggle.PositionWiggleProperties.FrequencyMin = shakeFrequency.x;
-            wiggle.TargetWiggle.PositionWiggleProperties.FrequencyMax = shakeFrequency.y;
+            wiggle.CameraShakeProperties.Duration = time;
+            wiggle.CameraShakeProperties.Amplitude = strength;
+            wiggle.CameraShakeProperties.Frequency = shakeFrequency;
+            wiggle.CameraShakeProperties.AmplitudeX = newAmplitude.x;
+            wiggle.CameraShakeProperties.AmplitudeY = newAmplitude.y;
+            wiggle.CameraShakeProperties.AmplitudeZ = newAmplitude.z;
             screenShakeFeedback.Initialization();
             screenShakeFeedback.PlayFeedbacks();
         }

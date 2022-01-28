@@ -556,6 +556,8 @@ MonoBehaviour:
     isMidair: 0
     canControlMidAir: 1
     airControlDamping: 2.5
+    stopMovementWhenAttacking: 1
+    movementStopTime: 0.5
   characterEvents:
     onGrounded:
       m_PersistentCalls:
@@ -745,6 +747,11 @@ MonoBehaviour:
   cameraOffset: {x: 0, y: 2.5, z: -9}
   moveDirectionChangesXOffset: 1
   moveDirectionXOffset: 0.75
+  screenShakeFeedback: {fileID: 0}
+  shakeTime: 0.2
+  shakeStrength: 1
+  shakeFrequency: 0.5
+  amplitude: {x: 1, y: 1, z: 0}
 --- !u!114 &1607073792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,11 +764,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b79f1d02dc4ad441972bcc3795b01c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAlive: 0
+  statsProfile: {fileID: 11400000, guid: 2610ef389482c844a8b3f0227896e7ec, type: 2}
+  maxHealth: 0
   health: 4
   defence: 0
+  maxLivesRemaining: 0
   livesRemaining: 0
-  attack: 0
+  attack: 3
+  isAlive: 1
+  destroyOnDeath: 1
+  destroyTimer: 1.5
   onHealthGained:
     m_PersistentCalls:
       m_Calls: []
