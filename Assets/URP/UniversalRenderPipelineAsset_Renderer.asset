@@ -15,8 +15,8 @@ MonoBehaviour:
   m_Active: 1
   settings:
     resolutionScale: 1
-    intensity: 0.231
-    blurWidth: 0.564
+    intensity: 0.576
+    blurWidth: 0.546
 --- !u!114 &-4098090460766985721
 MonoBehaviour:
   m_ObjectHideFlags: 0
