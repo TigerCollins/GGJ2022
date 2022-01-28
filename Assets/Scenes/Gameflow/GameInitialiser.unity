@@ -746,6 +746,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1826629595652942433, guid: 7dab12c4d96b5244aa57509a1391a263, type: 3}
+      propertyPath: loadOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1826629595652942433, guid: 7dab12c4d96b5244aa57509a1391a263, type: 3}
+      propertyPath: transitionOutOnly
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1826629595652942434, guid: 7dab12c4d96b5244aa57509a1391a263, type: 3}
       propertyPath: m_Pivot.x
       value: 0
