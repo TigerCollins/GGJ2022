@@ -27,7 +27,7 @@ public class DimensionSwitcher : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateTickDimensionCheck();
+        //UpdateTickDimensionCheck();
     }
 
     //THIS IS ONLY FOR DEBUG. NEEDS TO BE REMOVED

@@ -18,14 +18,14 @@ public class PlayerController : MonoBehaviour
 	[Header("Player Settings")]
 	public static PlayerController instance;
 	[SerializeField] PlayerAnimation playerAnimator;
-	[SerializeField] CharacterController characterController;
+	public  CharacterController characterController;
 	[SerializeField] float physicsPushPower;
 
 
 	[SerializeField] MovementDetails movement;
 	[SerializeField] internal CharacterEvents characterEvents;
 	[SerializeField] List<DirectionBasedObjectFlip> directionBasedObjectFlips;
-	 Vector3 moveDirection = Vector3.zero;
+	Vector3 moveDirection = Vector3.zero;
 	UnityEvent onUpdateCalled = new UnityEvent();
 
 	
@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if (context.performed)
 		{
-			characterEvents.onAttack.Invoke();
+            characterEvents.onAttack.Invoke();
 		}
 	}
 

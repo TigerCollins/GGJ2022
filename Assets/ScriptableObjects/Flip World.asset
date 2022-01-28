@@ -17,5 +17,5 @@ MonoBehaviour:
   cardName: World Flip
   abilityLockedFlavour: 
   abilityUnlockedFlavour: Flip the world
-  unlocked: 0
-  cooldown: 0
+  unlocked: 1
+  cooldown: 5
