@@ -15,6 +15,7 @@ public class NPCScript : MonoBehaviour
 
 
 
+
 	[Header("NPC Settings")]
 	[SerializeField] NPCAnimation npcAnimation;
 	[SerializeField] CharacterController characterController;
@@ -66,9 +67,9 @@ public class NPCScript : MonoBehaviour
 	void InitStatEvents()
     {
 		stats.onDeath.AddListener(delegate { npcAnimation.Death(); });
+		stats.onDeath.AddListener(delegate { canMove = false;  });
 		stats.onHealthLost.AddListener(delegate { npcAnimation.TookDamage(); });
-		stats.onHealthLost.AddListener(delegate { Debug.Log("k"); });
-		stats.onHealthLost.AddListener(delegate { GetKnockBack(); });
+		stats.onHealthLost.AddListener(delegate { GetKnockBack(PlayerController.instance.StatsController.StatProfile); });
     }
 
 	public CharacterController PlayerCharacterController
@@ -87,7 +88,7 @@ public class NPCScript : MonoBehaviour
         }
     }
 
-	public void GetKnockBack()
+	public void GetKnockBack(StatsDetails statProfile)
     {
 
 			StatsController.DealDamageToOther(StatsController);
@@ -95,12 +96,12 @@ public class NPCScript : MonoBehaviour
 			float newDirection = 0;
 			if (PlayerController.IsObjectOnRight(transform, PlayerController.instance.transform))
 			{
-				newDirection = -StatsController.StatProfile.KnockBackStrength;
+				newDirection = -statProfile.KnockBackStrength;
 			}
 
 			else
 			{
-				newDirection = StatsController.StatProfile.KnockBackStrength;
+				newDirection = statProfile.KnockBackStrength;
 			}
 			secondaryMoveDirection.x = newDirection;
 			StartCoroutine(RemoveFromSecondaryMoveDirection());
@@ -136,11 +137,9 @@ public class NPCScript : MonoBehaviour
 	void FixedUpdate()
 	{
 		//Movement();
-		if (canMove)
-		{
-
+		
 			MovementVector();
-		}
+		
 
 		IsGrounded = characterController.isGrounded;
 
@@ -212,73 +211,75 @@ public class NPCScript : MonoBehaviour
 
 	public void MovementVector()
 	{
-
 		float input = 0;
-
 		float distance = Vector3.Distance(PlayerController.instance.transform.position, transform.position);
-		if (distance < seekPlayerDistanceThreshold.y && distance > seekPlayerDistanceThreshold.x)
-        {
-			if (PlayerController.instance.transform.position.x > transform.position.x)
+		if (canMove)
+		{
+
+			if (distance < seekPlayerDistanceThreshold.y && distance > seekPlayerDistanceThreshold.x)
 			{
-				input = seekPlayerMoveSpeed;
+				if (PlayerController.instance.transform.position.x > transform.position.x)
+				{
+					input = seekPlayerMoveSpeed;
+				}
+
+				else
+				{
+					input = -seekPlayerMoveSpeed;
+				}
+
 			}
 
 			else
 			{
-				input = -seekPlayerMoveSpeed;
+				input = movement.horizontalMoveDirection;
 			}
 
-		}
-
-		else
-        {
-			input = movement.horizontalMoveDirection;
-		}
 
 
-
-		//Facing Direction
-		if (input < 0)
-		{
-			IsFacingRight = false;
-			receivingMovementInput = true;
-		}
-
-		else if (input > 0)
-		{
-			IsFacingRight = true;
-			receivingMovementInput = true;
-
-		}
-
-		else
-		{
-			receivingMovementInput = false;
-
-		
-		}
-
-
-		
-		//Position
-		if (Mathf.Abs(input) > 0.3f)
-		{
-
-			if (IsGrounded && !IsHittingWall)
+			//Facing Direction
+			if (input < 0)
 			{
-				npcAnimation.onMoveInputStateChange.Invoke(MovementState.Sprint);
+				IsFacingRight = false;
+				receivingMovementInput = true;
 			}
 
-			else if (IsHittingWall)
+			else if (input > 0)
 			{
-				npcAnimation.onMoveInputStateChange.Invoke(MovementState.idle);
+				IsFacingRight = true;
+				receivingMovementInput = true;
+
 			}
 
+			else
+			{
+				receivingMovementInput = false;
+
+
+			}
+
+
+
+			//Position
+			if (Mathf.Abs(input) > 0.3f)
+			{
+
+				if (IsGrounded && !IsHittingWall)
+				{
+					npcAnimation.onMoveInputStateChange.Invoke(MovementState.Sprint);
+				}
+
+				else if (IsHittingWall)
+				{
+					npcAnimation.onMoveInputStateChange.Invoke(MovementState.idle);
+				}
+
+			}
+			else
+			{
+				npcAnimation.AttemptIdleAnimationState();
+			}
 		}
-		else
-        {
-			npcAnimation.AttemptIdleAnimationState();
-        }
 
 		moveDirection += movement.gravity * Time.deltaTime;
 	
@@ -289,6 +290,8 @@ public class NPCScript : MonoBehaviour
 
 
 	}
+
+	
 
 	public void Raycast(InputAction.CallbackContext context)
 	{

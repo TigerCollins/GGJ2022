@@ -1442,6 +1442,11 @@ Transform:
   m_Father: {fileID: 60439922}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &882787830 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3114611267891543743, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
+  m_PrefabInstance: {fileID: 1607073789}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &904658977
 GameObject:
   m_ObjectHideFlags: 0
@@ -2668,6 +2673,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1607073792, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
+      propertyPath: statsProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: 2610ef389482c844a8b3f0227896e7ec, type: 2}
     - target: {fileID: 2909470774800876578, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: m_SkinWidth
       value: 0.1
@@ -2724,6 +2733,10 @@ PrefabInstance:
       propertyPath: knockbackTime
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 5315511273860487878, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
+      propertyPath: _raycast.raycastPoint
+      value: 
+      objectReference: {fileID: 882787830}
     - target: {fileID: 8235586008436921445, guid: 3d8deecda64b598448bf8e5033c4c540, type: 3}
       propertyPath: cameraObject
       value: 
@@ -3022,8 +3035,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1582827545493165174, guid: e6e8023710be02f4b866ff73b19ee5fe, type: 3}
+      propertyPath: m_Height
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1582827545493165174, guid: e6e8023710be02f4b866ff73b19ee5fe, type: 3}
       propertyPath: m_Radius
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1582827545493165174, guid: e6e8023710be02f4b866ff73b19ee5fe, type: 3}
+      propertyPath: m_Center.y
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 1582827545493165174, guid: e6e8023710be02f4b866ff73b19ee5fe, type: 3}
       propertyPath: m_SkinWidth
@@ -3076,6 +3097,10 @@ PrefabInstance:
     - target: {fileID: 1637500272379392617, guid: e6e8023710be02f4b866ff73b19ee5fe, type: 3}
       propertyPath: m_Name
       value: RAT
+      objectReference: {fileID: 0}
+    - target: {fileID: 1637500272379392619, guid: e6e8023710be02f4b866ff73b19ee5fe, type: 3}
+      propertyPath: inputLerpTime
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1637500272379392619, guid: e6e8023710be02f4b866ff73b19ee5fe, type: 3}
       propertyPath: knockbackTime

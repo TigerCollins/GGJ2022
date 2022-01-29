@@ -194,6 +194,13 @@ public class PlayerController : MonoBehaviour
 	}
 #endif
 
+	public StatsController StatsController
+    {
+        get
+        {
+			return statsController;
+        }
+    }
 
 	public void BasicAttack(InputAction.CallbackContext context)
 	{
@@ -207,7 +214,7 @@ public class PlayerController : MonoBehaviour
 				statsController.DealDamageToOther(stats);
 				if(stats.TryGetComponent(out NPCScript npc))
                 {
-			//		npc.GetKnockBack();
+					npc.GetKnockBack(statsController.StatProfile);
                 }
 
 			}
@@ -356,7 +363,7 @@ public class PlayerController : MonoBehaviour
 		if(_raycast.useRaycast)
         {
 			RaycastHit hit;
-			Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y + 1, _raycast.raycastPoint.position.z);
+			Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y +1, _raycast.raycastPoint.position.z);
 			Debug.DrawRay(origin, Vector2.right * (isFacingRight ? 1 : -1) * _raycast.raycastDistance, _raycast.aboveCheckRaycastColour);
 			if (Physics.Raycast(origin, Vector2.right * (isFacingRight ? 1 : -1), out hit, _raycast.raycastDistance, _raycast.raycastMask))
 			{
@@ -645,7 +652,6 @@ public class PlayerController : MonoBehaviour
 			
 
 		}
-		print(value);
 		return value;
     }
 }

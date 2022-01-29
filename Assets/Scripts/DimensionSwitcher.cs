@@ -69,23 +69,25 @@ public class DimensionSwitcher : MonoBehaviour
 [System.Serializable]
 public class DimensionEnvironmentHandler
 {
-    public List<DimensionObject> environmentObject;
+    public List<DimensionObject> environmentDimensionObjects;
+    public List<GameObject> dimensionAObjects;
+    public List<GameObject> dimensionBObjects;
     public int environmentObjectsActive;
 
     public void AddToEnvironmentList(DimensionObject newObject)
     {
-        environmentObject.Add(newObject);
+        environmentObjects.Add(newObject);
         environmentObjectsActive++;
     }
 
     public void RemoveFromEnvironmentList(DimensionObject objectToDelete)
     {
         int id = 0;
-        foreach (DimensionObject item in environmentObject)
+        foreach (DimensionObject item in environmentObjects)
         {
             if(item == objectToDelete)
             {
-                environmentObject.RemoveRange(id, 1);
+                environmentObjects.RemoveRange(id, 1);
             }
             id++;
         }
@@ -97,8 +99,26 @@ public class DimensionEnvironmentHandler
         switch (DimensionSwitcher.instance.CurrentDimension())
         {
             case GlobalHelper.Dimensions.dimensionA:
+                foreach (GameObject item in dimensionAObjects)
+                {
+                    item.SetActive(false);
+                }
+
+                foreach (GameObject item in dimensionBObjects)
+                {
+                    item.SetActive(true);
+                }
                 break;
             case GlobalHelper.Dimensions.dimensionB:
+                foreach (GameObject item in dimensionAObjects)
+                {
+                    item.SetActive(true);
+                }
+
+                foreach (GameObject item in dimensionBObjects)
+                {
+                    item.SetActive(false);
+                }
                 break;
             default:
                 break;
