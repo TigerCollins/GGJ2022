@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using MoreMountains.Feedbacks;
 
 public class SideScrollCamera : MonoBehaviour
 {
@@ -25,16 +23,6 @@ public class SideScrollCamera : MonoBehaviour
     [Space(10)]
     [SerializeField] bool moveDirectionChangesXOffset;
     [SerializeField] float moveDirectionXOffset;
-
-    [Header("Juice")]
-    [SerializeField] MMFeedbacks screenShakeFeedback;
-
-    [Space(10)]
-
-    [SerializeField] float shakeTime;
-    [SerializeField] float shakeStrength;
-    [SerializeField] float shakeFrequency;
-    [SerializeField] Vector3 amplitude;
 
 
     private void Start()
@@ -73,44 +61,5 @@ public class SideScrollCamera : MonoBehaviour
 
 
 
-    }
-
-    public void ShakeCamera(InputAction.CallbackContext context)
-    {
-        if(context.performed)
-        {
-            ShakeCamera();
-        }
-    }
-
-    void ShakeCamera()
-    {
-        if(screenShakeFeedback.TryGetComponent(out MMFeedbackCameraShake wiggle))
-        {
-            wiggle.CameraShakeProperties.Duration = shakeTime;
-            wiggle.CameraShakeProperties.Amplitude = shakeStrength;
-            wiggle.CameraShakeProperties.Frequency = shakeFrequency;
-            wiggle.CameraShakeProperties.AmplitudeX = amplitude.x;
-            wiggle.CameraShakeProperties.AmplitudeY = amplitude.y;
-            wiggle.CameraShakeProperties.AmplitudeZ = amplitude.z;
-
-            screenShakeFeedback.Initialization();
-            screenShakeFeedback.PlayFeedbacks();
-        }
-    }
-
-    void ShakeCameraOneTime(float time,float strength, Vector3 newAmplitude)
-    {
-        if (screenShakeFeedback.TryGetComponent(out MMFeedbackCameraShake wiggle))
-        {
-            wiggle.CameraShakeProperties.Duration = time;
-            wiggle.CameraShakeProperties.Amplitude = strength;
-            wiggle.CameraShakeProperties.Frequency = shakeFrequency;
-            wiggle.CameraShakeProperties.AmplitudeX = newAmplitude.x;
-            wiggle.CameraShakeProperties.AmplitudeY = newAmplitude.y;
-            wiggle.CameraShakeProperties.AmplitudeZ = newAmplitude.z;
-            screenShakeFeedback.Initialization();
-            screenShakeFeedback.PlayFeedbacks();
-        }
     }
 }

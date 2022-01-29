@@ -363,7 +363,10 @@ public class NPCScript : MonoBehaviour
 	{
 		foreach (DirectionBasedObjectFlip item in directionBasedObjectFlips)
 		{
-			item.Init();
+			if(item != null) 
+			{ 
+				item.Init();
+			}
 		}
 	}
 
@@ -371,7 +374,10 @@ public class NPCScript : MonoBehaviour
 	{
 		foreach (DirectionBasedObjectFlip item in directionBasedObjectFlips)
 		{
-			item.FlipObject(IsFacingRight);
+			if (item != null)
+			{
+				item.FlipObject(IsFacingRight);
+			}
 		}
 	}
 
