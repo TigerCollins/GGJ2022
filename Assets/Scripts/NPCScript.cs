@@ -22,8 +22,9 @@ public class NPCScript : MonoBehaviour
 	[SerializeField] float physicsPushPower;
 	[SerializeField] Vector2 seekPlayerDistanceThreshold = new Vector2(1,3);
 	[Range(0,10)] [SerializeField] float seekPlayerMoveSpeed = 3;
+	[SerializeField] float knockbackTime;
 	Vector3 playerPosition;
-
+	Vector3 secondaryMoveDirection;
 
 	[SerializeField] MovementInfo movement;
 	[SerializeField] internal CharacterEvents characterEvents;
@@ -66,6 +67,8 @@ public class NPCScript : MonoBehaviour
     {
 		stats.onDeath.AddListener(delegate { npcAnimation.Death(); });
 		stats.onHealthLost.AddListener(delegate { npcAnimation.TookDamage(); });
+		stats.onHealthLost.AddListener(delegate { Debug.Log("k"); });
+		stats.onHealthLost.AddListener(delegate { GetKnockBack(); });
     }
 
 	public CharacterController PlayerCharacterController
@@ -83,6 +86,40 @@ public class NPCScript : MonoBehaviour
 			return stats;
         }
     }
+
+	public void GetKnockBack()
+    {
+
+			StatsController.DealDamageToOther(StatsController);
+
+			float newDirection = 0;
+			if (PlayerController.IsObjectOnRight(transform, PlayerController.instance.transform))
+			{
+				newDirection = -StatsController.StatProfile.KnockBackStrength;
+			}
+
+			else
+			{
+				newDirection = StatsController.StatProfile.KnockBackStrength;
+			}
+			secondaryMoveDirection.x = newDirection;
+			StartCoroutine(RemoveFromSecondaryMoveDirection());
+
+	}
+
+	public IEnumerator RemoveFromSecondaryMoveDirection()
+	{
+		float t = 0; ;
+
+		while (secondaryMoveDirection != Vector3.zero)
+		{
+			t += Time.deltaTime;
+			secondaryMoveDirection = Vector3.Lerp(secondaryMoveDirection, Vector3.zero, t / knockbackTime);
+
+			yield return null;
+		}
+		yield return null;
+	}
 
 	void OnBecameInvisible()
 	{
@@ -248,7 +285,7 @@ public class NPCScript : MonoBehaviour
 
 	moveDirection = new Vector3(input, moveDirection.y, 0);
 
-	characterController.Move(moveDirection* Time.deltaTime);
+	characterController.Move((moveDirection + secondaryMoveDirection) * Time.deltaTime);
 
 
 	}

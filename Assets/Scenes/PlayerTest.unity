@@ -3078,6 +3078,10 @@ PrefabInstance:
       value: RAT
       objectReference: {fileID: 0}
     - target: {fileID: 1637500272379392619, guid: e6e8023710be02f4b866ff73b19ee5fe, type: 3}
+      propertyPath: knockbackTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1637500272379392619, guid: e6e8023710be02f4b866ff73b19ee5fe, type: 3}
       propertyPath: seekPlayerMoveSpeed
       value: 2
       objectReference: {fileID: 0}

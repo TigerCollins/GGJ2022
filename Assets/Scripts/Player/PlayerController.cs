@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] PlayerAnimation playerAnimator;
 	[SerializeField] CharacterController characterController;
 	[SerializeField] float physicsPushPower;
+	NPCScript npcScript;
 
 
 	[SerializeField] MovementDetails movement;
@@ -74,6 +75,7 @@ public class PlayerController : MonoBehaviour
 	{
 		statsController.onDeath.AddListener(delegate { playerAnimator.Death(); });
 		statsController.onHealthLost.AddListener(delegate { playerAnimator.TookDamage(); });
+		statsController.onHealthLost.AddListener(delegate { GetKnockBack(); });
 	}
 
 
@@ -203,7 +205,12 @@ public class PlayerController : MonoBehaviour
             {
 		
 				statsController.DealDamageToOther(stats);
-            }
+				if(stats.TryGetComponent(out NPCScript npc))
+                {
+			//		npc.GetKnockBack();
+                }
+
+			}
 			HaltMovement();
 			characterEvents.onAttack.Invoke();
 		}
@@ -557,10 +564,8 @@ public class PlayerController : MonoBehaviour
 
 	public void HaltMovement()
     {
-		print("rgrregregg");
 		if (movement.stopMovementWhenAttacking == true)
         {
-			print("rgrg");
 			if (movement.StopMovementCoroutine != null)
 			{
 				//StopCoroutine(movement.StopMovementCoroutine);
@@ -588,29 +593,33 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-		
+		//Enemy collision
 		if(other.transform.TryGetComponent(out NPCScript npc))
         {
-			Debug.Log("w");
-			npc.StatsController.DealDamageToOther(statsController);
-
-			float newDirection = 0;
-			if(IsObjectOnRight(transform,npc.transform ))
-            {
-				newDirection = -npc.StatsController.StatProfile.KnockBackStrength ;
-            }
-
-			else
-            {
-				newDirection = npc.StatsController.StatProfile.KnockBackStrength;
-			}
-			Debug.Log(newDirection);
-			secondaryMoveDirection.x = newDirection;
-			StartCoroutine(RemoveFromSecondaryMoveDirection());
-
-
+			npcScript = npc;
+			GetKnockBack();
 		}
     }
+
+	public void GetKnockBack()
+    {
+		npcScript.StatsController.DealDamageToOther(statsController);
+		float newDirection = 0;
+		if (IsObjectOnRight(transform, npcScript.transform))
+		{
+			newDirection = -npcScript.StatsController.StatProfile.KnockBackStrength;
+		}
+
+		else
+		{
+			newDirection = npcScript.StatsController.StatProfile.KnockBackStrength;
+		}
+
+		npcScript = null;
+
+		secondaryMoveDirection.x = newDirection;
+		StartCoroutine(RemoveFromSecondaryMoveDirection());
+	}
 
 	public IEnumerator RemoveFromSecondaryMoveDirection()
     {
@@ -620,11 +629,10 @@ public class PlayerController : MonoBehaviour
         {
 			t += Time.deltaTime;
 			secondaryMoveDirection = Vector3.Lerp(secondaryMoveDirection, Vector3.zero, t/knockbackTime);
-			Debug.Log(secondaryMoveDirection);
 
 			yield return null;
 		}
-		Debug.Log("pog");
+
 		yield return null;
 	}
 
