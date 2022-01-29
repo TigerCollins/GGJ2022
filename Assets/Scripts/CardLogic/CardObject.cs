@@ -108,6 +108,7 @@ public class CardObject : MonoBehaviour
                                 playerAbilities.DashMovement();
                                 break;
                             case CardAbilities.Ability.Ability3:
+                                playerAbilities.FreezeTimeAbility();
                                 break;
                             case CardAbilities.Ability.Ability4:
                                 break;
@@ -135,8 +136,10 @@ public class CardObject : MonoBehaviour
                                 playerAbilities.ThrowTeleportCard();
                                 break;
                             case CardAbilities.Ability.Ability2:
+                                playerAbilities.DashMovement();
                                 break;
                             case CardAbilities.Ability.Ability3:
+                                playerAbilities.FreezeTimeAbility();
                                 break;
                             case CardAbilities.Ability.Ability4:
                                 break;

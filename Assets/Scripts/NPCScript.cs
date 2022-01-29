@@ -12,8 +12,8 @@ public class NPCScript : MonoBehaviour
 
 	bool receivingMovementInput;
 	[SerializeField] bool canMove = true;
-
-
+    PlayerAbilities playerAbilities;
+    bool currentlySlowed = false;
 
 	[Header("NPC Settings")]
 	[SerializeField] NPCAnimation npcAnimation;
@@ -63,13 +63,14 @@ public class NPCScript : MonoBehaviour
 		stats.onHealthLost.AddListener(delegate { npcAnimation.TookDamage(); });
     }
 
-	public CharacterController PlayerCharacterController
-	{
-		get
-		{
-			return characterController;
-		}
-	}
+    private void Start()
+    {
+        playerAbilities = PlayerAbilities.instance;
+        playerAbilities.onTimeStop.AddListener(delegate { onPlayerFreezeAbility(); });
+
+        
+    }
+   
 
 	// Main tick
 	void FixedUpdate()
@@ -194,14 +195,10 @@ public class NPCScript : MonoBehaviour
 			npcAnimation.AttemptIdleAnimationState();
         }
 
-		moveDirection += movement.gravity * Time.deltaTime;
-	
+		moveDirection += movement.gravity * (Time.deltaTime * GlobalHelper.instance.UniversalTimeScale);
 
-	moveDirection = new Vector3(input, moveDirection.y, 0);
-
-	characterController.Move(moveDirection* Time.deltaTime);
-
-
+        moveDirection = new Vector3(input, moveDirection.y, 0);
+	    characterController.Move(moveDirection* (Time.deltaTime * GlobalHelper.instance.UniversalTimeScale));
 	}
 
 	public void Raycast(InputAction.CallbackContext context)
@@ -399,6 +396,12 @@ public class NPCScript : MonoBehaviour
 			return movement.horizontalMoveDirection;
         }
     }
+
+    private void onPlayerFreezeAbility()
+    {
+        npcAnimation.NPCAnimator.speed = GlobalHelper.instance.UniversalTimeScale;
+    }
+
 }
 
 [System.Serializable]

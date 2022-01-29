@@ -27,8 +27,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] List<DirectionBasedObjectFlip> directionBasedObjectFlips;
     Vector3 moveDirection = Vector3.zero;
 	UnityEvent onUpdateCalled = new UnityEvent();
-
-	
+    [HideInInspector]public bool pauseMove = false;
 
 	[SerializeField] bool isFacingRight;
 
@@ -178,78 +177,82 @@ public class PlayerController : MonoBehaviour
 		
 				statsController.DealDamageToOther(stats);
             }
-			HaltMovement();
+			//HaltMovement();
 			characterEvents.onAttack.Invoke();
 		}
 	}
 
-	void ApplyMovement()
-	{
+    void ApplyMovement()
+    {
 
-		float input = moveAxis.x;
-		if (Mathf.Abs(input) < 0.3f)
-		{
-			input = 0f;
-			playerAnimator.AttemptIdleAnimationState();
-			//Animate Run
-
-		}
-
-		else if( canMove)
+        float input = moveAxis.x;
+        if (Mathf.Abs(input) < 0.3f)
         {
-			if(IsGrounded && !IsHittingWall)
+            input = 0f;
+            playerAnimator.AttemptIdleAnimationState();
+            //Animate Run
+
+        }
+
+        else if (canMove)
+        {
+            if (IsGrounded && !IsHittingWall)
             {
-				playerAnimator.onMoveInputStateChange.Invoke(MovementState.Sprint);
-			}
+                playerAnimator.onMoveInputStateChange.Invoke(MovementState.Sprint);
+            }
 
-			else if(IsHittingWall)
+            else if (IsHittingWall)
             {
-				playerAnimator.onMoveInputStateChange.Invoke(MovementState.idle);
-			}
-			
-		}
+                playerAnimator.onMoveInputStateChange.Invoke(MovementState.idle);
+            }
 
-		Vector2 desiredVelocity = new Vector2(input, characterController.velocity.y);
-		desiredVelocity *= movement.maxSpeed;
+        }
 
-		//Midair
-		if (!IsGrounded)
-		{
-			if(movement.canControlMidAir)
+        Vector2 desiredVelocity = new Vector2(input, characterController.velocity.y);
+        desiredVelocity *= movement.maxSpeed;
+
+        if (!pauseMove)
+        {
+            //Midair
+            if (!IsGrounded)
             {
-				desiredVelocity = Vector2.Lerp(characterController.velocity, desiredVelocity, Time.deltaTime * movement.airControlDamping);
-				movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
-			}
+                if (movement.canControlMidAir)
+                {
+                    desiredVelocity = Vector2.Lerp(characterController.velocity, desiredVelocity, Time.deltaTime * movement.airControlDamping);
+                    movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
+                }
 
-			movement.MoveVector = transform.TransformDirection(movement.MoveVector);
-		}
+                movement.MoveVector = transform.TransformDirection(movement.MoveVector);
+            }
 
-		//On Ground
-		else if (IsGrounded && canMove)
-		{
-			desiredVelocity = new Vector2(Mathf.LerpUnclamped(characterController.velocity.x, desiredVelocity.x, movement.controlDamping * Time.deltaTime), characterController.velocity.y);
-			movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
-			movement.MoveVector = transform.TransformDirection(movement.MoveVector);
-		}
+            //On Ground
+            else if (IsGrounded && canMove)
+            {
+                desiredVelocity = new Vector2(Mathf.LerpUnclamped(characterController.velocity.x, desiredVelocity.x, movement.controlDamping * Time.deltaTime), characterController.velocity.y);
+                movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
+                movement.MoveVector = transform.TransformDirection(movement.MoveVector);
+            }
 
-		//JUMP (when midair)
-		if(!IsGrounded)
-        {
-			moveDirection += movement.gravity * Time.deltaTime * movement.jumpGravityMultiplier;
-		}
-		
-		if(canMove)
-        {
-			moveDirection = new Vector3(movement.MoveVector.x, moveDirection.y, movement.MoveVector.z);
-		}
+            //JUMP (when midair)
+            if (!IsGrounded && !pauseMove)
+            {
+                moveDirection += movement.gravity * (Time.deltaTime * GlobalHelper.instance.PlayerTimeScale) * movement.jumpGravityMultiplier;
+            }
 
-		else
-        {
-			moveDirection = new Vector3(0, moveDirection.y, movement.MoveVector.z);
-		}
-		
+            if (canMove)
+            {
+                moveDirection = new Vector3(movement.MoveVector.x, moveDirection.y, movement.MoveVector.z);
+            }
 
-		characterController.Move(moveDirection * Time.deltaTime);
+            else
+            {
+                moveDirection = new Vector3(0, moveDirection.y, movement.MoveVector.z);
+            }
+
+        }
+            //moveDirection *= GlobalHelper.instance.PlayerTimeScale;
+            characterController.Move(moveDirection * (Time.deltaTime* GlobalHelper.instance.PlayerTimeScale));
+        
 	}
 
 	
@@ -277,27 +280,30 @@ public class PlayerController : MonoBehaviour
 	{
 
 		moveAxis = callbackContext.ReadValue<Vector2>();
-		
 
-		//Facing Direction
-		if (moveAxis.x < 0)
-		{
-			IsFacingRight = false;
-			receivingMovementInput = true;
-		}
-
-		else if(moveAxis.x >0)
+        if (!pauseMove)
         {
-			IsFacingRight = true;
-			receivingMovementInput = true;
+            //Facing Direction
+            if (moveAxis.x < 0)
+            {
+                IsFacingRight = false;
+                receivingMovementInput = true;
+            }
 
-		}
+            else if (moveAxis.x > 0)
+            {
+                IsFacingRight = true;
+                receivingMovementInput = true;
 
-		else
-        {
-			receivingMovementInput = false;
+            }
 
-		}
+            else
+            {
+                receivingMovementInput = false;
+
+            }
+        }
+
 	}
 
 	public void Raycast(InputAction.CallbackContext context)
@@ -536,35 +542,6 @@ public class PlayerController : MonoBehaviour
             return moveDirection;
         }
     }
-
-    public void SetMoveHigh()
-    {
-        StartCoroutine(Dash());
-        
-    }
-
-    IEnumerator Dash()
-    {
-        float startTime = Time.time;
-
-        while(Time.time < startTime + 0.25f)
-        {
-            if (isFacingRight)
-            {
-                characterController.Move(Vector3.right * 15f * Time.deltaTime);
-            }
-            else
-            {
-                characterController.Move(-Vector3.right * 15f * Time.deltaTime);
-            }
-            
-            yield return null;
-        }
-
-
-    }
-
-
 }
 
 [System.Serializable]

@@ -155,4 +155,12 @@ public class NPCAnimation : MonoBehaviour
             spriteRendererCard.flipX = playerFacingRight;
         }
     }
+
+    public Animator NPCAnimator
+    {
+        get
+        {
+            return animator;
+        }
+    }
 }
