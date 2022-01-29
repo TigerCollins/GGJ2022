@@ -8,14 +8,15 @@ using MoreMountains.Feedbacks;
 public class LevelLoader : MonoBehaviour
 {
     public static LevelLoader instance;
-
     [SerializeField] bool loadOnAwake;
+
     [SerializeField] int targetSceneIndex;
     [SerializeField] int currentSceneIndex;
 
     [Space(15)]
 
     [SerializeField] bool transitionOutOnly;
+        [SerializeField] float delayOnceLoaded;
     [SerializeField] MMFeedbacks transitionIn;
     [SerializeField] MMFeedbacks transitionOut;
     [SerializeField] float progress;
@@ -95,8 +96,12 @@ public class LevelLoader : MonoBehaviour
             progress= asyncOperation.progress * 100;
             yield return null;
         }
+
         onLoadFinished.Invoke();
         progress = asyncOperation.progress * 100;
+
+        yield return new WaitForSeconds(delayOnceLoaded);
+ 
         transitionOut.Events.OnComplete.AddListener(delegate { onTransitionFinished.Invoke(); Destroy(gameObject);  });
         transitionOut.Initialization();
         transitionOut.PlayFeedbacks();
@@ -128,6 +133,9 @@ public class LevelLoader : MonoBehaviour
         }
         onLoadFinished.Invoke();
         progress = asyncOperation.progress * 100;
+
+        yield return new WaitForSeconds(delayOnceLoaded);
+
         transitionOut.Events.OnComplete.AddListener(delegate { onTransitionFinished.Invoke(); Destroy(gameObject); });
         transitionOut.Initialization();
         transitionOut.PlayFeedbacks();

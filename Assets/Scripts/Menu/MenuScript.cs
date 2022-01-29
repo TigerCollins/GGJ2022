@@ -9,12 +9,9 @@ public class MenuScript : MonoBehaviour
     public enum OtherMenus
     {
         Main,
-        Lobby,
         Options,
-        Saves,
-        Pause,
-        Splash,
-        GUI
+        Credits,
+        Other
     }
 
     [Header("Menu Script")]
@@ -34,25 +31,17 @@ public class MenuScript : MonoBehaviour
             case OtherMenus.Main:
                 UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.mainMenuScript;
                 break;
-            case OtherMenus.Lobby:
-                UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.lobbyMenuScript;
+            case OtherMenus.Credits:
+                UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.creditsScript;
                 //menuScripts.mainMenuScript.transitionDetails.baseMenuFeedbackGroup.hideFeedback.Events.OnComplete.AddListener(delegate { StartCoroutine(menuScripts.currentMenuScript.ShowMenu()); menuScripts.mainMenuScript.transitionDetails.baseMenuFeedbackGroup.hideFeedback.Events.OnComplete.RemoveAllListeners(); });
                 break;
             case OtherMenus.Options:
                 UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.optionMenuScript;
                 break;
-            case OtherMenus.Saves:
-                UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.saveMenuScript;
+            case OtherMenus.Other:
+                UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.otherScript;
                 break;
-            case OtherMenus.Pause:
-                UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.pauseMenuScript;
-                break;
-            case OtherMenus.Splash:
-                UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.splashMenuScript;
-                break;
-            case OtherMenus.GUI:
-                UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.generalGUIScript;
-                break;
+            
             default:
                 break;
         }

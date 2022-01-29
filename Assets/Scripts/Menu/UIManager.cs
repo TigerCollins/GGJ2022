@@ -9,8 +9,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     
     public MenuScripts menuScripts;
-    [SerializeField] GameVersion gameVersion;
-    [SerializeField] QuitPrompt quitPrompt;
+    public List<CreditsDetails> credits;
 
     private void Awake()
     {
@@ -27,11 +26,10 @@ public class UIManager : MonoBehaviour
     {
         if(menuScripts.GetMenuScriptsAsList().Count != 0)
         {
+            menuScripts.defaultMenu.GoToDifferentMenu(menuScripts.defaultMenu.menuGroup);
             menuScripts.currentMenu = menuScripts.defaultMenu;
-            menuScripts.defaultMenu.ShowMenu();
             menuScripts.ForceCloseOtherMenuScripts();
             menuScripts.InitSwitch();
-            gameVersion.Init();
         }
       
     }
@@ -64,9 +62,9 @@ public class MenuScripts
     [Space(15)]
 
     public MenuScript mainMenuScript;
-    public MenuScript lobbyMenuScript;
+    public MenuScript creditsScript;
     public MenuScript optionMenuScript;
-    public MenuScript saveMenuScript;
+    public MenuScript otherScript;
     public MenuScript splashMenuScript;
     public MenuScript pauseMenuScript;
     public MenuScript generalGUIScript;
@@ -91,21 +89,22 @@ public class MenuScripts
         {
             list.Add(mainMenuScript);
         }
-
-        if (lobbyMenuScript != null)
+        
+        if (creditsScript != null)
         {
-            list.Add(lobbyMenuScript);
+            list.Add(creditsScript);
         }
-
+        
         if (optionMenuScript != null)
         {
             list.Add(optionMenuScript);
         }
 
-        if (saveMenuScript != null)
+       /* if (saveMenuScript != null)
         {
             list.Add(saveMenuScript);
         }
+       */
         if (splashMenuScript != null)
         {
             list.Add(splashMenuScript);
@@ -126,11 +125,11 @@ public class MenuScripts
         return mainMenuScript as MainMenuHandler;
     }
 
-   /* public LobbyHandler LobbyHandlerScript()
+    public CreditsMenuhandler CreditsMenuHandlerScript()
     {
-        return lobbyMenuScript as LobbyHandler;
+        return creditsScript as CreditsMenuhandler;
     }
-
+    /*
     public GeneralMenuGameplayHandler GeneralGUIScript()
     {
         return generalGUIScript as GeneralMenuGameplayHandler;
@@ -145,11 +144,11 @@ public class MenuScripts
             {
                 if(item == mainMenuScript)
                 {
-                   // MainMenuScript().CloseWholeMenuFunction();
+                    MainMenuScript().CloseWholeMenuFunction();
                 }
-               if(item == lobbyMenuScript)
+               if(item == creditsScript)
                 {
-                  //  LobbyHandlerScript().CloseWholeMenuFunction();
+                    CreditsMenuHandlerScript().CloseWholeMenuFunction();
                 }
                 
             }
@@ -165,12 +164,12 @@ public class MenuScripts
             case MenuScript.OtherMenus.Main:
                 UIManager.instance.menuScripts.MainMenuScript().Init();
                 break;
-            case MenuScript.OtherMenus.Lobby:
+            case MenuScript.OtherMenus.Options:
               //  UIManager.instance.menuScripts.LobbyHandlerScript().Init();
                 break;
-            case MenuScript.OtherMenus.Options:
+            case MenuScript.OtherMenus.Credits:
                 break;
-            case MenuScript.OtherMenus.Saves:
+            case MenuScript.OtherMenus.Other:
                 break;
             default:
                 break;
@@ -179,33 +178,18 @@ public class MenuScripts
 }
 
 [System.Serializable]
-public class GameVersion
+public class CreditsDetails
 {
-    [Header("Game Version")]
-    public TextMeshProUGUI versionText;
-    public string gameVersion;
-
-    public void Init()
-    {
-        if (gameVersion == null)
-        {
-            gameVersion = Application.version;
-        }
-        versionText.text = gameVersion;
-    }
+    public string name;
+    public string job1;
+    public string job2;
+    public Sprite icon;
+    public LinksInfo webLink;
 }
 
-
 [System.Serializable]
-public class QuitPrompt
+public class LinksInfo
 {
-    [Header("Quit Prompt Dialogue")]
-    [TextArea]    public  string quitWarning;
-    public string confirmText;
-    public string declineText;
-
-    public void Cancel()
-    {
-        //
-    }
+    public string displayName;
+    public string link;
 }
