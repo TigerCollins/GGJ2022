@@ -12,6 +12,7 @@ public class StatsDetails : ScriptableObject
 
     [SerializeField] int baseAttack;
     [SerializeField] int baseDefence;
+    [SerializeField] float knockbackPower;
 
     [Space(10)]
 
@@ -63,6 +64,15 @@ public class StatsDetails : ScriptableObject
         get
         {
             return baseAttack;
+        }
+    }
+
+    public float KnockBackStrength
+
+    {
+        get
+        {
+            return knockbackPower;
         }
     }
 

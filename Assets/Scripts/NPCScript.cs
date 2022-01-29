@@ -73,6 +73,15 @@ public class NPCScript : MonoBehaviour
 		}
 	}
 
+	public StatsController StatsController
+    {
+		get
+        {
+			return stats;
+        }
+    }
+
+
 	// Main tick
 	void FixedUpdate()
 	{

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 3
   baseHealth: 3
+  baseAttack: 0
   baseDefence: 0
+  knockbackPower: 2
   maxLives: 1
   baseLives: 1
-  baseAttack: 0

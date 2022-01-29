@@ -147,6 +147,14 @@ public class StatsController : MonoBehaviour
         }
     }
 
+    public StatsDetails StatProfile
+    {
+        get
+        {
+            return statsProfile;
+        }
+    }
+
     void DeathCountdown()
     {
         if(destroyOnDeath)

@@ -24,9 +24,11 @@ public class PlayerController : MonoBehaviour
 
 
 	[SerializeField] MovementDetails movement;
+	[SerializeField] float knockbackTime = 5;
 	[SerializeField] internal CharacterEvents characterEvents;
 	[SerializeField] List<DirectionBasedObjectFlip> directionBasedObjectFlips;
 	 Vector3 moveDirection = Vector3.zero;
+	 Vector3 secondaryMoveDirection = Vector3.zero;
 	UnityEvent onUpdateCalled = new UnityEvent();
 
 	
@@ -278,7 +280,7 @@ public class PlayerController : MonoBehaviour
 		}
 		
 
-		characterController.Move(moveDirection * Time.deltaTime);
+		characterController.Move((moveDirection + secondaryMoveDirection) * Time.deltaTime);
 	}
 
 	
@@ -576,6 +578,67 @@ public class PlayerController : MonoBehaviour
 		canMove = true;
 
 	}
+
+
+	/// <summary>
+	/// COMBAT LOGIC
+	/// </summary>
+	/// <param name="other"></param>
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+		
+		if(other.transform.TryGetComponent(out NPCScript npc))
+        {
+			npc.StatsController.DealDamageToOther(statsController);
+
+			float newDirection = 0;
+			if(IsObjectOnRight(transform,npc.transform ))
+            {
+				newDirection = -npc.StatsController.StatProfile.KnockBackStrength ;
+            }
+
+			else
+            {
+				newDirection = npc.StatsController.StatProfile.KnockBackStrength;
+			}
+			Debug.Log(newDirection);
+			secondaryMoveDirection.x = newDirection;
+			StartCoroutine(RemoveFromSecondaryMoveDirection());
+
+
+		}
+    }
+
+	public IEnumerator RemoveFromSecondaryMoveDirection()
+    {
+		float t = 0; ;
+		
+		while (secondaryMoveDirection != Vector3.zero)
+        {
+			t += Time.deltaTime;
+			secondaryMoveDirection = Vector3.Lerp(secondaryMoveDirection, Vector3.zero, t/knockbackTime);
+			Debug.Log(secondaryMoveDirection);
+
+			yield return null;
+		}
+		Debug.Log("pog");
+		yield return null;
+	}
+
+	public static bool IsObjectOnRight(Transform player,Transform other)
+    {
+		bool value = false;
+		if(player.position.x < other.position.x)
+        {
+			value = true;
+			
+
+		}
+		print(value);
+		return value;
+    }
 }
 
 [System.Serializable]
