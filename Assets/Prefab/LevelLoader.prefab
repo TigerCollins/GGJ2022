@@ -98,7 +98,7 @@ MonoBehaviour:
   Label: LoadOut
   Chance: 38
   Timing:
-    TimescaleMode: 0
+    TimescaleMode: 1
     InitialDelay: 0
     CooldownDuration: 0
     ExcludeFromHoldingPauses: 0
@@ -641,6 +641,7 @@ GameObject:
   - component: {fileID: 1826629595652942433}
   - component: {fileID: 1826629595652942432}
   - component: {fileID: 1826629595652942435}
+  - component: {fileID: 741270461}
   m_Layer: 0
   m_Name: LevelLoader
   m_TagString: Untagged
@@ -683,10 +684,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadOnAwake: 0
-  delayOnceLoaded: 0.25
   targetSceneIndex: 2
   currentSceneIndex: 0
   transitionOutOnly: 0
+  delayOnceLoaded: 0.25
   transitionIn: {fileID: 2006917711}
   transitionOut: {fileID: 1272788883}
   progress: 0
@@ -759,6 +760,14 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!222 &741270461
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826629595652942439}
+  m_CullTransparentMesh: 1
 --- !u!1 &1826629595695488272
 GameObject:
   m_ObjectHideFlags: 0

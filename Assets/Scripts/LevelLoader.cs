@@ -41,6 +41,15 @@ public class LevelLoader : MonoBehaviour
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
     }
 
+    public void CreateLoader()
+    {
+      //  GameObject newLoader = Instantiate(UIManager.instance.levelLoaderToMainMenuPrefab);
+      //  if (newLoader.TryGetComponent(out LevelLoader levelLoader))
+      //  {
+         //   UIManager.instance.pauseQuitButton.onClick.AddListener(delegate { CreateLoader(); });
+    //    }
+    }
+
     void MaintainBetweenScenes()
     {
         if (instance != null)
@@ -53,6 +62,16 @@ public class LevelLoader : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
+    }
+
+    public void ChangePause(bool value)
+    {
+        UIManager.instance.PauseGame(value);
+    }
+
+    public void ChangeMenuToMainMenu()
+    {
+       UIManager.instance.menuScripts.otherScript.GoToDifferentMenu(MenuScript.OtherMenus.Main);
     }
 
     void AttemptLoadOnAwake()
@@ -100,7 +119,7 @@ public class LevelLoader : MonoBehaviour
         onLoadFinished.Invoke();
         progress = asyncOperation.progress * 100;
 
-        yield return new WaitForSeconds(delayOnceLoaded);
+        yield return new WaitForSecondsRealtime(delayOnceLoaded);
  
         transitionOut.Events.OnComplete.AddListener(delegate { onTransitionFinished.Invoke(); Destroy(gameObject);  });
         transitionOut.Initialization();
@@ -134,7 +153,7 @@ public class LevelLoader : MonoBehaviour
         onLoadFinished.Invoke();
         progress = asyncOperation.progress * 100;
 
-        yield return new WaitForSeconds(delayOnceLoaded);
+        yield return new WaitForSecondsRealtime(delayOnceLoaded);
 
         transitionOut.Events.OnComplete.AddListener(delegate { onTransitionFinished.Invoke(); Destroy(gameObject); });
         transitionOut.Initialization();

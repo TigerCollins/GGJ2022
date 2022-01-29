@@ -15,4 +15,17 @@ public class GlobalHelper : MonoBehaviour
         dimensionA,
         dimensionB
     }
+
+    public bool IsPaused
+    {
+        get
+        {
+            bool value = false;
+            if(UIManager.instance != null)
+            {
+                value = UIManager.instance.IsPaused;
+            }
+            return value;
+        }
+    }
 }

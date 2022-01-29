@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
 
@@ -11,10 +14,129 @@ public class UIManager : MonoBehaviour
     public MenuScripts menuScripts;
     public List<CreditsDetails> credits;
 
+    [SerializeField] float timeScale;
+    [SerializeField] bool paused;
+    [SerializeField] InputAction pauseInput;
+    [SerializeField] UnityEvent<bool> pauseStateChanged;
+
+    [Space(10)]
+
+    public GameObject levelLoaderToMainMenuPrefab;
+    public GameObject levelLoaderToGamePrefab;
+    
+    public bool IsPaused
+    {
+        get
+        {
+            return paused;
+        }
+    }
+
+    public void PauseGame(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            PauseGame(!paused);
+        }    
+    }
+
+    public void ForcePauseGameToFunction(bool newState)
+    {
+        if (newState != paused)
+        {
+            if (newState)
+            {
+                Time.timeScale = 0;
+            }
+
+            else
+            {
+                Time.timeScale = 1;
+            }
+            timeScale = Time.timeScale;
+            paused = newState;
+            ChangeFeedbackPlayed(newState);
+            pauseStateChanged.Invoke(paused);
+        }
+    }
+
+    public void PauseGame(bool newState)
+    {
+        if(SceneManager.GetActiveScene().buildIndex != 1)
+        {
+            if (newState != paused)
+            {
+                if (newState)
+                {
+                    Time.timeScale = 0;
+                }
+
+                else
+                {
+                    Time.timeScale = 1;
+                }
+                timeScale = Time.timeScale;
+                paused = newState;
+                ChangeFeedbackPlayed(newState);
+                pauseStateChanged.Invoke(paused);
+            }
+        }
+        
+      
+    }
+
+   
+
+   public void GoToGame()
+    {
+       GameObject newObject = Instantiate(levelLoaderToGamePrefab);
+        if(newObject.TryGetComponent(out LevelLoader loader))
+        {
+            loader.LoadScene();
+        }
+    }
+
+    public void GoToMainMenu()
+    {
+        GameObject newObject = Instantiate(levelLoaderToMainMenuPrefab);
+        if (newObject.TryGetComponent(out LevelLoader loader))
+        {
+            loader.LoadScene();
+        }
+    }
+
+    public void ChangeFeedbackPlayed(bool pauseState)
+    {
+
+        if (pauseState == true)
+        {
+           
+            menuScripts.otherScript.GoToDifferentMenu(MenuScript.OtherMenus.Pause);
+        }
+
+        else if(pauseState == false)
+        {
+            menuScripts.pauseMenuScript.GoToDifferentMenu(MenuScript.OtherMenus.Other);
+        }
+    }
+
+
     private void Awake()
     {
-        instance = this;
-       
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        
+        else
+        {
+            
+            Destroy(gameObject);
+        }
+
+        pauseInput.performed += PauseGame;
+        pauseInput.Enable();
     }
 
     private void Start()
@@ -31,7 +153,8 @@ public class UIManager : MonoBehaviour
             menuScripts.ForceCloseOtherMenuScripts();
             menuScripts.InitSwitch();
         }
-      
+
+        
     }
 
 
@@ -65,9 +188,8 @@ public class MenuScripts
     public MenuScript creditsScript;
     public MenuScript optionMenuScript;
     public MenuScript otherScript;
-    public MenuScript splashMenuScript;
     public MenuScript pauseMenuScript;
-    public MenuScript generalGUIScript;
+
 
     public MenuScript CurrentMenuScript
     {
@@ -100,23 +222,22 @@ public class MenuScripts
             list.Add(optionMenuScript);
         }
 
-       /* if (saveMenuScript != null)
+        /* if (saveMenuScript != null)
+         {
+             list.Add(saveMenuScript);
+         }
+        */
+
+        if (otherScript != null)
         {
-            list.Add(saveMenuScript);
+            list.Add(otherScript);
         }
-       */
-        if (splashMenuScript != null)
-        {
-            list.Add(splashMenuScript);
-        }
+
         if (pauseMenuScript != null)
         {
             list.Add(pauseMenuScript);
         }
-        if (generalGUIScript != null)
-        {
-            list.Add(generalGUIScript);
-        }
+
         return list;
     }
 
@@ -129,12 +250,17 @@ public class MenuScripts
     {
         return creditsScript as CreditsMenuhandler;
     }
-    /*
-    public GeneralMenuGameplayHandler GeneralGUIScript()
+   
+    public GUIHandler GeneralGUIScript()
     {
-        return generalGUIScript as GeneralMenuGameplayHandler;
+        return otherScript as GUIHandler;
     }
-   */
+
+    public PauseMenuHandler PauseMenuScript()
+    {
+        return pauseMenuScript as PauseMenuHandler;
+    }
+
 
     public void ForceCloseOtherMenuScripts()
     {
@@ -150,7 +276,14 @@ public class MenuScripts
                 {
                     CreditsMenuHandlerScript().CloseWholeMenuFunction();
                 }
-                
+               if(item == otherScript)
+                {
+                    GeneralGUIScript().CloseWholeMenuFunction();
+                }
+                if (item == pauseMenuScript)
+                {
+                    PauseMenuScript().CloseWholeMenuFunction();
+                }
             }
 
             

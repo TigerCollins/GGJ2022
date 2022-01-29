@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Feedbacks;
 
-public class MainMenuHandler : MenuScript
+public class PauseMenuHandler : MenuScript
 {
-    [Header("Main Menu Specific")]
+    [Header("Pause Specific")]
     [SerializeField] MMFeedbacks hideFeedback;
+    [SerializeField] MMFeedbacks showFeedback;
 
-    public void Init()
-    {
-     //base.   
-    }
+    [Space(10)]
 
+    [SerializeField] GUIHandler guiScript;
+
+   
 
     public void CloseWholeMenuFunction()
     {

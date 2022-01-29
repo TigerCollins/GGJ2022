@@ -11,7 +11,8 @@ public class MenuScript : MonoBehaviour
         Main,
         Options,
         Credits,
-        Other
+        Other,
+        Pause
     }
 
     [Header("Menu Script")]
@@ -41,11 +42,12 @@ public class MenuScript : MonoBehaviour
             case OtherMenus.Other:
                 UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.otherScript;
                 break;
-            
+            case OtherMenus.Pause:
+                UIManager.instance.menuScripts.CurrentMenuScript = UIManager.instance.menuScripts.pauseMenuScript;
+                break;
             default:
                 break;
         }
-        
         //Event to open next menu
         UnityAction eventAction = null;
         eventAction = new UnityAction(delegate () { UIManager.instance.menuScripts.CurrentMenuScript.ShowMenuFunction(); transitionDetails.menuCloseCompleted.RemoveListener(eventAction); });
@@ -92,7 +94,7 @@ public class MenuScript : MonoBehaviour
     {
         UIManager.instance.menuScripts.InitSwitch();
 
-        yield return new WaitForSeconds(transitionDetails.transitionDelay);
+        yield return new WaitForSecondsRealtime(transitionDetails.transitionDelay);
 
         foreach (var item in allShowEvents)
         {

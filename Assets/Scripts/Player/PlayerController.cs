@@ -174,7 +174,7 @@ public class PlayerController : MonoBehaviour
 
 	public void BasicAttack(InputAction.CallbackContext context)
 	{
-		if (context.performed)
+		if (context.performed && !GlobalHelper.instance.IsPaused)
 		{
 			
 			StatsController stats = RaycastStats();
@@ -266,7 +266,7 @@ public class PlayerController : MonoBehaviour
 
 	public void Jump(InputAction.CallbackContext callbackContext)
 	{
-		if(callbackContext.performed)
+		if(callbackContext.performed && !GlobalHelper.instance.IsPaused)
         {
 			
 			if (IsGrounded)
@@ -285,29 +285,32 @@ public class PlayerController : MonoBehaviour
 
 	public void MovementVector(InputAction.CallbackContext callbackContext)
 	{
+		if (!GlobalHelper.instance.IsPaused)
+        {
+			moveAxis = callbackContext.ReadValue<Vector2>();
 
-		moveAxis = callbackContext.ReadValue<Vector2>();
+
+			//Facing Direction
+			if (moveAxis.x < 0)
+			{
+				IsFacingRight = false;
+				receivingMovementInput = true;
+			}
+
+			else if (moveAxis.x > 0)
+			{
+				IsFacingRight = true;
+				receivingMovementInput = true;
+
+			}
+
+			else
+			{
+				receivingMovementInput = false;
+
+			}
+		}
 		
-
-		//Facing Direction
-		if (moveAxis.x < 0)
-		{
-			IsFacingRight = false;
-			receivingMovementInput = true;
-		}
-
-		else if(moveAxis.x >0)
-        {
-			IsFacingRight = true;
-			receivingMovementInput = true;
-
-		}
-
-		else
-        {
-			receivingMovementInput = false;
-
-		}
 	}
 
 	public void Raycast(InputAction.CallbackContext context)

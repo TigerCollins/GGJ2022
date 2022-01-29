@@ -14,10 +14,12 @@ public class MenuScriptHelper : MonoBehaviour
 
     public void ChangeSceneMainMenu()
     {
-        MainMenuHandler mainMenuHandler = currentMenu as MainMenuHandler;
-        if(mainMenuHandler != null)
-        {
-            mainMenuHandler.OpenLevel();
-        }
+            UIManager.instance.GoToMainMenu();
+
+    }
+
+    public void ChangeSceneGame()
+    {
+        UIManager.instance.GoToGame();
     }
 }
