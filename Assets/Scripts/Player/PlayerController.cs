@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
     public void Update()
     {
 		IsGrounded = characterController.isGrounded;
-
+		//transform.position
 		ForcePlayerHeightToDrop();
 		HittingWallLogic();
 		IsFallingCheck();

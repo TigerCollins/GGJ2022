@@ -86,7 +86,7 @@ public class LevelLoader : MonoBehaviour
         onTransitionStart.Invoke();
         //Begin to load the Scene you specify
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(targetSceneIndex, LoadSceneMode.Single);
-
+ 
         onLoadStart.Invoke();
         //When the load is still in progress, output the Text and progress bar
         while (!asyncOperation.isDone)
