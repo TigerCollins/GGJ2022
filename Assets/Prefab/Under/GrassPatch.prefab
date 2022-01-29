@@ -58,6 +58,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TallGrass (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3814474039296640438, guid: b085d14f14cd6e34bb93bec31f9dfe03, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5687675675955709815, guid: b085d14f14cd6e34bb93bec31f9dfe03, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -296,6 +300,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 2452255672331763789, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2730826919859991454, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -373,6 +381,10 @@ PrefabInstance:
     - target: {fileID: 2452255672331763789, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
       propertyPath: m_Name
       value: Grass (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452255672331763789, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2730826919859991454, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
       propertyPath: m_RootOrder
@@ -603,6 +615,10 @@ PrefabInstance:
     - target: {fileID: 2452255672331763789, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
       propertyPath: m_Name
       value: Grass (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452255672331763789, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2730826919859991454, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
       propertyPath: m_RootOrder
@@ -837,6 +853,10 @@ PrefabInstance:
     - target: {fileID: 2452255672331763789, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
       propertyPath: m_Name
       value: Grass (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452255672331763789, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2730826919859991454, guid: e0f2110b14ce61646808170b2b8b39c2, type: 3}
       propertyPath: m_RootOrder
