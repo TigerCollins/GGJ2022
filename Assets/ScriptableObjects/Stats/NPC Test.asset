@@ -16,6 +16,6 @@ MonoBehaviour:
   baseHealth: 3
   baseAttack: 0
   baseDefence: 0
-  knockbackPower: 2
+  knockbackPower: 14.13
   maxLives: 1
   baseLives: 1

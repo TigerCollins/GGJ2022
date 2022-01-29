@@ -20,6 +20,9 @@ public class NPCScript : MonoBehaviour
 	[SerializeField] CharacterController characterController;
 	[SerializeField] StatsController stats;
 	[SerializeField] float physicsPushPower;
+	[SerializeField] Vector2 seekPlayerDistanceThreshold = new Vector2(1,3);
+	[Range(0,10)] [SerializeField] float seekPlayerMoveSpeed = 3;
+	Vector3 playerPosition;
 
 
 	[SerializeField] MovementInfo movement;
@@ -81,6 +84,16 @@ public class NPCScript : MonoBehaviour
         }
     }
 
+	void OnBecameInvisible()
+	{
+		canMove = false;
+	}
+
+	void OnBecameVisible()
+	{
+		canMove = true;
+	}
+
 
 	// Main tick
 	void FixedUpdate()
@@ -102,6 +115,7 @@ public class NPCScript : MonoBehaviour
 		HittingWallLogic();
 		IsFallingCheck();
 		onUpdateCalled.Invoke();
+		//playerPosition = 
 	}
 
 	public bool IsGrounded
@@ -162,7 +176,28 @@ public class NPCScript : MonoBehaviour
 	public void MovementVector()
 	{
 
-		float input = movement.horizontalMoveDirection;
+		float input = 0;
+
+		float distance = Vector3.Distance(PlayerController.instance.transform.position, transform.position);
+		if (distance < seekPlayerDistanceThreshold.y && distance > seekPlayerDistanceThreshold.x)
+        {
+			if (PlayerController.instance.transform.position.x > transform.position.x)
+			{
+				input = seekPlayerMoveSpeed;
+			}
+
+			else
+			{
+				input = -seekPlayerMoveSpeed;
+			}
+
+		}
+
+		else
+        {
+			input = movement.horizontalMoveDirection;
+		}
+
 
 
 		//Facing Direction
@@ -191,8 +226,6 @@ public class NPCScript : MonoBehaviour
 		//Position
 		if (Mathf.Abs(input) > 0.3f)
 		{
-					
-
 
 			if (IsGrounded && !IsHittingWall)
 			{

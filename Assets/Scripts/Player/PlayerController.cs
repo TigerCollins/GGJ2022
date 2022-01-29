@@ -591,6 +591,7 @@ public class PlayerController : MonoBehaviour
 		
 		if(other.transform.TryGetComponent(out NPCScript npc))
         {
+			Debug.Log("w");
 			npc.StatsController.DealDamageToOther(statsController);
 
 			float newDirection = 0;
