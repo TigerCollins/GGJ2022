@@ -66,7 +66,7 @@ public class LevelLoader : MonoBehaviour
 
     public void ChangePause(bool value)
     {
-        UIManager.instance.PauseGame(value);
+        UIManager.instance.ForcePauseGameToFunction(value); 
     }
 
     public void ChangeMenuToMainMenu()

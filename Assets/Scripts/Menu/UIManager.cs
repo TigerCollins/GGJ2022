@@ -123,6 +123,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        Time.timeScale = 1;
         if(instance == null)
         {
             instance = this;
@@ -131,8 +132,10 @@ public class UIManager : MonoBehaviour
         
         else
         {
-            
             Destroy(gameObject);
+            //Destroy(instance.gameObject);
+           // instance = this;
+           // DontDestroyOnLoad(gameObject);
         }
 
         pauseInput.performed += PauseGame;

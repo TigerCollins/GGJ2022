@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
 	Vector3 originalPos;
 	[SerializeField] bool isGrounded;
 	[SerializeField] bool isHittingWall;
+	bool paused;
 
 	public enum MovementState
     {
@@ -117,7 +118,25 @@ public class PlayerController : MonoBehaviour
 		HittingWallLogic();
 		IsFallingCheck();
 		onUpdateCalled.Invoke();
+		CheckForInputAfterResuming();
 	}
+
+	void CheckForInputAfterResuming()
+    {
+		if(paused != GlobalHelper.instance.IsPaused)
+        {
+			paused = GlobalHelper.instance.IsPaused;
+			if (!receivingMovementInput && !paused)
+			{
+				moveAxis = Vector2.zero;
+			}
+
+			else if(paused)
+            {
+				receivingMovementInput = false;
+			}
+		}
+    }
 
     public bool IsGrounded
     {
