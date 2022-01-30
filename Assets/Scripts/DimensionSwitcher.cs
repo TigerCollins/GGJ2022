@@ -76,18 +76,18 @@ public class DimensionEnvironmentHandler
 
     public void AddToEnvironmentList(DimensionObject newObject)
     {
-        environmentObjects.Add(newObject);
+        environmentDimensionObjects.Add(newObject);
         environmentObjectsActive++;
     }
 
     public void RemoveFromEnvironmentList(DimensionObject objectToDelete)
     {
         int id = 0;
-        foreach (DimensionObject item in environmentObjects)
+        foreach (DimensionObject item in environmentDimensionObjects)
         {
             if(item == objectToDelete)
             {
-                environmentObjects.RemoveRange(id, 1);
+                environmentDimensionObjects.RemoveRange(id, 1);
             }
             id++;
         }
