@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] PlayerAnimation playerAnimator;
 	public  CharacterController characterController;
 	[SerializeField] float physicsPushPower;
-
+    PlayerAbilities playerAbilities;
 
 	[SerializeField] MovementDetails movement;
 	[SerializeField] internal CharacterEvents characterEvents;
@@ -69,12 +69,13 @@ public class PlayerController : MonoBehaviour
 	{
 		statsController.onDeath.AddListener(delegate { playerAnimator.Death(); });
 		statsController.onHealthLost.AddListener(delegate { playerAnimator.TookDamage(); });
-	}
+
+    }
 
 
 	void Start()
 	{
-		StartCoroutine(PositionTracking());
+        StartCoroutine(PositionTracking());
 	}
 
 	public CharacterController PlayerCharacterController
@@ -128,6 +129,7 @@ public class PlayerController : MonoBehaviour
 				if (value == true)
                 {
 					movement.isMidair = false;
+
 					//playerAnimator.AttemptIdleAnimationState();
 				}
 			}
@@ -236,7 +238,7 @@ public class PlayerController : MonoBehaviour
             //JUMP (when midair)
             if (!IsGrounded && !pauseMove)
             {
-                moveDirection += movement.gravity * (Time.deltaTime * GlobalHelper.instance.PlayerTimeScale) * movement.jumpGravityMultiplier;
+                moveDirection += movement.gravity * Time.deltaTime * (movement.jumpGravityMultiplier * GlobalHelper.instance.PlayerTimeScale);
             }
 
             if (canMove)
@@ -250,8 +252,8 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-            //moveDirection *= GlobalHelper.instance.PlayerTimeScale;
-            characterController.Move(moveDirection * (Time.deltaTime* GlobalHelper.instance.PlayerTimeScale));
+            
+            characterController.Move(moveDirection * (Time.deltaTime));
         
 	}
 
@@ -266,7 +268,7 @@ public class PlayerController : MonoBehaviour
             {
 				movement.isMidair = true;
 				movement.HeightWhenJumped = transform.position.y;
-				movement.JumpTarget = Mathf.Sqrt(movement.jumpHeight * -3.0f * movement.gravity.y);
+				movement.JumpTarget = Mathf.Sqrt((movement.jumpHeight * GlobalHelper.instance.PlayerTimeScale) * -3.0f * movement.gravity.y);
 				moveDirection.y = movement.JumpTarget;
 				characterEvents.onJumped.Invoke();
 				
@@ -540,6 +542,16 @@ public class PlayerController : MonoBehaviour
         get
         {
             return moveDirection;
+        }
+    }
+
+    public void ReduceYMoveSpeedForFreeze()
+    {
+        if (!isGrounded)
+        {
+            float predictedApexOfJump = movement.JumpTarget + movement.HeightWhenJumped;
+            float progressOfJump = transform.position.y / predictedApexOfJump;
+            moveDirection.y = (Mathf.Sqrt((movement.jumpHeight * GlobalHelper.instance.PlayerTimeScale) * -1.0f * movement.gravity.y)) * (1- progressOfJump);
         }
     }
 }

@@ -30,6 +30,24 @@ public class PlayerAbilities : MonoBehaviour
     [Range(1f, 0f)] [SerializeField] float worldSlowRate;
     Rigidbody[] rigidbodies;
 
+    [Header("Suspend card Variables")]
+
+    [SerializeField] GameObject suspendCardPrefab;
+    public float suspendDuration;
+
+    [Header("Rock throw card Variables")]
+    [SerializeField] float arcHeight;
+    [SerializeField] float rockSpeed;
+    [SerializeField] GameObject rockPrefab;
+
+    [Header("Projectile Attack Variables")]
+    [SerializeField] float projectileSpeed;
+    [SerializeField] float projectileDuration;
+    [SerializeField] GameObject projectileCard;
+
+
+    [Header("Scriptable Objects Abilities")]
+    [SerializeField] List<CardDetails> abilityList;
 
     [Header("Events")]
     public UnityEvent onTimeStop;
@@ -50,8 +68,7 @@ public class PlayerAbilities : MonoBehaviour
 
     public void ThrowTeleportCard()
     {
-        print("throwing Teleport Card");
-        GameObject obj = Instantiate(teleportCardPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(Vector3.zero));
+        GameObject obj = Instantiate(teleportCardPrefab, transform.position + new Vector3(0, 0.7f, 0), Quaternion.Euler(Vector3.zero));
         if (obj.TryGetComponent(out Rigidbody rb))
         {
             if (playerController.IsFacingRight)
@@ -99,6 +116,7 @@ public class PlayerAbilities : MonoBehaviour
         playerAnimation.GetPlayerAnimator.speed = playerSlowRate;
         playerAnimation.GetCardAnimator.speed = playerSlowRate;
         ChangeRigidBodiesDrag(10f);
+        playerController.ReduceYMoveSpeedForFreeze();
         onTimeStop.Invoke();
 
         yield return new WaitForSecondsRealtime(freezeDuration);
@@ -119,4 +137,57 @@ public class PlayerAbilities : MonoBehaviour
         }
     }
 
+    public void SuspendTarget()
+    {
+
+        GameObject obj = Instantiate(suspendCardPrefab, transform.position + new Vector3(0, 0.7f, 0), Quaternion.Euler(Vector3.zero));
+        if (obj.TryGetComponent(out Rigidbody rb))
+        {
+            if (playerController.IsFacingRight)
+                rb.velocity = new Vector3(teleportCardSpeed, 0, 0);
+            else
+                rb.velocity = new Vector3(-teleportCardSpeed, 0, 0);
+        }
+
+    }
+
+    public void ThrowRock()
+    {
+        GameObject obj = Instantiate(rockPrefab, transform.position + new Vector3(0, 0.7f, 0), Quaternion.Euler(Vector3.zero));
+        if (obj.TryGetComponent(out Rigidbody rb))
+        {
+            if (playerController.IsFacingRight)
+                rb.velocity = new Vector3(rockSpeed, arcHeight, 0);
+            else
+                rb.velocity = new Vector3(-rockSpeed, arcHeight, 0);
+        }
+    }
+
+    public void ProjectileAttack()
+    {
+        GameObject obj = Instantiate(projectileCard, transform.position + new Vector3(0, 0.7f, 0), Quaternion.Euler(Vector3.zero));
+        if (obj.TryGetComponent(out Rigidbody rb))
+        {
+            if (playerController.IsFacingRight)
+                rb.velocity = new Vector3(projectileSpeed, 0, 0);
+            else
+                rb.velocity = new Vector3(-projectileSpeed, 0, 0);
+        }
+        Destroy(obj, projectileDuration);
+    }
+
+    public void UnlockAbility(CardAbilities.Ability ability)
+    {
+        foreach (CardDetails card in abilityList )
+        {
+            if(card.CardAbility == ability)
+            {
+                card.IsUnlocked = true;
+                return;
+            }
+        }
+
+        print("No ability found");
+
+    }
 }

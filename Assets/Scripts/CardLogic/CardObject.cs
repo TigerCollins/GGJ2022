@@ -101,20 +101,23 @@ public class CardObject : MonoBehaviour
                             case CardAbilities.Ability.DimensionSwap:
                                 DimensionSwitcher.instance.onDimensionChange.Invoke();
                                 break;
-                            case CardAbilities.Ability.WorldFlip:
+                            case CardAbilities.Ability.Teleport:
                                 playerAbilities.ThrowTeleportCard();
                                 break;
-                            case CardAbilities.Ability.Ability2:
+                            case CardAbilities.Ability.Dash:
                                 playerAbilities.DashMovement();
                                 break;
-                            case CardAbilities.Ability.Ability3:
+                            case CardAbilities.Ability.TimeStop:
                                 playerAbilities.FreezeTimeAbility();
                                 break;
-                            case CardAbilities.Ability.Ability4:
+                            case CardAbilities.Ability.HangmanVine:
+                                playerAbilities.SuspendTarget();
                                 break;
-                            case CardAbilities.Ability.Ability5:
+                            case CardAbilities.Ability.RockThrow:
+                                playerAbilities.ThrowRock();
                                 break;
-                            case CardAbilities.Ability.Ability6:
+                            case CardAbilities.Ability.ProjectileAttack:
+                                playerAbilities.ProjectileAttack();
                                 break;
                             default:
                                 break;
@@ -132,20 +135,23 @@ public class CardObject : MonoBehaviour
                             case CardAbilities.Ability.DimensionSwap:
                                 DimensionSwitcher.instance.onDimensionChange.Invoke();
                                 break;
-                            case CardAbilities.Ability.WorldFlip:
+                            case CardAbilities.Ability.Teleport:
                                 playerAbilities.ThrowTeleportCard();
                                 break;
-                            case CardAbilities.Ability.Ability2:
+                            case CardAbilities.Ability.Dash:
                                 playerAbilities.DashMovement();
                                 break;
-                            case CardAbilities.Ability.Ability3:
+                            case CardAbilities.Ability.TimeStop:
                                 playerAbilities.FreezeTimeAbility();
                                 break;
-                            case CardAbilities.Ability.Ability4:
+                            case CardAbilities.Ability.HangmanVine:
+                                playerAbilities.SuspendTarget();
                                 break;
-                            case CardAbilities.Ability.Ability5:
+                            case CardAbilities.Ability.RockThrow:
+                                playerAbilities.ThrowRock();
                                 break;
-                            case CardAbilities.Ability.Ability6:
+                            case CardAbilities.Ability.ProjectileAttack:
+                                playerAbilities.ProjectileAttack();
                                 break;
                             default:
                                 break;

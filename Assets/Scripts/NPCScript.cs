@@ -27,8 +27,9 @@ public class NPCScript : MonoBehaviour
 	[SerializeField] List<DirectionBasedObjectFlip> directionBasedObjectFlips;
 	Vector3 moveDirection = Vector3.zero;
 	UnityEvent onUpdateCalled = new UnityEvent();
+    [HideInInspector] public bool characterGrabbed = false;
 
-	[SerializeField] bool isFacingRight;
+    [SerializeField] bool isFacingRight;
 
 	[Header("Raycast")]
 	[SerializeField] RaycastInfo _raycast;
@@ -176,7 +177,7 @@ public class NPCScript : MonoBehaviour
 		}
 
 		//Position
-		if (Mathf.Abs(input) > 0.3f)
+		if (Mathf.Abs(input) > 0.3f && !characterGrabbed)
 		{
 
 			if (IsGrounded && !IsHittingWall)
@@ -198,7 +199,12 @@ public class NPCScript : MonoBehaviour
 		moveDirection += movement.gravity * (Time.deltaTime * GlobalHelper.instance.UniversalTimeScale);
 
         moveDirection = new Vector3(input, moveDirection.y, 0);
-	    characterController.Move(moveDirection* (Time.deltaTime * GlobalHelper.instance.UniversalTimeScale));
+        if(!characterGrabbed)
+	        characterController.Move(moveDirection* (Time.deltaTime * GlobalHelper.instance.UniversalTimeScale));
+        else
+        {
+            moveDirection = new Vector3(0,-2,0);
+        }
 	}
 
 	public void Raycast(InputAction.CallbackContext context)
