@@ -6,7 +6,12 @@ public class RockThrow : MonoBehaviour
 {
     private void OnCollisionEnter(Collision collision)
     {
-        print("Hit and deal damage needed");
-        Destroy(this.gameObject);
+
+        if (collision.transform.CompareTag("Destructable"))
+        {
+            Destroy(collision.gameObject);
+            Destroy(this.gameObject);
+        }
+        
     }
 }

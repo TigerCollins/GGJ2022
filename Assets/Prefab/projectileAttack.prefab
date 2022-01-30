@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4060410211928173619}
   - component: {fileID: 5945386884798714532}
   - component: {fileID: 6618008592157881853}
+  - component: {fileID: -7710278743925900513}
   m_Layer: 10
   m_Name: projectileAttack
   m_TagString: Untagged
@@ -114,3 +115,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 124
   m_CollisionDetection: 0
+--- !u!114 &-7710278743925900513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6371211791302962980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a8444e176b60d742a0217f34fe41d19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1

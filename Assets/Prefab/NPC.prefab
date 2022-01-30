@@ -471,7 +471,7 @@ GameObject:
   - component: {fileID: 3862179287901793914}
   - component: {fileID: 3907314994672072964}
   - component: {fileID: 3757105085532797457}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: NPC
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -548,6 +548,7 @@ MonoBehaviour:
         m_Calls: []
   directionBasedObjectFlips:
   - {fileID: 2036593958419912513}
+  characterGrabbed: 0
   isFacingRight: 0
   _raycast:
     useRaycast: 0
@@ -615,6 +616,9 @@ MonoBehaviour:
   maxLivesRemaining: 0
   livesRemaining: 0
   attack: 0
+  isAlive: 0
+  destroyOnDeath: 1
+  destroyTimer: 0
   onHealthGained:
     m_PersistentCalls:
       m_Calls: []
@@ -627,9 +631,6 @@ MonoBehaviour:
   onDeath:
     m_PersistentCalls:
       m_Calls: []
-  isAlive: 0
-  destroyOnDeath: 1
-  destroyTimer: 0
 --- !u!212 &3862179287901793914
 SpriteRenderer:
   m_ObjectHideFlags: 0
