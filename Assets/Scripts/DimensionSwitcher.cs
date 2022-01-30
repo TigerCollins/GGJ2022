@@ -19,10 +19,23 @@ public class DimensionSwitcher : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        CheckForMultiple();
+        
         onDimensionChange.AddListener(delegate {environmentHandler.ChangeEnvironmentDimension(); });
     }
 
+    void CheckForMultiple()
+    {
+        if(instance != null)
+        {
+            Debug.LogError("This is the second DimensionSwitch, it is on '" + gameObject.name + "'. The original (the one used for functionality) is on '" + instance.gameObject.name + "'.");
+        }
+
+        else
+        {
+            instance = this;
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -39,6 +52,8 @@ public class DimensionSwitcher : MonoBehaviour
             lastDimension = currentDimension;
             onDimensionChange.Invoke();
         }
+
+        
     }
 
     public GlobalHelper.Dimensions CurrentDimension()
@@ -101,23 +116,23 @@ public class DimensionEnvironmentHandler
             case GlobalHelper.Dimensions.dimensionA:
                 foreach (GameObject item in dimensionAObjects)
                 {
-                    item.SetActive(false);
+                    item.SetActive(true);
                 }
 
                 foreach (GameObject item in dimensionBObjects)
                 {
-                    item.SetActive(true);
+                    item.SetActive(false);
                 }
                 break;
             case GlobalHelper.Dimensions.dimensionB:
                 foreach (GameObject item in dimensionAObjects)
                 {
-                    item.SetActive(true);
+                    item.SetActive(false);
                 }
 
                 foreach (GameObject item in dimensionBObjects)
                 {
-                    item.SetActive(false);
+                    item.SetActive(true);
                 }
                 break;
             default:
