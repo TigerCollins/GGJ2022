@@ -94,7 +94,7 @@ public class NPCScript : MonoBehaviour
 	public void GetKnockBack(StatsDetails statProfile)
     {
 
-			StatsController.DealDamageToOther(StatsController);
+			//StatsController.DealDamageToOther(StatsController);
 
 			float newDirection = 0;
 			if (PlayerController.IsObjectOnRight(transform, PlayerController.instance.transform))
@@ -213,7 +213,7 @@ public class NPCScript : MonoBehaviour
 	{
 		float input = 0;
 		float distance = Vector3.Distance(PlayerController.instance.transform.position, transform.position);
-		float xDistance = PlayerController.instance.transform.position.x - transform.position.x;
+		float xDistance = Mathf.Abs(PlayerController.instance.transform.position.x - transform.position.x);
 		if (canMove)
 		{
 

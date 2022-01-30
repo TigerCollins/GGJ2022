@@ -605,7 +605,7 @@ public class PlayerController : MonoBehaviour
         {
 			npcScript = npc;
 			npc.Attack();
-			GetKnockBack();
+			
 		}
     }
 
@@ -614,7 +614,7 @@ public class PlayerController : MonoBehaviour
 		float newDirection = 0;
 		if (npcScript != null)
 		{
-			npcScript.StatsController.DealDamageToOther(statsController);
+			//npcScript.StatsController.DealDamageToOther(statsController);
 
 			if (IsObjectOnRight(transform, npcScript.transform))
 			{

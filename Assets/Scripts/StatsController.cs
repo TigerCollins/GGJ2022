@@ -38,6 +38,7 @@ public class StatsController : MonoBehaviour
     public UnityEvent onHealthLost;
     public UnityEvent onLifeLost;
     public UnityEvent onDeath;
+    public UnityEvent onHitWithRecoil;
 
     
 
@@ -59,44 +60,26 @@ public class StatsController : MonoBehaviour
     public void DealDamageToOther(StatsController otherStatsController)
     {
         otherStatsController.ReceiveDamage(attack);
-        otherStatsController.CharacterWhoJustHarmed = this;
-    }
-
-    public StatsController CharacterWhoJustHarmed
-    {
-        set
-        {
-            if(value != null)
-            {
-                AttemptRecoilDamage(value);
-                Debug.Log(transform.name);
-            }
-           // Debug.Log(value != null);
-            
-        }
+        otherStatsController.AttemptRecoilDamage(this);
     }
 
     public void AttemptRecoilDamage(StatsController personWhoAttacked)
     {
-        if (statsProfile.CanDealRecoilDamage)
+        if (statsProfile.CanDealRecoilDamage == true)
         {
-            if (recoilRoutine != null)
-            {
-                StopCoroutine(recoilRoutine);
-            }
-            recoilRoutine = StartCoroutine(personWhoAttacked.TakeRecoilDamage());
+                recoilRoutine = StartCoroutine(DealRecoilDamage(personWhoAttacked));
         }
     }
 
-    public IEnumerator TakeRecoilDamage()
+    public IEnumerator DealRecoilDamage(StatsController personWhoAttacked)
     {
        
         yield return new WaitForSeconds(statsProfile.TimeBeforeTryingRecoil);
         bool success = Random.Range(0, 100) < statsProfile.RecoilThreshold;
-        if(success)
+        if (success)
         {
-            ReceiveDamage(attack);
-            Debug.Log(transform.name);
+            personWhoAttacked.ReceiveDamage(attack);
+            personWhoAttacked.onHitWithRecoil.Invoke();
         }
     }
 
