@@ -503,7 +503,7 @@ GameObject:
   - component: {fileID: 8235586008436921445}
   - component: {fileID: 1607073792}
   - component: {fileID: 2037103211}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -749,11 +749,6 @@ MonoBehaviour:
   cameraOffset: {x: 0, y: 2.5, z: -9}
   moveDirectionChangesXOffset: 1
   moveDirectionXOffset: 0.75
-  screenShakeFeedback: {fileID: 0}
-  shakeTime: 0.2
-  shakeStrength: 1
-  shakeFrequency: 0.5
-  amplitude: {x: 1, y: 1, z: 0}
 --- !u!114 &1607073792
 MonoBehaviour:
   m_ObjectHideFlags: 0
