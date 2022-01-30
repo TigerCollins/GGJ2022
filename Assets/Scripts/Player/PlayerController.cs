@@ -604,24 +604,28 @@ public class PlayerController : MonoBehaviour
 		if(other.transform.TryGetComponent(out NPCScript npc))
         {
 			npcScript = npc;
+			npc.Attack();
 			GetKnockBack();
 		}
     }
 
 	public void GetKnockBack()
-    {
-		npcScript.StatsController.DealDamageToOther(statsController);
+	{
 		float newDirection = 0;
-		if (IsObjectOnRight(transform, npcScript.transform))
+		if (npcScript != null)
 		{
-			newDirection = -npcScript.StatsController.StatProfile.KnockBackStrength;
-		}
+			npcScript.StatsController.DealDamageToOther(statsController);
 
-		else
-		{
-			newDirection = npcScript.StatsController.StatProfile.KnockBackStrength;
-		}
+			if (IsObjectOnRight(transform, npcScript.transform))
+			{
+				newDirection = -npcScript.StatsController.StatProfile.KnockBackStrength;
+			}
 
+			else
+			{
+				newDirection = npcScript.StatsController.StatProfile.KnockBackStrength;
+			}
+		}
 		npcScript = null;
 
 		secondaryMoveDirection.x = newDirection;

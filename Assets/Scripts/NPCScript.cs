@@ -70,7 +70,10 @@ public class NPCScript : MonoBehaviour
 		stats.onDeath.AddListener(delegate { canMove = false;  });
 		stats.onHealthLost.AddListener(delegate { npcAnimation.TookDamage(); });
 		stats.onHealthLost.AddListener(delegate { GetKnockBack(PlayerController.instance.StatsController.StatProfile); });
-    }
+		//characterEvents.onAttack.AddListener(delegate { npcAnimation.at });
+
+
+	}
 
 	public CharacterController PlayerCharacterController
 	{
@@ -200,12 +203,9 @@ public class NPCScript : MonoBehaviour
 #endif
 
 
-	public void BasicAttack(InputAction.CallbackContext context)
+	public void Attack()
 	{
-		if (context.performed)
-		{
-			characterEvents.onAttack.Invoke();
-		}
+		characterEvents.onAttack.Invoke();
 	}
 
 
@@ -213,10 +213,11 @@ public class NPCScript : MonoBehaviour
 	{
 		float input = 0;
 		float distance = Vector3.Distance(PlayerController.instance.transform.position, transform.position);
+		float xDistance = PlayerController.instance.transform.position.x - transform.position.x;
 		if (canMove)
 		{
 
-			if (distance < seekPlayerDistanceThreshold.y && distance > seekPlayerDistanceThreshold.x)
+			if (distance < seekPlayerDistanceThreshold.y && distance > seekPlayerDistanceThreshold.x || xDistance < seekPlayerDistanceThreshold.y && xDistance > seekPlayerDistanceThreshold.x)
 			{
 				if (PlayerController.instance.transform.position.x > transform.position.x)
 				{
