@@ -150,7 +150,7 @@ MonoBehaviour:
   obj: {fileID: 0}
   lineRenderer: {fileID: 2626932369416065329}
   originalPosition: {x: 0, y: 0, z: 0}
-  objectHoldHeightOffCeiling: 2
+  objectHoldHeightOffCeiling: 10
   objHasRB: 0
   renderer: {fileID: 2626932369416065329}
   material: {fileID: 2100000, guid: 8182a411e7cdd814b94bed4ece4391bc, type: 2}

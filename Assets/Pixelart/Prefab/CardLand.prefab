@@ -1487,7 +1487,7 @@ MonoBehaviour:
     title: {fileID: 4879108644271169729}
     body: {fileID: 4879108644830958573}
   thisCardRenderer: {fileID: 4879108644423303857}
-  sideACardDetails: {fileID: 11400000, guid: 6d7114f18c3460045a9a6ecdcaccd562, type: 2}
+  sideACardDetails: {fileID: 11400000, guid: aeb64136cb4b95047a0fd19408b9c96b, type: 2}
   sideBCardDetails: {fileID: 11400000, guid: 26a9dc6b495bf1d46a9ffbb23a2657a9, type: 2}
 --- !u!114 &4879108644423303869
 MonoBehaviour:
