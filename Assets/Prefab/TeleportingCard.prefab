@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3090943175189480666}
   - component: {fileID: 5432519090517579374}
   - component: {fileID: 5402275439999580001}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: TeleportingCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}

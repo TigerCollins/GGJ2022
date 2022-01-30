@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5089479540798891880}
   - component: {fileID: 5089479540798891895}
   - component: {fileID: 4241930}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: SuspendCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,4 +130,4 @@ MonoBehaviour:
   vineToPullObject: {fileID: 2626932369416065328, guid: 579995a445abdca469fe4eb4c83d428b, type: 3}
   raycastMask:
     serializedVersion: 2
-    m_Bits: 511
+    m_Bits: 1535
