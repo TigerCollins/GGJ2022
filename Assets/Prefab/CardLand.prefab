@@ -3184,6 +3184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4879108645159142109}
   - component: {fileID: 4879108645159142107}
+  - component: {fileID: 379996854}
   m_Layer: 0
   m_Name: CardLand
   m_TagString: Untagged
@@ -3220,6 +3221,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilityCards: []
+--- !u!114 &379996854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4879108645159142110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb1b5666482a024ca96c7d4643eef3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugMode: 0
+  currentDimension: 0
+  environmentHandler:
+    environmentDimensionObjects: []
+    dimensionAObjects: []
+    dimensionBObjects: []
+    environmentObjectsActive: 0
+  onDimensionChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4879108645198163098
 GameObject:
   m_ObjectHideFlags: 0

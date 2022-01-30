@@ -29,12 +29,26 @@ public class DimensionSwitcher : MonoBehaviour
     {
         if(instance != null)
         {
-            Debug.LogError("This is the second DimensionSwitch, it is on '" + gameObject.name + "'. The original (the one used for functionality) is on '" + instance.gameObject.name + "'.");
+            Debug.LogError("This is the second DimensionSwitch, it is on '" + gameObject.name + "'. The original (the one used for functionality) is on '" + instance.gameObject.name + "', the other has now been destroyed.");
+
+            instance.environmentHandler.dimensionAObjects.Clear();
+            instance.environmentHandler.dimensionBObjects.Clear();
+            foreach (GameObject item in environmentHandler.dimensionAObjects)
+            {
+                instance.environmentHandler.dimensionAObjects.Add(item);
+            }
+
+            foreach (GameObject item in environmentHandler.dimensionAObjects)
+            {
+                instance.environmentHandler.dimensionBObjects.Add(item);
+            }
+            Destroy(gameObject);
         }
 
         else
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
 

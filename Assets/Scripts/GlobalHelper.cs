@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GlobalHelper : MonoBehaviour
 {
@@ -88,6 +89,19 @@ public class GlobalHelper : MonoBehaviour
             }
             return value;
         }
+    }
+
+    public static bool InMainMenu()
+    {
+        bool value = true;
+
+        int sceneID = SceneManager.GetActiveScene().buildIndex;
+        if(sceneID >1)
+        {
+            value = false;
+        }
+
+        return value;
     }
 
 }

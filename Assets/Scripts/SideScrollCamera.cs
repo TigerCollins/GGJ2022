@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SideScrollCamera : MonoBehaviour
 {
+    public bool useCamera;
     [SerializeField] GameObject cameraObject;
     [SerializeField] Transform cameraTarget;
     [SerializeField] PlayerController playerController;
@@ -38,27 +39,32 @@ public class SideScrollCamera : MonoBehaviour
     void CameraLogic()
     {
         float effectiveXOffset = cameraOffset.x;
-        if (moveDirectionChangesXOffset)
+
+        if(useCamera)
         {
-            if(playerController.IsFacingRight)
+            if (moveDirectionChangesXOffset)
             {
-                effectiveXOffset = moveDirectionXOffset;
+                if (playerController.IsFacingRight)
+                {
+                    effectiveXOffset = moveDirectionXOffset;
+                }
+
+                else
+                {
+                    effectiveXOffset = -moveDirectionXOffset;
+                }
             }
 
-            else
+            Vector3 desiredPosition = new Vector3(cameraTarget.position.x + effectiveXOffset, cameraTarget.position.y + cameraOffset.y, cameraTarget.position.z + cameraOffset.z);
+            if (useCameraBounds)
             {
-                effectiveXOffset = -moveDirectionXOffset;
+                desiredPosition.x = Mathf.Clamp(desiredPosition.x, cameraXBounds.x, cameraXBounds.y);
             }
+
+            cameraObject.transform.position = Vector3.SmoothDamp(cameraObject.transform.position, desiredPosition, ref velocity, cameraDelay);
+
+
         }
-
-        Vector3 desiredPosition = new Vector3(cameraTarget.position.x + effectiveXOffset, cameraTarget.position.y + cameraOffset.y, cameraTarget.position.z + cameraOffset.z);
-        if(useCameraBounds)
-        {
-            desiredPosition.x = Mathf.Clamp(desiredPosition.x, cameraXBounds.x, cameraXBounds.y);
-        }
-
-        cameraObject.transform.position = Vector3.SmoothDamp(cameraObject.transform.position, desiredPosition, ref velocity, cameraDelay);
-
 
 
     }

@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
 
 	void CheckForInputAfterResuming()
     {
-		if(paused != GlobalHelper.instance.IsPaused)
+		if(paused != GlobalHelper.instance.IsPaused && !GlobalHelper.InMainMenu())
         {
 			paused = GlobalHelper.instance.IsPaused;
 			if (!receivingMovementInput && !paused)
@@ -141,6 +141,12 @@ public class PlayerController : MonoBehaviour
             {
 				receivingMovementInput = false;
 			}
+		}
+
+		else if(GlobalHelper.InMainMenu())
+        {
+			receivingMovementInput = true;
+			moveAxis = Vector2.zero;
 		}
     }
 
