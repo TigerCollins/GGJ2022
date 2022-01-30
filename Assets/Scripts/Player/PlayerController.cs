@@ -12,14 +12,14 @@ public class PlayerController : MonoBehaviour
 
 	bool receivingMovementInput;
 	[SerializeField] bool canMove = true;
+	[HideInInspector] public bool pauseMove = false;
 
-	
 
 	[Header("Player Settings")]
 	public static PlayerController instance;
 	[SerializeField] StatsController statsController;
 	[SerializeField] PlayerAnimation playerAnimator;
-	[SerializeField] CharacterController characterController;
+	public CharacterController characterController;
 	[SerializeField] float physicsPushPower;
 	NPCScript npcScript;
 
@@ -123,6 +123,8 @@ public class PlayerController : MonoBehaviour
 		IsFallingCheck();
 		onUpdateCalled.Invoke();
 		CheckForInputAfterResuming();
+
+
 	}
 
 	void CheckForInputAfterResuming()
@@ -252,66 +254,81 @@ public class PlayerController : MonoBehaviour
 		Vector2 desiredVelocity = new Vector2(input, characterController.velocity.y);
 		desiredVelocity *= movement.maxSpeed;
 
-		//Midair
-		if (!IsGrounded)
+		if (!pauseMove)
 		{
-			if(movement.canControlMidAir)
-            {
-				desiredVelocity = Vector2.Lerp(characterController.velocity, desiredVelocity, Time.deltaTime * movement.airControlDamping);
-				movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
+
+			//Midair
+			if (!IsGrounded)
+			{
+				if (movement.canControlMidAir)
+				{
+					desiredVelocity = Vector2.Lerp(characterController.velocity, desiredVelocity, Time.deltaTime * movement.airControlDamping);
+					movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
+				}
+
+				movement.MoveVector = transform.TransformDirection(movement.MoveVector);
 			}
 
-			movement.MoveVector = transform.TransformDirection(movement.MoveVector);
-		}
+			//On Ground
+			else if (IsGrounded && canMove)
+			{
+				desiredVelocity = new Vector2(Mathf.LerpUnclamped(characterController.velocity.x, desiredVelocity.x, movement.controlDamping * Time.deltaTime), characterController.velocity.y);
+				movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
+				movement.MoveVector = transform.TransformDirection(movement.MoveVector);
+			}
 
-		//On Ground
-		else if (IsGrounded && canMove)
-		{
-			desiredVelocity = new Vector2(Mathf.LerpUnclamped(characterController.velocity.x, desiredVelocity.x, movement.controlDamping * Time.deltaTime), characterController.velocity.y);
-			movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
-			movement.MoveVector = transform.TransformDirection(movement.MoveVector);
-		}
+			//JUMP (when midair)
+			if (!IsGrounded && !pauseMove)
+			{
+				moveDirection += movement.gravity * Time.deltaTime * (movement.jumpGravityMultiplier * GlobalHelper.instance.PlayerTimeScale);
+			}
 
-		//JUMP (when midair)
-		if(movement.isMidair)
-        {
-			moveDirection += movement.gravity * Time.deltaTime * movement.jumpGravityMultiplier;
-		}
-		//JUMP (when grounded)
-		else
-		{
-			moveDirection += movement.gravity * Time.deltaTime ;
-		}
-		
-		if(canMove)
-        {
-			moveDirection = new Vector3(movement.MoveVector.x, moveDirection.y, movement.MoveVector.z);
-		}
+			if (canMove)
+			{
+				moveDirection = new Vector3(movement.MoveVector.x, moveDirection.y, movement.MoveVector.z);
+			}
 
-		else
-        {
-			moveDirection = new Vector3(0, moveDirection.y, movement.MoveVector.z);
+			else
+			{
+				moveDirection = new Vector3(0, moveDirection.y, movement.MoveVector.z);
+			}
 		}
-		
 
 		characterController.Move((moveDirection + secondaryMoveDirection) * Time.deltaTime);
 	}
 
-	
+	public Vector3 SetMoveDirection
+	{
+		get => moveDirection;
+		set
+		{
+			moveDirection = value;
+		}
+	}
+
+	public void ReduceYMoveSpeedForFreeze()
+	{
+		if (!isGrounded)
+		{
+			float predictedApexOfJump = movement.JumpTarget + movement.HeightWhenJumped;
+			float progressOfJump = transform.position.y / predictedApexOfJump;
+			moveDirection.y = (Mathf.Sqrt((movement.jumpHeight * GlobalHelper.instance.PlayerTimeScale) * -1.0f * movement.gravity.y)) * (1 - progressOfJump);
+		}
+	}
 
 	public void Jump(InputAction.CallbackContext callbackContext)
 	{
 		if(callbackContext.performed && !GlobalHelper.instance.IsPaused)
         {
-			
-			if (IsGrounded)
+
+            if (IsGrounded)
             {
 				movement.isMidair = true;
 				movement.HeightWhenJumped = transform.position.y;
-				movement.JumpTarget = Mathf.Sqrt(movement.jumpHeight * -3.0f * movement.gravity.y);
+				movement.JumpTarget = Mathf.Sqrt((movement.jumpHeight * GlobalHelper.instance.PlayerTimeScale) * -3.0f * movement.gravity.y);
 				moveDirection.y = movement.JumpTarget;
 				characterEvents.onJumped.Invoke();
-				
+
 				playerAnimator.onJump.Invoke();
 			}
 			

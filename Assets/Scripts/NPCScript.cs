@@ -34,6 +34,9 @@ public class NPCScript : MonoBehaviour
 	UnityEvent onUpdateCalled = new UnityEvent();
 
 
+	[HideInInspector] public bool characterGrabbed = false;
+
+
 
 	[SerializeField] bool isFacingRight;
 
@@ -262,7 +265,7 @@ public class NPCScript : MonoBehaviour
 
 
 			//Position
-			if (Mathf.Abs(input) > 0.3f)
+			if (Mathf.Abs(input) > 0.3f && !characterGrabbed)
 			{
 
 				if (IsGrounded && !IsHittingWall)
@@ -282,17 +285,27 @@ public class NPCScript : MonoBehaviour
 			}
 		}
 
-		moveDirection += movement.gravity * Time.deltaTime;
+		moveDirection += movement.gravity * (Time.deltaTime *GlobalHelper.instance.UniversalTimeScale);
 	
 
 	moveDirection = new Vector3(input, moveDirection.y, 0);
 
-	characterController.Move((moveDirection + secondaryMoveDirection) * Time.deltaTime);
+	
+
+		if (!characterGrabbed)
+			characterController.Move((moveDirection + secondaryMoveDirection) * (Time.deltaTime * GlobalHelper.instance.UniversalTimeScale));
+		else
+		{
+			moveDirection = new Vector3(0, -2, 0);
+		}
 
 
 	}
 
-	
+	private void onPlayerFreezeAbility()
+	{
+		npcAnimation.NPCAnimator.speed = GlobalHelper.instance.UniversalTimeScale;
+	}
 
 	public void Raycast(InputAction.CallbackContext context)
 	{
@@ -347,6 +360,7 @@ public class NPCScript : MonoBehaviour
 	{
 		isHittingWall = HittingObjectInfrontWithoutRigidBody();
 	}
+
 
 	public bool HitObjectAbove()
 	{

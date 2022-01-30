@@ -288,6 +288,17 @@
                 },
                 {
                     "name": "",
+                    "id": "aed67518-8039-4309-93fe-6e95fd1b6448",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "79a78368-aa5c-4048-83d0-22893582be1b",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
@@ -300,7 +311,7 @@
                 {
                     "name": "",
                     "id": "49a0b46a-ec7e-4840-bbee-cf6487b5eba3",
-                    "path": "<Keyboard>/c",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -311,7 +322,7 @@
                 {
                     "name": "",
                     "id": "bd76ab70-c69c-4187-bab0-ecfdc44d9822",
-                    "path": "<Keyboard>/v",
+                    "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
