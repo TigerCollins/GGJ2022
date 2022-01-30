@@ -86,6 +86,15 @@ public class UIManager : MonoBehaviour
     }
 
    
+    public void ChangeLevel(int target)
+    {
+        GameObject newObject = Instantiate(levelLoaderToGamePrefab);
+        if (newObject.TryGetComponent(out LevelLoader loader))
+        {
+            loader.TargetSceneIndex = target;
+            loader.LoadScene();
+        }
+    }
 
    public void GoToGame()
     {

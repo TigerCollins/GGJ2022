@@ -22,6 +22,7 @@ public class DimensionSwitcher : MonoBehaviour
         CheckForMultiple();
         
         onDimensionChange.AddListener(delegate {environmentHandler.ChangeEnvironmentDimension(); });
+        onDimensionChange.AddListener(delegate { GlobalHelper.instance.DimensionColour(currentDimension); });
     }
 
     void CheckForMultiple()
@@ -74,6 +75,7 @@ public class DimensionSwitcher : MonoBehaviour
             {
                 currentDimension = GlobalHelper.Dimensions.dimensionB;
             }
+           
             onDimensionChange.Invoke();
         }
        

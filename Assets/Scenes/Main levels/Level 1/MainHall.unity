@@ -22176,8 +22176,8 @@ MonoBehaviour:
   m_RenderPostProcessing: 1
   m_Antialiasing: 2
   m_AntialiasingQuality: 2
-  m_StopNaN: 0
-  m_Dithering: 0
+  m_StopNaN: 1
+  m_Dithering: 1
   m_ClearDepth: 1
   m_AllowXRRendering: 1
   m_RequiresDepthTexture: 0
@@ -44478,6 +44478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc1d1e9a59874634f9e4161281d577c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  normalColour: {r: 0.49474904, g: 0.77419406, b: 0.9622642, a: 1}
+  overGrowthColor: {r: 0.394075, g: 0.7264151, b: 0.36663404, a: 1}
 --- !u!4 &2133099411 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8073356929925719269, guid: 1cdf3afd1a7b3a7408f0cd102e46adb5, type: 3}

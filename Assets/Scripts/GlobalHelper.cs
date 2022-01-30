@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GlobalHelper : MonoBehaviour
 {
+    public Color normalColour;
+    public Color overGrowthColor;
+
     internal static GlobalHelper instance;
     private void Awake()
     {
@@ -24,8 +27,24 @@ public class GlobalHelper : MonoBehaviour
             if(UIManager.instance != null)
             {
                 value = UIManager.instance.IsPaused;
+                AudioManager.instance.IsSoundtrackLoweredVolume(value);
             }
             return value;
+        }
+    }
+
+    public void DimensionColour(Dimensions newDimension)
+    {
+        switch (newDimension)
+        {
+            case Dimensions.dimensionA:
+                RenderSettings.fogColor = normalColour;
+                break;
+            case Dimensions.dimensionB:
+                RenderSettings.fogColor = overGrowthColor;
+                break;
+            default:
+                break;
         }
     }
 }
