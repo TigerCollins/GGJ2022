@@ -41,6 +41,14 @@ public class LevelLoader : MonoBehaviour
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
     }
 
+    public int TargetSceneIndex
+    {
+        set
+        {
+            targetSceneIndex = value;
+        } 
+    }
+
     public void CreateLoader()
     {
       //  GameObject newLoader = Instantiate(UIManager.instance.levelLoaderToMainMenuPrefab);

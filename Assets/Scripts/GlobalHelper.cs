@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class GlobalHelper : MonoBehaviour
 {
-    public static GlobalHelper instance;
-    float universalTimeScale = 1f;
-    float playerTimeScale = 1f;
+    public Color normalColour;
+    public Color overGrowthColor;
+
+    internal static GlobalHelper instance;
     private void Awake()
     {
         instance = this;
@@ -18,42 +19,32 @@ public class GlobalHelper : MonoBehaviour
         dimensionB
     }
 
-    public enum CardSide
-    {
-        aSide,
-        bSide
-    }
-
-    public void ResetTimeScales()
-    {
-        universalTimeScale = 1f;
-        playerTimeScale = 1f;
-    }
-
-    public float UniversalTimeScale
+    public bool IsPaused
     {
         get
         {
-            return universalTimeScale;
-        }
-
-        set
-        {
-            universalTimeScale = value;
+            bool value = false;
+            if(UIManager.instance != null)
+            {
+                value = UIManager.instance.IsPaused;
+                AudioManager.instance.IsSoundtrackLoweredVolume(value);
+            }
+            return value;
         }
     }
 
-    public float PlayerTimeScale
+    public void DimensionColour(Dimensions newDimension)
     {
-        get
+        switch (newDimension)
         {
-            return playerTimeScale;
-        }
-
-        set
-        {
-            playerTimeScale = value;
+            case Dimensions.dimensionA:
+                RenderSettings.fogColor = normalColour;
+                break;
+            case Dimensions.dimensionB:
+                RenderSettings.fogColor = overGrowthColor;
+                break;
+            default:
+                break;
         }
     }
-
 }

@@ -8,11 +8,17 @@ public class StatsDetails : ScriptableObject
     [SerializeField] int maxHealth;
     [SerializeField] int baseHealth;
 
+
     [Space(10)]
 
     [SerializeField] int baseAttack;
     [SerializeField] int baseDefence;
     [SerializeField] float knockbackPower;
+
+    [Space(5)]
+    [SerializeField] bool canDealRecoil;
+    [SerializeField] float timeBeforeTryingRecoil = .5f;
+    [SerializeField] float recoilChance = 10;
 
     [Space(10)]
 
@@ -76,5 +82,27 @@ public class StatsDetails : ScriptableObject
         }
     }
 
+    public bool CanDealRecoilDamage
+    {
+        get
+        {
+            return canDealRecoil;
+        }
+    }
 
+    public float RecoilThreshold
+    {
+        get
+        {
+            return recoilChance;
+        }
+    }
+
+    public float TimeBeforeTryingRecoil
+    {
+        get
+        {
+            return timeBeforeTryingRecoil;
+        }
+    }
 }

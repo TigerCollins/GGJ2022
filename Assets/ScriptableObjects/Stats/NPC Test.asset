@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 3
   baseHealth: 3
-  baseAttack: 0
+  baseAttack: 2
   baseDefence: 0
   knockbackPower: 14.13
+  canDealRecoil: 1
+  timeBeforeTryingRecoil: 0.5
+  recoilChance: 100
   maxLives: 1
   baseLives: 1

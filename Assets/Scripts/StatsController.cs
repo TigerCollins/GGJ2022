@@ -23,6 +23,7 @@ public class StatsController : MonoBehaviour
 
     [Header("Combat")]
     [SerializeField] int attack;
+    Coroutine recoilRoutine;
 
     [Header("On Death")]
     [SerializeField] bool isAlive = true;
@@ -37,6 +38,7 @@ public class StatsController : MonoBehaviour
     public UnityEvent onHealthLost;
     public UnityEvent onLifeLost;
     public UnityEvent onDeath;
+    public UnityEvent onHitWithRecoil;
 
     
 
@@ -52,12 +54,33 @@ public class StatsController : MonoBehaviour
             maxHealth = statsProfile.MaxHealth;
             maxLivesRemaining = statsProfile.MaxLives;
         }
+        //onHealthLost.AddListener(delegate {; });
     }
 
     public void DealDamageToOther(StatsController otherStatsController)
     {
         otherStatsController.ReceiveDamage(attack);
+        otherStatsController.AttemptRecoilDamage(this);
+    }
 
+    public void AttemptRecoilDamage(StatsController personWhoAttacked)
+    {
+        if (statsProfile.CanDealRecoilDamage == true)
+        {
+                recoilRoutine = StartCoroutine(DealRecoilDamage(personWhoAttacked));
+        }
+    }
+
+    public IEnumerator DealRecoilDamage(StatsController personWhoAttacked)
+    {
+       
+        yield return new WaitForSeconds(statsProfile.TimeBeforeTryingRecoil);
+        bool success = Random.Range(0, 100) < statsProfile.RecoilThreshold;
+        if (success)
+        {
+            personWhoAttacked.ReceiveDamage(attack);
+            personWhoAttacked.onHitWithRecoil.Invoke();
+        }
     }
 
     public void ReceiveDamage(int damage)

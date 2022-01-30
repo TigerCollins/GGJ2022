@@ -9,7 +9,7 @@ public class NPCAnimation : MonoBehaviour
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] NPCScript npcController;
 
-    [SerializeField] Animator animatorCard;
+//    [SerializeField] Animator //animatorCard;
     [SerializeField] SpriteRenderer spriteRendererCard;
 
     public UnityEvent onJump;
@@ -30,12 +30,12 @@ public class NPCAnimation : MonoBehaviour
             {
                 groundedState = value;
                 animator.SetBool("Grounded", value);
-                animatorCard.SetBool("Grounded", value);
+               // //animatorCard.SetBool("Grounded", value);
                 if (value)
                 {
                     onGrounded.Invoke();
                     animator.SetBool("Falling", false);
-                    animatorCard.SetBool("Falling", false);
+                  //  //animatorCard.SetBool("Falling", false);
                 }
 
 
@@ -80,27 +80,27 @@ public class NPCAnimation : MonoBehaviour
         if (!npcController.IsFalling)
         {
             animator.SetTrigger("Jump");
-            animatorCard.SetTrigger("Jump");
+           // //animatorCard.SetTrigger("Jump");
         }
 
     }
     void Attack()
     {
         animator.SetTrigger("Attack");
-        animatorCard.SetTrigger("Attack");
+       // //animatorCard.SetTrigger("Attack");
     }
 
     void AbilityUsed()
     {
         animator.SetTrigger("Ability");
-        animatorCard.SetTrigger("Ability");
+       // //animatorCard.SetTrigger("Ability");
     }
 
     void IsFalling()
     {
 
         animator.SetBool("Falling", true);
-        animatorCard.SetBool("Falling", true);
+       // //animatorCard.SetBool("Falling", true);
     }
 
     public void MovementStateChange(NPCScript.MovementState state)
@@ -111,7 +111,7 @@ public class NPCAnimation : MonoBehaviour
             if (npcController.CanMove)
             {
                 animator.SetInteger("AnimState", (int)state);
-                animatorCard.SetInteger("AnimState", (int)state);
+              //  //animatorCard.SetInteger("AnimState", (int)state);
             }
 
             else
