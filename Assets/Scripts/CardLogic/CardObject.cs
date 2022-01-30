@@ -10,12 +10,22 @@ public class CardObject : MonoBehaviour
     [SerializeField] MMFeedbacks cardFlipFeedback;
     float zRotation;
 
+    PlayerAbilities playerAbilities;
+
     [Header("Logic")]
     [SerializeField] TextMeshGroups sideAText;
     [SerializeField] TextMeshGroups sideBText;
     [SerializeField] Renderer thisCardRenderer;
     [SerializeField] CardDetails sideACardDetails;
     [SerializeField] CardDetails sideBCardDetails;
+    bool aSideCardIsReady = true;
+    bool bSideCardIsReady = true;
+
+    private void Start()
+    {
+        playerAbilities = PlayerAbilities.instance;
+    }
+
     public void Init()
     {
         PlayCardFlip();
@@ -25,12 +35,12 @@ public class CardObject : MonoBehaviour
 
     void SetCardTextures()
     {
-        if(thisCardRenderer != null)
+        if (thisCardRenderer != null)
         {
             thisCardRenderer.material.SetTexture("Back_Face_Texture", sideACardDetails.Art);
             thisCardRenderer.material.SetTexture("Card_Colour_Texture", sideBCardDetails.Art);
         }
-      
+
     }
 
     void SetCardText()
@@ -43,12 +53,12 @@ public class CardObject : MonoBehaviour
 
     public void PlayCardFlip()
     {
-        if(DimensionSwitcher.instance.CurrentDimension() == GlobalHelper.Dimensions.dimensionA)
+        if (DimensionSwitcher.instance.CurrentDimension() == GlobalHelper.Dimensions.dimensionA)
         {
 
-            if(cardFlipFeedback.TryGetComponent(out MMFeedbackRotation rotationFeedback))
+            if (cardFlipFeedback.TryGetComponent(out MMFeedbackRotation rotationFeedback))
             {
-                rotationFeedback.DestinationAngles = new Vector3(90, 0, 180);   
+                rotationFeedback.DestinationAngles = new Vector3(90, 0, 180);
             }
         }
 
@@ -66,7 +76,7 @@ public class CardObject : MonoBehaviour
     bool BothSidesLocked()
     {
         bool bothLocked = false;
-        if(!sideACardDetails.IsUnlocked && !sideBCardDetails.IsUnlocked)
+        if (!sideACardDetails.IsUnlocked && !sideBCardDetails.IsUnlocked)
         {
             bothLocked = true;
         }
@@ -76,69 +86,100 @@ public class CardObject : MonoBehaviour
 
     public void ActivateAbility(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if (context.performed)
         {
+            
             PlayerController.instance.characterEvents.onAbilityUsed.Invoke();
-            if(DimensionSwitcher.instance != null)
+            if (DimensionSwitcher.instance != null)
             {
                 if (DimensionSwitcher.instance.CurrentDimension() == GlobalHelper.Dimensions.dimensionA)
                 {
-                    if (sideACardDetails.IsUnlocked)
+                    if (sideACardDetails.IsUnlocked && aSideCardIsReady)
                     {
                         switch (sideACardDetails.CardAbility)
                         {
                             case CardAbilities.Ability.DimensionSwap:
                                 DimensionSwitcher.instance.onDimensionChange.Invoke();
                                 break;
-                            case CardAbilities.Ability.WorldFlip:
+                            case CardAbilities.Ability.Teleport:
+                                playerAbilities.ThrowTeleportCard();
                                 break;
-                            case CardAbilities.Ability.Ability2:
+                            case CardAbilities.Ability.Dash:
+                                playerAbilities.DashMovement();
                                 break;
-                            case CardAbilities.Ability.Ability3:
+                            case CardAbilities.Ability.TimeStop:
+                                playerAbilities.FreezeTimeAbility();
                                 break;
-                            case CardAbilities.Ability.Ability4:
+                            case CardAbilities.Ability.HangmanVine:
+                                playerAbilities.SuspendTarget();
                                 break;
-                            case CardAbilities.Ability.Ability5:
+                            case CardAbilities.Ability.RockThrow:
+                                playerAbilities.ThrowRock();
                                 break;
-                            case CardAbilities.Ability.Ability6:
+                            case CardAbilities.Ability.ProjectileAttack:
+                                playerAbilities.ProjectileAttack();
                                 break;
                             default:
                                 break;
                         }
+                        StartCoroutine(Cooldown(sideACardDetails.CardCooldown, GlobalHelper.CardSide.aSide));
                     }
-
                 }
 
                 else
                 {
-                    if (sideBCardDetails.IsUnlocked)
+                    if (sideBCardDetails.IsUnlocked && bSideCardIsReady)
                     {
                         switch (sideBCardDetails.CardAbility)
                         {
                             case CardAbilities.Ability.DimensionSwap:
                                 DimensionSwitcher.instance.onDimensionChange.Invoke();
                                 break;
-                            case CardAbilities.Ability.WorldFlip:
+                            case CardAbilities.Ability.Teleport:
+                                playerAbilities.ThrowTeleportCard();
                                 break;
-                            case CardAbilities.Ability.Ability2:
+                            case CardAbilities.Ability.Dash:
+                                playerAbilities.DashMovement();
                                 break;
-                            case CardAbilities.Ability.Ability3:
+                            case CardAbilities.Ability.TimeStop:
+                                playerAbilities.FreezeTimeAbility();
                                 break;
-                            case CardAbilities.Ability.Ability4:
+                            case CardAbilities.Ability.HangmanVine:
+                                playerAbilities.SuspendTarget();
                                 break;
-                            case CardAbilities.Ability.Ability5:
+                            case CardAbilities.Ability.RockThrow:
+                                playerAbilities.ThrowRock();
                                 break;
-                            case CardAbilities.Ability.Ability6:
+                            case CardAbilities.Ability.ProjectileAttack:
+                                playerAbilities.ProjectileAttack();
                                 break;
                             default:
                                 break;
                         }
+                        StartCoroutine(Cooldown(sideBCardDetails.CardCooldown, GlobalHelper.CardSide.bSide));
                     }
                 }
             }
-       
         }
-       
+    }
+
+    public IEnumerator Cooldown(float cooldown, GlobalHelper.CardSide cardSide)
+    {
+        switch (cardSide)
+        {
+            case GlobalHelper.CardSide.aSide:
+                aSideCardIsReady = false;
+                yield return new WaitForSeconds(cooldown);
+                aSideCardIsReady = true;
+                break;
+            case GlobalHelper.CardSide.bSide:
+                bSideCardIsReady = false;
+                yield return new WaitForSeconds(cooldown);
+                bSideCardIsReady = true;
+                break;
+            default:
+                break;
+        }
     }
 }
 

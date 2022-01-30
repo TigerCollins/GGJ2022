@@ -502,7 +502,8 @@ GameObject:
   - component: {fileID: 2909470774800876578}
   - component: {fileID: 8235586008436921445}
   - component: {fileID: 1607073792}
-  m_Layer: 0
+  - component: {fileID: 2037103211}
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -585,6 +586,7 @@ MonoBehaviour:
         m_Calls: []
   directionBasedObjectFlips:
   - {fileID: 1439607154}
+  pauseMove: 0
   isFacingRight: 0
   _raycast:
     useRaycast: 1
@@ -747,11 +749,6 @@ MonoBehaviour:
   cameraOffset: {x: 0, y: 2.5, z: -9}
   moveDirectionChangesXOffset: 1
   moveDirectionXOffset: 0.75
-  screenShakeFeedback: {fileID: 0}
-  shakeTime: 0.2
-  shakeStrength: 1
-  shakeFrequency: 0.5
-  amplitude: {x: 1, y: 1, z: 0}
 --- !u!114 &1607073792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -784,6 +781,43 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onDeath:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2037103211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3111495686390456893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4771dc812813b5e43adc2c4f4a815658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleportCardPrefab: {fileID: 2375298987836806148, guid: c92ae21e49e07f94688b87ca79531d92, type: 3}
+  teleportCardSpeed: 10
+  dashSpeed: 20
+  dashTime: 0.1
+  freezeDuration: 2
+  playerSlowRate: 0.085
+  worldSlowRate: 0
+  suspendCardPrefab: {fileID: 5089479540798891894, guid: 2e63e5de660f3e04e8d5aac828956561, type: 3}
+  suspendDuration: 1
+  arcHeight: 6
+  rockSpeed: 6
+  rockPrefab: {fileID: 7549399431323484172, guid: a22b9a3c076c9324f90380ed0d08bbad, type: 3}
+  projectileSpeed: 20
+  projectileDuration: 1
+  projectileCard: {fileID: 6371211791302962980, guid: 4fc4f0ca658bdf947a4d5d6bf65e4544, type: 3}
+  abilityList:
+  - {fileID: 11400000, guid: 6d7114f18c3460045a9a6ecdcaccd562, type: 2}
+  - {fileID: 11400000, guid: 26a9dc6b495bf1d46a9ffbb23a2657a9, type: 2}
+  - {fileID: 11400000, guid: aeb64136cb4b95047a0fd19408b9c96b, type: 2}
+  - {fileID: 11400000, guid: 5ea27d08e78a6c6499214ed62e1aa771, type: 2}
+  - {fileID: 11400000, guid: 45bef818d1b9f5a4c8d0817b476e8eed, type: 2}
+  - {fileID: 11400000, guid: efca9fb440ad3fb49bab8a4f38e0fc4d, type: 2}
+  onTimeStop:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &6685032484304088833

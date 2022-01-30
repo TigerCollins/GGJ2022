@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 public class PlayerAnimation : MonoBehaviour
 {
+    public static PlayerAnimation instance;
+
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] PlayerController playerController;
@@ -22,6 +24,11 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField] bool groundedState;
     [SerializeField] bool playerFacingRight;
     [SerializeField] PlayerController.MovementState movementState;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     public bool IsGrounded
     {
@@ -156,4 +163,22 @@ public class PlayerAnimation : MonoBehaviour
             spriteRendererCard.flipX = playerFacingRight;
         }
     }
+
+    public Animator GetPlayerAnimator
+    {
+        get
+        {
+            return animator;
+        }
+    }
+
+    public Animator GetCardAnimator
+    {
+        get
+        {
+            return animatorCard;
+        }
+    }
+    
+
 }

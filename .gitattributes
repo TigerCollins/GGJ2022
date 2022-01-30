@@ -151,3 +151,4 @@
 *.gz lfs
 *.rar lfs
 *.tar lfs
+*[ll]ighting[dd]ata.asset filter=lfs diff=lfs merge=lfs -text

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class GlobalHelper : MonoBehaviour
 {
-    internal static GlobalHelper instance;
+    public static GlobalHelper instance;
+    float universalTimeScale = 1f;
+    float playerTimeScale = 1f;
     private void Awake()
     {
         instance = this;
@@ -16,16 +18,42 @@ public class GlobalHelper : MonoBehaviour
         dimensionB
     }
 
-    public bool IsPaused
+    public enum CardSide
+    {
+        aSide,
+        bSide
+    }
+
+    public void ResetTimeScales()
+    {
+        universalTimeScale = 1f;
+        playerTimeScale = 1f;
+    }
+
+    public float UniversalTimeScale
     {
         get
         {
-            bool value = false;
-            if(UIManager.instance != null)
-            {
-                value = UIManager.instance.IsPaused;
-            }
-            return value;
+            return universalTimeScale;
+        }
+
+        set
+        {
+            universalTimeScale = value;
         }
     }
+
+    public float PlayerTimeScale
+    {
+        get
+        {
+            return playerTimeScale;
+        }
+
+        set
+        {
+            playerTimeScale = value;
+        }
+    }
+
 }

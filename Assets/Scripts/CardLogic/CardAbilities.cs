@@ -7,12 +7,12 @@ public class CardAbilities : MonoBehaviour
     public enum Ability
     {
         DimensionSwap,
-        WorldFlip,
-        Ability2,
-        Ability3,
-        Ability4,
-        Ability5,
-        Ability6
+        Teleport,
+        Dash,
+        TimeStop,
+        HangmanVine,
+        RockThrow,
+        ProjectileAttack
     }
 
     public List<CardDetails> abilityCards;

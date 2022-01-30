@@ -8,7 +8,6 @@ using UnityEngine.Events;
 [RequireComponent(typeof(PlayerAnimation))]
 public class PlayerController : MonoBehaviour
 {
-	//public GameController gameController;
 
 	bool receivingMovementInput;
 	[SerializeField] bool canMove = true;
@@ -19,20 +18,16 @@ public class PlayerController : MonoBehaviour
 	public static PlayerController instance;
 	[SerializeField] StatsController statsController;
 	[SerializeField] PlayerAnimation playerAnimator;
-	[SerializeField] CharacterController characterController;
+	public  CharacterController characterController;
 	[SerializeField] float physicsPushPower;
-	NPCScript npcScript;
-
+    PlayerAbilities playerAbilities;
 
 	[SerializeField] MovementDetails movement;
-	[SerializeField] float knockbackTime = 5;
 	[SerializeField] internal CharacterEvents characterEvents;
 	[SerializeField] List<DirectionBasedObjectFlip> directionBasedObjectFlips;
-	 Vector3 moveDirection = Vector3.zero;
-	 Vector3 secondaryMoveDirection = Vector3.zero;
+    Vector3 moveDirection = Vector3.zero;
 	UnityEvent onUpdateCalled = new UnityEvent();
-
-	
+    [HideInInspector]public bool pauseMove = false;
 
 	[SerializeField] bool isFacingRight;
 
@@ -50,7 +45,6 @@ public class PlayerController : MonoBehaviour
 	Vector3 originalPos;
 	[SerializeField] bool isGrounded;
 	[SerializeField] bool isHittingWall;
-	bool paused;
 
 	public enum MovementState
     {
@@ -75,13 +69,13 @@ public class PlayerController : MonoBehaviour
 	{
 		statsController.onDeath.AddListener(delegate { playerAnimator.Death(); });
 		statsController.onHealthLost.AddListener(delegate { playerAnimator.TookDamage(); });
-		statsController.onHealthLost.AddListener(delegate { GetKnockBack(); });
-	}
+
+    }
 
 
 	void Start()
 	{
-		StartCoroutine(PositionTracking());
+        StartCoroutine(PositionTracking());
 	}
 
 	public CharacterController PlayerCharacterController
@@ -109,38 +103,16 @@ public class PlayerController : MonoBehaviour
 		//Movement();
 
 		ApplyMovement();
-
-		
-
+        
 	}
 
     public void Update()
     {
 		IsGrounded = characterController.isGrounded;
-		//transform.position
-		ForcePlayerHeightToDrop();
 		HittingWallLogic();
 		IsFallingCheck();
 		onUpdateCalled.Invoke();
-		CheckForInputAfterResuming();
 	}
-
-	void CheckForInputAfterResuming()
-    {
-		if(paused != GlobalHelper.instance.IsPaused)
-        {
-			paused = GlobalHelper.instance.IsPaused;
-			if (!receivingMovementInput && !paused)
-			{
-				moveAxis = Vector2.zero;
-			}
-
-			else if(paused)
-            {
-				receivingMovementInput = false;
-			}
-		}
-    }
 
     public bool IsGrounded
     {
@@ -157,6 +129,7 @@ public class PlayerController : MonoBehaviour
 				if (value == true)
                 {
 					movement.isMidair = false;
+
 					//playerAnimator.AttemptIdleAnimationState();
 				}
 			}
@@ -194,17 +167,10 @@ public class PlayerController : MonoBehaviour
 	}
 #endif
 
-	public StatsController StatsController
-    {
-        get
-        {
-			return statsController;
-        }
-    }
 
 	public void BasicAttack(InputAction.CallbackContext context)
 	{
-		if (context.performed && !GlobalHelper.instance.IsPaused)
+		if (context.performed)
 		{
 			
 			StatsController stats = RaycastStats();
@@ -212,103 +178,97 @@ public class PlayerController : MonoBehaviour
             {
 		
 				statsController.DealDamageToOther(stats);
-				if(stats.TryGetComponent(out NPCScript npc))
-                {
-					npc.GetKnockBack(statsController.StatProfile);
-                }
-
-			}
-			HaltMovement();
+            }
+			//HaltMovement();
 			characterEvents.onAttack.Invoke();
 		}
 	}
 
-	void ApplyMovement()
-	{
+    void ApplyMovement()
+    {
 
-		float input = moveAxis.x;
-		if (Mathf.Abs(input) < 0.3f)
-		{
-			input = 0f;
-			playerAnimator.AttemptIdleAnimationState();
-			//Animate Run
-
-		}
-
-		else if( canMove)
+        float input = moveAxis.x;
+        if (Mathf.Abs(input) < 0.3f)
         {
-			if(IsGrounded && !IsHittingWall)
+            input = 0f;
+            playerAnimator.AttemptIdleAnimationState();
+            //Animate Run
+
+        }
+
+        else if (canMove)
+        {
+            if (IsGrounded && !IsHittingWall)
             {
-				playerAnimator.onMoveInputStateChange.Invoke(MovementState.Sprint);
-			}
+                playerAnimator.onMoveInputStateChange.Invoke(MovementState.Sprint);
+            }
 
-			else if(IsHittingWall)
+            else if (IsHittingWall)
             {
-				playerAnimator.onMoveInputStateChange.Invoke(MovementState.idle);
-			}
-			
-		}
+                playerAnimator.onMoveInputStateChange.Invoke(MovementState.idle);
+            }
 
-		Vector2 desiredVelocity = new Vector2(input, characterController.velocity.y);
-		desiredVelocity *= movement.maxSpeed;
+        }
 
-		//Midair
-		if (!IsGrounded)
-		{
-			if(movement.canControlMidAir)
+        Vector2 desiredVelocity = new Vector2(input, characterController.velocity.y);
+        desiredVelocity *= movement.maxSpeed;
+
+        if (!pauseMove)
+        {
+            //Midair
+            if (!IsGrounded)
             {
-				desiredVelocity = Vector2.Lerp(characterController.velocity, desiredVelocity, Time.deltaTime * movement.airControlDamping);
-				movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
-			}
+                if (movement.canControlMidAir)
+                {
+                    desiredVelocity = Vector2.Lerp(characterController.velocity, desiredVelocity, Time.deltaTime * movement.airControlDamping);
+                    movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
+                }
 
-			movement.MoveVector = transform.TransformDirection(movement.MoveVector);
-		}
+                movement.MoveVector = transform.TransformDirection(movement.MoveVector);
+            }
 
-		//On Ground
-		else if (IsGrounded && canMove)
-		{
-			desiredVelocity = new Vector2(Mathf.LerpUnclamped(characterController.velocity.x, desiredVelocity.x, movement.controlDamping * Time.deltaTime), characterController.velocity.y);
-			movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
-			movement.MoveVector = transform.TransformDirection(movement.MoveVector);
-		}
+            //On Ground
+            else if (IsGrounded && canMove)
+            {
+                desiredVelocity = new Vector2(Mathf.LerpUnclamped(characterController.velocity.x, desiredVelocity.x, movement.controlDamping * Time.deltaTime), characterController.velocity.y);
+                movement.MoveVector = new Vector3(desiredVelocity.x, desiredVelocity.y, 0);
+                movement.MoveVector = transform.TransformDirection(movement.MoveVector);
+            }
 
-		//JUMP (when midair)
-		if(movement.isMidair)
-        {
-			moveDirection += movement.gravity * Time.deltaTime * movement.jumpGravityMultiplier;
-		}
-		//JUMP (when grounded)
-		else
-		{
-			moveDirection += movement.gravity * Time.deltaTime ;
-		}
-		
-		if(canMove)
-        {
-			moveDirection = new Vector3(movement.MoveVector.x, moveDirection.y, movement.MoveVector.z);
-		}
+            //JUMP (when midair)
+            if (!IsGrounded && !pauseMove)
+            {
+                moveDirection += movement.gravity * Time.deltaTime * (movement.jumpGravityMultiplier * GlobalHelper.instance.PlayerTimeScale);
+            }
 
-		else
-        {
-			moveDirection = new Vector3(0, moveDirection.y, movement.MoveVector.z);
-		}
-		
+            if (canMove)
+            {
+                moveDirection = new Vector3(movement.MoveVector.x, moveDirection.y, movement.MoveVector.z);
+            }
 
-		characterController.Move((moveDirection + secondaryMoveDirection) * Time.deltaTime);
+            else
+            {
+                moveDirection = new Vector3(0, moveDirection.y, movement.MoveVector.z);
+            }
+
+        }
+            
+            characterController.Move(moveDirection * (Time.deltaTime));
+        
 	}
 
 	
 
 	public void Jump(InputAction.CallbackContext callbackContext)
 	{
-		if(callbackContext.performed && !GlobalHelper.instance.IsPaused)
+		if(callbackContext.performed)
         {
 			
 			if (IsGrounded)
             {
 				movement.isMidair = true;
 				movement.HeightWhenJumped = transform.position.y;
-				movement.JumpTarget = Mathf.Sqrt(movement.jumpHeight * -3.0f * movement.gravity.y);
+				movement.JumpTarget = Mathf.Sqrt((movement.jumpHeight * GlobalHelper.instance.PlayerTimeScale) * -3.0f * movement.gravity.y);
 				moveDirection.y = movement.JumpTarget;
 				characterEvents.onJumped.Invoke();
 				
@@ -320,32 +280,32 @@ public class PlayerController : MonoBehaviour
 
 	public void MovementVector(InputAction.CallbackContext callbackContext)
 	{
-		if (!GlobalHelper.instance.IsPaused)
+
+		moveAxis = callbackContext.ReadValue<Vector2>();
+
+        if (!pauseMove)
         {
-			moveAxis = callbackContext.ReadValue<Vector2>();
+            //Facing Direction
+            if (moveAxis.x < 0)
+            {
+                IsFacingRight = false;
+                receivingMovementInput = true;
+            }
 
+            else if (moveAxis.x > 0)
+            {
+                IsFacingRight = true;
+                receivingMovementInput = true;
 
-			//Facing Direction
-			if (moveAxis.x < 0)
-			{
-				IsFacingRight = false;
-				receivingMovementInput = true;
-			}
+            }
 
-			else if (moveAxis.x > 0)
-			{
-				IsFacingRight = true;
-				receivingMovementInput = true;
+            else
+            {
+                receivingMovementInput = false;
 
-			}
+            }
+        }
 
-			else
-			{
-				receivingMovementInput = false;
-
-			}
-		}
-		
 	}
 
 	public void Raycast(InputAction.CallbackContext context)
@@ -363,12 +323,12 @@ public class PlayerController : MonoBehaviour
 		if(_raycast.useRaycast)
         {
 			RaycastHit hit;
-			Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y +1, _raycast.raycastPoint.position.z);
+			Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y + 1, _raycast.raycastPoint.position.z);
 			Debug.DrawRay(origin, Vector2.right * (isFacingRight ? 1 : -1) * _raycast.raycastDistance, _raycast.aboveCheckRaycastColour);
 			if (Physics.Raycast(origin, Vector2.right * (isFacingRight ? 1 : -1), out hit, _raycast.raycastDistance, _raycast.raycastMask))
 			{
 				//Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
-				 if (hit.transform.TryGetComponent(out StatsController stats))
+				if (hit.transform.TryGetComponent(out StatsController stats))
 				{
 					newController = stats;
 				}
@@ -400,37 +360,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-	void ForcePlayerHeightToDrop()
-    {
-		if(HitObjectAbove() == true)
-        {
-			moveDirection.y = 0;
-        }
-	}
-
 	public void HittingWallLogic()
     {
 		isHittingWall = HittingObjectInfrontWithoutRigidBody();
     }
-
-	public bool HitObjectAbove()
-    {
-		bool isHitting = false;
-		RaycastHit hit;
-		Vector3 origin = new Vector3(_raycast.raycastPoint.position.x, _raycast.raycastPoint.position.y + 1, _raycast.raycastPoint.position.z);
-		Debug.DrawRay(origin, transform.TransformDirection(Vector2.up) * _raycast.aboveCheckDistance, _raycast.aboveCheckRaycastColour);
-		if (Physics.Raycast(origin,transform.TransformDirection(Vector2.up),out hit, _raycast.aboveCheckDistance,_raycast.raycastMask))  
-		{
-			//Below is the if statement to find objects. Can be used from Unity 2017 onwards, otherwise use GetComponent instead of TryGetComponent()
-			if (hit.transform != null)
-			{
-				isHitting = true;
-			}
-
-		}
-		return isHitting;
-	}
 
 	public bool HittingObjectInfrontWithoutRigidBody()
     {
@@ -466,7 +399,11 @@ public class PlayerController : MonoBehaviour
 
 	public void RigidBodyPhysics(ControllerColliderHit hit)
 	{
-		Rigidbody body = hit.collider.attachedRigidbody;
+
+        if (hit.moveDirection.y > 0f)
+            moveDirection.y = -1;
+
+        Rigidbody body = hit.collider.attachedRigidbody;
 
 
 		// no rigidbody
@@ -487,7 +424,7 @@ public class PlayerController : MonoBehaviour
 		// Apply the push
 		body.velocity = pushDir * physicsPushPower;
 
-	}
+    }
 
 	public UnityEvent UpdateEvent
     {
@@ -591,68 +528,31 @@ public class PlayerController : MonoBehaviour
 
 	}
 
-
-	/// <summary>
-	/// COMBAT LOGIC
-	/// </summary>
-	/// <param name="other"></param>
-
-
-    private void OnTriggerEnter(Collider other)
+    public Vector3 SetMoveDirection
     {
-		//Enemy collision
-		if(other.transform.TryGetComponent(out NPCScript npc))
+        get => moveDirection;
+        set
         {
-			npcScript = npc;
-			GetKnockBack();
-		}
+            moveDirection = value;
+        }
     }
 
-	public void GetKnockBack()
+    public Vector3 GetMoveDirection
     {
-		npcScript.StatsController.DealDamageToOther(statsController);
-		float newDirection = 0;
-		if (IsObjectOnRight(transform, npcScript.transform))
-		{
-			newDirection = -npcScript.StatsController.StatProfile.KnockBackStrength;
-		}
-
-		else
-		{
-			newDirection = npcScript.StatsController.StatProfile.KnockBackStrength;
-		}
-
-		npcScript = null;
-
-		secondaryMoveDirection.x = newDirection;
-		StartCoroutine(RemoveFromSecondaryMoveDirection());
-	}
-
-	public IEnumerator RemoveFromSecondaryMoveDirection()
-    {
-		float t = 0; ;
-		
-		while (secondaryMoveDirection != Vector3.zero)
+        get
         {
-			t += Time.deltaTime;
-			secondaryMoveDirection = Vector3.Lerp(secondaryMoveDirection, Vector3.zero, t/knockbackTime);
+            return moveDirection;
+        }
+    }
 
-			yield return null;
-		}
-
-		yield return null;
-	}
-
-	public static bool IsObjectOnRight(Transform player,Transform other)
+    public void ReduceYMoveSpeedForFreeze()
     {
-		bool value = false;
-		if(player.position.x < other.position.x)
+        if (!isGrounded)
         {
-			value = true;
-			
-
-		}
-		return value;
+            float predictedApexOfJump = movement.JumpTarget + movement.HeightWhenJumped;
+            float progressOfJump = transform.position.y / predictedApexOfJump;
+            moveDirection.y = (Mathf.Sqrt((movement.jumpHeight * GlobalHelper.instance.PlayerTimeScale) * -1.0f * movement.gravity.y)) * (1- progressOfJump);
+        }
     }
 }
 
