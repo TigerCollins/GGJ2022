@@ -1,21 +1,15 @@
 # THIS GITATTRIBUTES IS PROPERTY OF TIGER COLLINS https://twitter.com/_TigerCollins . THIS GITATTRIBUTES WAS CREATED IN 2021.
-
 # Macro for Unity YAML-based asset files.
 [attr]unityyaml -text merge=unityyamlmerge diff eol=lf
-
 # Macro for all binary files that should use Git LFS.
 [attr]lfs -text filter=lfs diff=lfs merge=lfs
-
 # Default to auto-normalized line endings.
 * text=auto
-
 # Code
 *.cs text diff=csharp
-
 ## FMODAudio ##
 *.fspro lfs
 *.bank lfs
-
 ## Houdini Files ##
 *.hip lfs
 *.hipnc lfs
@@ -25,14 +19,12 @@
 *.otl lfs
 *.pic lfs
 *.rat lfs
-
 ## Blender Files ##
 *.blend lfs
 *.BLEND lfs
-
 # Unity Text Assets
 *.meta unityyaml
-*.unity unityyaml
+*.unity filter=lfs diff=lfs merge=lfs -text
 *.asset unityyaml
 *.prefab unityyaml
 *.mat unityyaml
@@ -57,7 +49,6 @@
 *.asmdef -text diff
 *LightingData.asset lfs
 *.unitypackage lfs
-
 # Unity Binary Assets
 *.cubemap lfs
 *.unitypackage lfs
@@ -65,13 +56,11 @@
 *-[Tt]errain.asset -unityyaml lfs
 # Note: Unity navmesh assets must have "-NavMesh" suffix.
 *-[Nn]av[Mm]esh.asset -unityyaml lfs
-
 # Note: Unity Terrain must be in terrain folder at root of assets folder.
 *.asset merge=unityyamlmerge eol=lf
 /Assets/Terrains/*.asset lfs
 #only if subfolders with terrains exist:
 /Assets/Terrains/**/*.asset lfs
-
 # Image
 *.jpg lfs
 *.jpeg lfs
@@ -100,7 +89,6 @@
 *.afphoto lfs
 *.afdesign lfs
 *.cubemap lfs
-
 # Audio
 *.mp3 lfs
 *.ogg lfs
@@ -111,11 +99,9 @@
 *.it lfs
 *.s3m lfs
 *.xm lfs
-
 ## Font Files
 *.ttf lfs
 *.TTF lfs
-
 # Video
 *.mov lfs
 *.avi lfs
@@ -126,7 +112,6 @@
 *.flv lfs
 *.ogv lfs
 *.wmv lfs
-
 ## Archive Files ##
 *.zip lfs
 *.ZIP lfs
@@ -134,7 +119,6 @@
 *.GZ lfs
 *.7z lfs
 *.7Z lfs
-
 # 3D
 *.fbx lfs
 *.obj lfs
@@ -155,14 +139,12 @@
 *.glb lfs
 *.bin.fbx lfs
 *.bin.FBX lfs
-
 # Executables
 *.exe lfs
 *.dll lfs
 *.so lfs
 *.pdb lfs
 *.mdb lfs
-
 # Packaging
 *.zip lfs
 *.7z lfs
