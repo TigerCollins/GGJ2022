@@ -68,6 +68,12 @@ public class CardDetails : ScriptableObject
         {
             return unlocked;
         }
+
+        set
+        {
+            unlocked = value;
+        }
+
     }
 
 

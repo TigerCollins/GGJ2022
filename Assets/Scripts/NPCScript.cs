@@ -12,30 +12,24 @@ public class NPCScript : MonoBehaviour
 
 	bool receivingMovementInput;
 	[SerializeField] bool canMove = true;
-
-
-
+    PlayerAbilities playerAbilities;
+    bool currentlySlowed = false;
 
 	[Header("NPC Settings")]
 	[SerializeField] NPCAnimation npcAnimation;
 	[SerializeField] CharacterController characterController;
 	[SerializeField] StatsController stats;
 	[SerializeField] float physicsPushPower;
-	[SerializeField] Vector2 seekPlayerDistanceThreshold = new Vector2(1,3);
-	[Range(0,10)] [SerializeField] float seekPlayerMoveSpeed = 3;
-	[SerializeField] float knockbackTime;
-	Vector3 playerPosition;
-	Vector3 secondaryMoveDirection;
+
 
 	[SerializeField] MovementInfo movement;
 	[SerializeField] internal CharacterEvents characterEvents;
 	[SerializeField] List<DirectionBasedObjectFlip> directionBasedObjectFlips;
 	Vector3 moveDirection = Vector3.zero;
 	UnityEvent onUpdateCalled = new UnityEvent();
+    [HideInInspector] public bool characterGrabbed = false;
 
-
-
-	[SerializeField] bool isFacingRight;
+    [SerializeField] bool isFacingRight;
 
 	[Header("Raycast")]
 	[SerializeField] RaycastInfo _raycast;
@@ -67,79 +61,27 @@ public class NPCScript : MonoBehaviour
 	void InitStatEvents()
     {
 		stats.onDeath.AddListener(delegate { npcAnimation.Death(); });
-		stats.onDeath.AddListener(delegate { canMove = false;  });
 		stats.onHealthLost.AddListener(delegate { npcAnimation.TookDamage(); });
-		stats.onHealthLost.AddListener(delegate { GetKnockBack(PlayerController.instance.StatsController.StatProfile); });
     }
 
-	public CharacterController PlayerCharacterController
-	{
-		get
-		{
-			return characterController;
-		}
-	}
-
-	public StatsController StatsController
+    private void Start()
     {
-		get
-        {
-			return stats;
-        }
+        playerAbilities = PlayerAbilities.instance;
+        playerAbilities.onTimeStop.AddListener(delegate { onPlayerFreezeAbility(); });
+
+        
     }
-
-	public void GetKnockBack(StatsDetails statProfile)
-    {
-
-			StatsController.DealDamageToOther(StatsController);
-
-			float newDirection = 0;
-			if (PlayerController.IsObjectOnRight(transform, PlayerController.instance.transform))
-			{
-				newDirection = -statProfile.KnockBackStrength;
-			}
-
-			else
-			{
-				newDirection = statProfile.KnockBackStrength;
-			}
-			secondaryMoveDirection.x = newDirection;
-			StartCoroutine(RemoveFromSecondaryMoveDirection());
-
-	}
-
-	public IEnumerator RemoveFromSecondaryMoveDirection()
-	{
-		float t = 0; ;
-
-		while (secondaryMoveDirection != Vector3.zero)
-		{
-			t += Time.deltaTime;
-			secondaryMoveDirection = Vector3.Lerp(secondaryMoveDirection, Vector3.zero, t / knockbackTime);
-
-			yield return null;
-		}
-		yield return null;
-	}
-
-	void OnBecameInvisible()
-	{
-		canMove = false;
-	}
-
-	void OnBecameVisible()
-	{
-		canMove = true;
-	}
-
+   
 
 	// Main tick
 	void FixedUpdate()
 	{
 		//Movement();
-		
+		if (canMove)
+		{
+
 			MovementVector();
-		
+		}
 
 		IsGrounded = characterController.isGrounded;
 
@@ -151,7 +93,6 @@ public class NPCScript : MonoBehaviour
 		HittingWallLogic();
 		IsFallingCheck();
 		onUpdateCalled.Invoke();
-		//playerPosition = 
 	}
 
 	public bool IsGrounded
@@ -199,7 +140,6 @@ public class NPCScript : MonoBehaviour
 	}
 #endif
 
-
 	public void BasicAttack(InputAction.CallbackContext context)
 	{
 		if (context.performed)
@@ -211,87 +151,61 @@ public class NPCScript : MonoBehaviour
 
 	public void MovementVector()
 	{
-		float input = 0;
-		float distance = Vector3.Distance(PlayerController.instance.transform.position, transform.position);
-		if (canMove)
+
+		float input = movement.horizontalMoveDirection;
+
+
+		//Facing Direction
+		if (input < 0)
 		{
-
-			if (distance < seekPlayerDistanceThreshold.y && distance > seekPlayerDistanceThreshold.x)
-			{
-				if (PlayerController.instance.transform.position.x > transform.position.x)
-				{
-					input = seekPlayerMoveSpeed;
-				}
-
-				else
-				{
-					input = -seekPlayerMoveSpeed;
-				}
-
-			}
-
-			else
-			{
-				input = movement.horizontalMoveDirection;
-			}
-
-
-
-			//Facing Direction
-			if (input < 0)
-			{
-				IsFacingRight = false;
-				receivingMovementInput = true;
-			}
-
-			else if (input > 0)
-			{
-				IsFacingRight = true;
-				receivingMovementInput = true;
-
-			}
-
-			else
-			{
-				receivingMovementInput = false;
-
-
-			}
-
-
-
-			//Position
-			if (Mathf.Abs(input) > 0.3f)
-			{
-
-				if (IsGrounded && !IsHittingWall)
-				{
-					npcAnimation.onMoveInputStateChange.Invoke(MovementState.Sprint);
-				}
-
-				else if (IsHittingWall)
-				{
-					npcAnimation.onMoveInputStateChange.Invoke(MovementState.idle);
-				}
-
-			}
-			else
-			{
-				npcAnimation.AttemptIdleAnimationState();
-			}
+			IsFacingRight = false;
+			receivingMovementInput = true;
 		}
 
-		moveDirection += movement.gravity * Time.deltaTime;
-	
+		else if (input > 0)
+		{
+			IsFacingRight = true;
+			receivingMovementInput = true;
 
-	moveDirection = new Vector3(input, moveDirection.y, 0);
+		}
 
-	characterController.Move((moveDirection + secondaryMoveDirection) * Time.deltaTime);
+		else
+		{
+			receivingMovementInput = false;
 
+		
+		}
 
+		//Position
+		if (Mathf.Abs(input) > 0.3f && !characterGrabbed)
+		{
+
+			if (IsGrounded && !IsHittingWall)
+			{
+				npcAnimation.onMoveInputStateChange.Invoke(MovementState.Sprint);
+			}
+
+			else if (IsHittingWall)
+			{
+				npcAnimation.onMoveInputStateChange.Invoke(MovementState.idle);
+			}
+
+		}
+		else
+        {
+			npcAnimation.AttemptIdleAnimationState();
+        }
+
+		moveDirection += movement.gravity * (Time.deltaTime * GlobalHelper.instance.UniversalTimeScale);
+
+        moveDirection = new Vector3(input, moveDirection.y, 0);
+        if(!characterGrabbed)
+	        characterController.Move(moveDirection* (Time.deltaTime * GlobalHelper.instance.UniversalTimeScale));
+        else
+        {
+            moveDirection = new Vector3(0,-2,0);
+        }
 	}
-
-	
 
 	public void Raycast(InputAction.CallbackContext context)
 	{
@@ -445,10 +359,7 @@ public class NPCScript : MonoBehaviour
 	{
 		foreach (DirectionBasedObjectFlip item in directionBasedObjectFlips)
 		{
-			if(item != null) 
-			{ 
-				item.Init();
-			}
+			item.Init();
 		}
 	}
 
@@ -456,10 +367,7 @@ public class NPCScript : MonoBehaviour
 	{
 		foreach (DirectionBasedObjectFlip item in directionBasedObjectFlips)
 		{
-			if (item != null)
-			{
-				item.FlipObject(IsFacingRight);
-			}
+			item.FlipObject(IsFacingRight);
 		}
 	}
 
@@ -494,6 +402,12 @@ public class NPCScript : MonoBehaviour
 			return movement.horizontalMoveDirection;
         }
     }
+
+    private void onPlayerFreezeAbility()
+    {
+        npcAnimation.NPCAnimator.speed = GlobalHelper.instance.UniversalTimeScale;
+    }
+
 }
 
 [System.Serializable]
@@ -533,11 +447,7 @@ public class MovementInfo
 	public float fallVelocityBuffer = .03f;
 	[HideInInspector] public bool isFalling;
 	[Range(1.25f, 15f)] public float controlDamping = 7f;
-
-
-
-
-
+    
 }
 
 
